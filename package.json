@@ -13,7 +13,10 @@
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
     "eslint-config-next": "13.4.13",
+    "firebase": "^10.1.0",
+    "msw": "^1.2.3",
     "next": "13.4.13",
     "postcss": "8.4.27",
     "react": "18.2.0",
@@ -30,5 +33,8 @@
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.33.1",
     "prettier": "^3.0.1"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

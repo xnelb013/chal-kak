@@ -1,7 +1,7 @@
 import { auth } from "@/firebase/firebaseAuth";
 import { db } from "@/firebase/firestore";
-import { createUserWithEmailAndPassword, deleteUser, signInWithEmailAndPassword } from "firebase/auth";
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { rest } from "msw";
 
 export const handlers = [
@@ -64,24 +64,4 @@ export const handlers = [
       );
     }
   }),
-  // 회원 탈퇴 mocking API
-  // rest.post("http://localhost:3000/delete", async (req, res, ctx) => {
-  //   const user = localStorage.getItem("user");
-  //   const { email } = JSON.parse(user as string);
-  //   const curUser = auth.currentUser;
-  //   try {
-  //     // await getDoc(doc(db, "users", email)).then((doc) => {
-  //     //   if (doc.exists()) {
-  //     //     localStorage.removeItem("user");
-  //     //     doc.ref.delete();
-  //     //   } else {
-  //     //     console.log("No such document!");
-  //     //   }
-  //     await deleteUser(curUser!);
-  //     await deleteDoc(doc(db, "users", email));
-  //     return res(ctx.status(200), ctx.json({ success: true }), ctx.json({ message: "회원 탈퇴에 성공하였습니다." }));
-  //   } catch (error) {
-  //     return res(ctx.status(400), ctx.json({ success: false }), ctx.json({ message: "회원 탈퇴에 실패하였습니다." }));
-  //   }
-  // }),
 ];

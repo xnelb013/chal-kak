@@ -14,5 +14,5 @@
     }
   },
   "plugins": ["react", "@typescript-eslint"],
-  "rules": { "react/react-in-jsx-scope": "off", "no-undef": "off" }
+  "rules": { "react/react-in-jsx-scope": "off", "no-undef": "off", "react/prop-types": "off" }
 }

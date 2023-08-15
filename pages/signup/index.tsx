@@ -16,9 +16,16 @@ interface SignUpData {
 export default function signup() {
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
+  const [invalidHeight, setInvalidHeight] = useState(false);
+  const [invalidWeight, setInvalidWeight] = useState(false);
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const [keywords, setKeywords] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [passwordConfirmTouched, setPasswordConfirmTouched] = useState(false);
+  const [heightTouched, setHeightTouched] = useState(false);
+  const [weightTouched, setWeightTouched] = useState(false);
   const [formData, setFormData] = useState<SignUpData>({
     email: "",
     password: "",
@@ -51,10 +58,15 @@ export default function signup() {
     return passwordPattern.test(password);
   };
 
+  const checkBodyFormat = (input: string) => {
+    const inputPattern = /^\d{1,3}$/;
+    return inputPattern.test(input);
+  };
+
   // 키 몸무게 유효성 검사
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: name === "height" || name === "weight" ? Number(value) : value });
+    setFormData({ ...formData, [name]: value });
   };
 
   // 정보 유효성 검사
@@ -78,6 +90,18 @@ export default function signup() {
         setPasswordMismatch(false);
       } else {
         setPasswordMismatch(true);
+      }
+    } else if (name === "height") {
+      if (checkBodyFormat(value)) {
+        setInvalidHeight(false);
+      } else {
+        setInvalidHeight(true);
+      }
+    } else if (name === "weight") {
+      if (checkBodyFormat(value)) {
+        setInvalidWeight(false);
+      } else {
+        setInvalidWeight(true);
       }
     }
   };
@@ -108,6 +132,7 @@ export default function signup() {
               onChange={(e) => {
                 handleChange(e);
                 handleChangeValid(e);
+                setEmailTouched(true);
               }}
             />
             {invalidEmail && <p className="text-red-500 text-xs mt-1">이메일 양식이 잘못되었습니다.</p>}
@@ -123,6 +148,7 @@ export default function signup() {
               onChange={(e) => {
                 handleChange(e);
                 handleChangeValid(e);
+                setPasswordTouched(true);
               }}
             />
             {invalidPassword && <p className="text-red-500 text-xs mt-1">비밀번호 형식이 맞지 않습니다.</p>}
@@ -131,13 +157,14 @@ export default function signup() {
             <p className="text-md font-bold mb-[-10px] mt-2">비밀번호 확인</p> <br />
             <input
               type="password"
-              className="border-b border-gray-200 w-[500px] pb-2 text-sm mb-2 focus:border-gray-700 transition-colors ease-in duration-100"
+              className="border-b border-gray-200 w-[500px] pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
               name="confirmPassword"
               placeholder="비밀번호 확인"
               value={formData.confirmPassword}
               onChange={(e) => {
                 handleChange(e);
                 handleChangeValid(e);
+                setPasswordConfirmTouched(true);
               }}
             />
             {passwordMismatch && <p className="text-red-500 text-xs mt-1">비밀번호가 일치하지 않습니다.</p>}
@@ -145,7 +172,7 @@ export default function signup() {
           <div className="flex w-full">
             <div className="w-1/3 ">
               <p className="text-md font-bold">성별</p>
-              <select name="gender" className="text-md h-10 mt-2" value={formData.gender} onChange={handleChange}>
+              <select name="gender" className="text-md h-10 mt-4" value={formData.gender} onChange={handleChange}>
                 <option value="male">남성</option>
                 <option value="female">여성</option>
               </select>
@@ -154,34 +181,49 @@ export default function signup() {
             <div className="flex flex-col items-start w-2/3 mb-10 ml-24">
               <p className="text-md font-bold mb-[21px]">체형</p>
               <div className="flex w-full">
-                <div className="flex items-center w-1/2 mr-5">
-                  <input
-                    type="text"
-                    name="height"
-                    className="pb-1 border-b border-gray-200 w-[100px] mr-1 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
-                    maxLength={3}
-                    value={formData.height}
-                    onChange={handleChange}
-                  />
-                  cm
+                <div className="flex flex-col items-start w-1/2 mr-5">
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="height"
+                      className="pb-1 border-b border-gray-200 w-[115px] mr-4 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+                      maxLength={3}
+                      value={formData.height}
+                      onChange={(e) => {
+                        handleChange(e);
+                        handleChangeValid(e);
+                        setHeightTouched(true);
+                      }}
+                    />
+                    cm
+                  </div>
+                  {invalidHeight && <p className="text-red-500 text-xs mt-1">체형 정보가 잘못되었습니다.</p>}
                 </div>
-                <div className="flex items-center w-1/2">
-                  <input
-                    type="text"
-                    name="weight"
-                    className="pb-1 border-b border-gray-200 w-[100px] mr-1 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
-                    maxLength={3}
-                    value={formData.weight}
-                    onChange={handleChange}
-                  />
-                  kg
+                <div className="flex flex-col items-center w-1/2">
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      name="weight"
+                      className="pb-1 border-b border-gray-200 w-[115px] mr-4 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+                      maxLength={3}
+                      value={formData.weight}
+                      onChange={(e) => {
+                        handleChange(e);
+                        handleChangeValid(e);
+                        setWeightTouched(true);
+                      }}
+                    />
+                    kg
+                  </div>
+                  {invalidWeight && <p className="text-red-500 text-xs pr-1 mt-1">체형 정보가 잘못되었습니다.</p>}
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex w-full">
-            <div className="flex w-1/3">
-              <div>
+
+          <div className="flex w-full h-[100px]">
+            <div className="flex w-1/3 ">
+              <div className="flex">
                 <button type="button" className="btn-neutral p-3 rounded-lg mb-10" onClick={handleOpenModal}>
                   관심 키워드
                 </button>
@@ -205,9 +247,22 @@ export default function signup() {
           </div>
 
           <div>
-            <button type="submit" className="btn w-[500px] p-4 bg-gray-200 rounded-full text-white text">
-              회원가입
-            </button>
+            {invalidEmail ||
+            invalidPassword ||
+            passwordMismatch ||
+            !emailTouched ||
+            !passwordTouched ||
+            !passwordConfirmTouched ||
+            !heightTouched ||
+            !weightTouched ? (
+              <button type="submit" className="btn w-[500px] p-4 bg-gray-200 rounded-full text-white">
+                회원가입
+              </button>
+            ) : (
+              <button type="submit" className="btn-neutral w-[500px] p-3 rounded-full text-sm">
+                회원가입
+              </button>
+            )}
           </div>
         </form>
       </div>

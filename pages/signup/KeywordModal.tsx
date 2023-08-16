@@ -17,7 +17,12 @@ const KeywordModal: React.FC<Props> = ({ isOpen, onClose, keywords, setKeywords 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
     if (e.target.checked) {
-      setKeywords([...keywords, keyword]);
+      // 개수제한
+      if (keywords.length < 5) {
+        setKeywords([...keywords, keyword]);
+      } else {
+        e.target.checked = false;
+      }
     } else {
       setKeywords(keywords.filter((kw) => kw !== keyword));
     }
@@ -31,13 +36,12 @@ const KeywordModal: React.FC<Props> = ({ isOpen, onClose, keywords, setKeywords 
     ));
   };
 
-  // 키워드 선택 및 변경 관련 로직 작성
-
   return (
     <>
       {isOpen && (
         <ModalWrapper>
-          <div className="text-xl font-bold my-5">관심 키워드 선택</div>
+          <div className="text-xl font-bold mt-5">관심 키워드 선택</div>
+          <div className="text-md mb-5">(최대 5개까지 선택 가능합니다)</div>
           <div>{renderKeywordsList()}</div>
 
           <div className="mt-4 mb-5">
@@ -435,8 +439,8 @@ const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
-  width: 500px;
-  min-width: 500px;
+  width: 600px;
+  min-width: 600px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -445,10 +449,6 @@ const ModalWrapper = styled.div`
   padding: 1rem;
   border-radius: 5px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-
-  > div:nth-child(2) {
-    text-align: center;
-  }
 `;
 
 export default KeywordModal;

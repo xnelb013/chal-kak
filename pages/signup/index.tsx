@@ -46,6 +46,11 @@ export default function signup() {
     setFormData({ ...formData, keywords: keywords });
   };
 
+  //키워드 삭제 버튼 클릭 핸들러
+  const removeKeyword = (removeItem: string) => {
+    setKeywords(keywords.filter((keyword) => keyword !== removeItem));
+  };
+
   // 이메일 양식 확인
   const checkEmailFormat = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -63,7 +68,6 @@ export default function signup() {
     return inputPattern.test(input);
   };
 
-  // 키 몸무게 유효성 검사
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -232,6 +236,9 @@ export default function signup() {
             <div className="w-2/3">
               {keywords.map((keyword) => (
                 <div className="badge text-xs badge-outline mr-2 mb-2 h-7" key={keyword}>
+                  <button onClick={() => removeKeyword(keyword)}>
+                    <i className="fa-solid fa-xmark mr-1"></i>
+                  </button>
                   {keyword}
                 </div>
               ))}

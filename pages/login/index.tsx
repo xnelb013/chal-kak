@@ -1,25 +1,23 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 
 // 이메일과 비밀번호를 포함한 객체
 interface LoginData {
-  email: string,
+  email: string;
   password: string;
 }
 
 export default function Login() {
-  const router = useRouter();
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [formData, setFormData] = useState<LoginData>({
     email: "",
     password: "",
-  })
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]:value });
+    setFormData({ ...formData, [name]: value });
   };
 
   // 이메일 양식 확인
@@ -37,11 +35,11 @@ export default function Login() {
         setInvalidEmail(true);
       }
     }
-  }
+  };
 
-  function handleLogin(e:FormEvent) {
+  function handleLogin(e: FormEvent) {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
   }
 
   // 이메일 및 비밀번호 입력 여부 확인
@@ -52,8 +50,8 @@ export default function Login() {
   // 버튼 활성화 결정
   function getButtonActive() {
     return isLoginFormValid()
-      ? "btn-neutral bg-[rgb(43,52,64)] w-full py-3 font-medium rounded-full"
-      : "btn w-full py-3 font-medium rounded-full bg-gray-200";
+      ? "btn-neutral bg-[rgb(43,52,64)] w-full py-3 font-medium rounded-full text-md"
+      : "btn w-full py-3 font-medium rounded-full bg-gray-200 text-md";
   }
 
   return (
@@ -65,73 +63,67 @@ export default function Login() {
       <div className="mt-[60px] mx-4 w-[500px] h-[600px]">
         <form>
           <div>
-            <label htmlFor="email" className="block pt-2 pb-2 text-sm font-medium leading-6 text-gray-800">
+            <label htmlFor="email" className="block pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
               이메일 주소
             </label>
             <div>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 id="email"
                 name="email"
                 value={formData.email}
-                onChange={(e) => {handleChangeValid(e); handleChange(e)}}
+                onChange={(e) => {
+                  handleChangeValid(e);
+                  handleChange(e);
+                }}
                 placeholder="zero@zerobase.com"
                 autoComplete="off"
-                className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-xs transition-colors ease-in duration-100"
+                className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
               />
               {invalidEmail && <p className="text-red-500 text-xs mt-1">이메일 양식이 잘못되었습니다.</p>}
             </div>
           </div>
           <div>
-            <label htmlFor="password" className="block mt-[40px] pt-2 pb-2 text-sm font-medium leading-6 text-gray-800">
+            <label htmlFor="password" className="block mt-[40px] pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
               비밀번호
             </label>
             <div>
-              <input 
-                type="password" 
+              <input
+                type="password"
                 id="password"
-                name="password" 
+                name="password"
                 value={formData.password}
                 onChange={(e) => handleChange(e)}
-                className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-xs transition-colors ease-in duration-100"
+                className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
               />
             </div>
           </div>
           <div className="mt-[60px]">
-            <button 
-              type="submit"
-              onClick={handleLogin}
-              disabled={!isLoginFormValid()} 
-              className={getButtonActive()}>
-                로그인
+            <button type="submit" onClick={handleLogin} disabled={!isLoginFormValid()} className={getButtonActive()}>
+              로그인
             </button>
           </div>
         </form>
 
         <ul className="flex justify-evenly items-center mt-[40px] ml-[10px]">
           <li className="list-none">
-            <Link 
-              href={"/signup"}
-              className="text-center text-xs text-gray-700"> 
-                회원가입
+            <Link href={"/signup"} className="text-center text-sm text-gray-700">
+              회원가입
             </Link>
           </li>
           <li className="list-none">
             <span className="text-gray-200 text-xs mx-1">|</span>
           </li>
           <li className="list-none">
-            <Link 
-              href={"/signup"} 
-              className="text-center text-xs pl-[10px] text-gray-700">
-                아이디 찾기
+            <Link href={"/signup"} className="text-center text-sm pl-[10px] text-gray-700">
+              아이디 찾기
             </Link>
           </li>
           <li className="list-none">
             <span className="text-gray-200 text-xs mx-1">|</span>
           </li>
           <li className="list-none">
-            <Link href={"/signup"} 
-            className="text-center text-xs text-gray-700">
+            <Link href={"/signup"} className="text-center text-sm text-gray-700">
               비밀번호 찾기
             </Link>
           </li>
@@ -144,7 +136,7 @@ export default function Login() {
         </div>
 
         <div className="mt-[50px] ml-[210px] background-white border rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer">
-          <FcGoogle className="w-[34px] h-[34px]"/>
+          <FcGoogle className="w-[34px] h-[34px]" />
         </div>
       </div>
     </div>

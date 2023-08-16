@@ -40,10 +40,9 @@ const KeywordModal: React.FC<Props> = ({ isOpen, onClose, keywords, setKeywords 
     <>
       {isOpen && (
         <ModalWrapper>
-          <div className="text-xl font-bold mt-5">관심 키워드 선택</div>
+          <div className="text-xl font-bold mt-8">관심 키워드 선택</div>
           <div className="text-md mb-5">(최대 5개까지 선택 가능합니다)</div>
           <div>{renderKeywordsList()}</div>
-
           <div className="mt-4 mb-5">
             <div className="text-2xl font-bold mb-5 mt-5 text-center">STYLE</div>
             <ul className="grid gap-6 grid-cols-4">
@@ -436,11 +435,12 @@ const KeywordModal: React.FC<Props> = ({ isOpen, onClose, keywords, setKeywords 
 const ModalWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   position: fixed;
   width: 600px;
   min-width: 600px;
+  max-height: 90vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -449,6 +449,7 @@ const ModalWrapper = styled.div`
   padding: 1rem;
   border-radius: 5px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 `;
 
 export default KeywordModal;

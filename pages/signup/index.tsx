@@ -120,12 +120,12 @@ export default function signup() {
   return (
     <div className="flex justify-center items-center">
       <div className="w-[500px]">
-        <div className="flex items-center justify-center mt-20">
-          <div className="text-3xl font-bold">회원가입</div>
+        <div className="flex items-center justify-center mt-10">
+          <div className="text-2xl">회원가입</div>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 mt-10">
+        <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 mt-[100px]">
           <div>
-            <p className="text-md font-bold mb-[-10px]">이메일 주소</p> <br />
+            <p className="text-md font-medium mb-[-10px]">이메일 주소</p> <br />
             <input
               type="text"
               className="border-b border-gray-200 w-[500px] pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
@@ -262,11 +262,11 @@ export default function signup() {
             !passwordConfirmTouched ||
             !heightTouched ||
             !weightTouched ? (
-              <button type="submit" className="btn w-[500px] p-4 bg-gray-200 rounded-full text-white">
+              <button type="submit" className="btn w-[500px] p-4 bg-gray-200 rounded-full text-white mb-10">
                 회원가입
               </button>
             ) : (
-              <button type="submit" className="btn-neutral w-[500px] p-3 rounded-full text-sm">
+              <button type="submit" className="btn-neutral w-[500px] p-3 rounded-full text-sm mb-10">
                 회원가입
               </button>
             )}

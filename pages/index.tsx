@@ -1,3 +1,12 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+
 export default function Home() {
-  return <div></div>;
+  const router = useRouter();
+
+  useEffect(() => {
+  router.replace('/main');
+  }, []);
+
+  return null;
 }

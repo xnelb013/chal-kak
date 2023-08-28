@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 
 .wrap {
   background-color: rgb(243, 243, 243);
@@ -19,4 +21,8 @@
 
 body {
   font-family: "Noto Sans KR", sans-serif;
+}
+
+input:focus {
+  outline: none;
 }

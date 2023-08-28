@@ -1,41 +1,59 @@
-import Image from "next/image";
+import axios from "axios";
+import Link from "next/link";
+import { CgProfile } from "react-icons/cg";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get("/signout");
+      console.log(response);
+      if (response.status === 200) {
+        router.push("/");
+        localStorage.removeItem("user");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
-      <div className="navbar bg-base-100">
+      <div className="h-[50px] navbar bg-base-100">
         <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-3xl title">#찰칵</a>
+          <Link href={"/"} className="ml-6 normal-case text-3xl title ">
+            #찰칵
+          </Link>
         </div>
-        <div className="flex-none gap-2">
-          <div className="form-control">
-            <input type="text" placeholder="Search" className="input input-bordered w-24 md:w-auto" />
+        <div className="flex-none gap-2 mt-4 mr-2">
+          <div className="mb-4 mr-2">
+            <Link href={"/search"}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 512 512">
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+              </svg>
+            </Link>
           </div>
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <Image src="/images/카카오.jpg" width={100} height={100} alt="profile-img" />
+          <div className="dropdown dropdown-end mb-2">
+            <label tabIndex={0} className="btn-circle avatar cursor-pointer">
+              <div className="mt-[6px]">
+                <CgProfile className="w-[32px] h-[32px]" />
+                {/* <Image src="/images/카카오.jpg" width={200} height={200} alt="profile-img" /> */}
               </div>
             </label>
-            <ul
-              tabIndex={0}
-              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-            >
+            <ul tabIndex={0} className="z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-32">
               <li>
-                <a className="justify-between">
+                <Link href={"/profile"} className="justify-between">
                   Profile
-                  <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>
         </div>
+      </div>
+      <div className="flex items-center justify-start pb-2">
       </div>
     </>
   );

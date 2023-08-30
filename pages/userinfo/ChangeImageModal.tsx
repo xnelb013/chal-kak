@@ -7,7 +7,7 @@ interface ChangeImageModalProps {
   setProfileUrl: (url: string) => void;
 }
 
-export const ChangeImageModal = ({ isOpen, handleCloseModal, setProfileUrl }: ChangeImageModalProps) => {
+const ChangeImageModal = ({ isOpen, handleCloseModal, setProfileUrl }: ChangeImageModalProps) => {
   const handleConfirm = () => {
     handleCloseModal();
   };
@@ -89,3 +89,5 @@ const ModalWrapper = styled.div`
   overflow-y: auto;
   animation: ${slideUp} 0.3s ease-in-out;
 `;
+
+export default ChangeImageModal;

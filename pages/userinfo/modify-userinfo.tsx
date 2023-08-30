@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ChangeImageModal } from "./ChangeImageModal";
 import { LiaUserCircleSolid } from "react-icons/lia";
+import ChangeImageModal from "./ChangeImageModal";
 
 export default function modifyuserinfo() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

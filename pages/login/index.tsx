@@ -44,7 +44,8 @@ export default function Login() {
   const [refreshToken, setRefreshToken] = useRecoilState(refreshTokenState);
   // const [expireDate, setExpireDate] = useRecoilState(accessTokenExpireDateState);
 
-  axios.defaults.baseURL = "http://ec2-13-127-154-248.ap-south-1.compute.amazonaws.com:8080/";
+  // axios.defaults.baseURL = "http://ec2-13-127-154-248.ap-south-1.compute.amazonaws.com:8080/";
+  axios.defaults.baseURL = "https://ec2-13-127-154-248.ap-south-1.compute.amazonaws.com:443/";
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });

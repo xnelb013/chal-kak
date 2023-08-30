@@ -8,6 +8,7 @@ import { useRecoilState } from "recoil";
 import { accessTokenState, refreshTokenState } from "@/utils/atoms";
 // import { on } from "events";
 import Cookies from "js-cookie";
+import { apiInstance } from "../api/setting";
 
 // 이메일과 비밀번호를 포함한 객체
 interface LoginData {
@@ -71,7 +72,7 @@ export default function Login() {
   // silentRefresh: accessToken 재발급 및 로그인 성공 실행 함수 실행
   const silentRefresh = async () => {
     try {
-      const response: SigninResponse = await axios({
+      const response: SigninResponse = await apiInstance({
         method: "post",
         url: "users/reissue",
         headers: {
@@ -95,7 +96,7 @@ export default function Login() {
     e.preventDefault();
     const { email, password } = formData;
     try {
-      const tokenResponse = await axios.post("users/signin", {
+      const tokenResponse = await apiInstance.post("users/signin", {
         email,
         password,
       });

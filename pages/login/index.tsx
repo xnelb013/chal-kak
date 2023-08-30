@@ -56,6 +56,7 @@ export default function Login() {
     const { accessToken, refreshToken, accessTokenExpireDate } = response.data.data.token;
     // 쿠키에 로그인 정보 저장
     Cookies.set("userId", String(response.data.data.userId));
+    Cookies.set("accessToken", accessToken);
 
     // accessToken, refreshToken recoil에 저장
     setAccessToken(accessToken);

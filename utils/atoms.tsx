@@ -55,3 +55,15 @@ export const postState = atom({
     userPosts: [],
   },
 });
+
+// accessToken State
+export const accessTokenState = atom({
+  key: "accessTokenState",
+  default: "",
+});
+
+// refreshToken State
+export const refreshTokenState = atom({
+  key: "refreshTokenState",
+  default: "",
+});

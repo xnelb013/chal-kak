@@ -107,34 +107,11 @@ export default function Login() {
       onLoginSuccess(tokenResponse);
       setFormData({ email: "", password: "" });
     } catch (error) {
+      console.log('err', error)
       setAlertMessage("이메일 또는 비밀번호를 확인해주세요.");
       setAlertOpen(true);
     }
   };
-
-  // 백엔드 API 로그인 호출
-  // const handleLogin = async(e:FormEvent) => {
-  //   e.preventDefault();
-
-  //   const { email, password } = formData;
-  //   try {
-  //     const response = await axios.post("/users/signin", {
-  //       email,
-  //       password,
-  //     });
-
-  //     if (response.status === 200 && response.data.success) {
-  //       localStorage.setItem('token', response.data.data.token.accessToken);
-  //       localStorage.setItem('refreshToken', response.data.data.token.refreshToken);
-
-  //       router.push("/");
-  //     } else {
-  //       setLoginFailed(true);
-  //     }
-  //   } catch (error) {
-  //     setLoginFailed(true);
-  //   }
-  // };
 
   // // 구글 로그인 API 호출
   // const handleGoogleLogin = async () => {

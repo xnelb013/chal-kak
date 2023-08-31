@@ -31,7 +31,7 @@ const ScrollTopButton = () => {
         isVisble && (
             <button
                 onClick={handleScrollTop}
-                className="flex items-center justify-center border rounded-full border-gray-200 bg-white w-[42px] h-[42px] fixed bottom-8 right-1/4 z-[1000] transform -translate-x-1/2"
+                className="flex items-center justify-center border border-gray-800 rounded-full text-white bg-gray-800 w-[42px] h-[42px]"
                 >
                 <HiOutlineArrowUp className="w-[24px] h-[24px]" />
             </button>

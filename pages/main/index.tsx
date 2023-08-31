@@ -316,49 +316,52 @@ const Main = () => {
 
   return (
     <div className="w-full h-full bg-white">
-      <div className="max-auto">
-        <div className="flex items-center justify-start border-b pb-2">
-            <button className="mr-4 text-lg ml-6">팔로잉</button>
-            <button className="text-lg">추천</button>
-        </div>
-        <div className="mt-6 ml-6 text-m text-gray-400">
-          <Weather />
-        </div>
-        <div className="mt-8 text-xl ml-6 font-bold">오늘 날씨와 어울리는 스타일</div>
-        <div className="mt-6 ml-4">
-          <Carousel>
-            {posts.map((post, index) => (
-              <CarouselContent key={index} imageUrl={post.images[0].url} />
-            ))}
-          </Carousel>
-        </div>
+        <div className="max-auto">
+            <div className="flex items-center justify-start border-b pb-2">
+                <button className="mr-4 text-lg ml-6">팔로잉</button>
+                <button className="text-lg">추천</button>
+            </div>
+            <div className="mt-6 ml-6 text-m text-gray-400">
+                <Weather />
+            </div>
+            <div className="mt-2 text-xl ml-6 font-bold">오늘 날씨와 어울리는 스타일</div>
+            <div className="mt-6 ml-4">
+            <Carousel>
+                {posts.map((post, index) => (
+                <CarouselContent key={index} imageUrl={post.images[0].url} />
+                ))}
+            </Carousel>
+            </div>
 
-        <div className="mt-12">
-            <GoToPostEditorButton />
-            <ScrollTopButton />
-         <div className="text-xl ml-6 font-bold">키워드 추천</div>
-         <div className="mt-6 ml-6 flex flex-wrap justify-flex-start gap-4">
-           {keywords.map((keyword) => {
-             const isActive = tempPosts.some(post => post.staticKeywords.includes(keyword.title));
-             return (
-               <div
-                 key={keyword.title}
-                 onClick={() => setSelectedKeyword(keyword.title)}
-                 className={`py-[4px] px-4 border rounded-full cursor-pointer text-xs ${isActive ? 'bg-black text-white'  : 'bg-white text-black'}`}>
-                 <p>{keyword.title}</p>
-               </div>
-             )
-           })}
-         </div>     
-       </div>
-       <div className="mt-5 h-auto grid grid-cols-2 gap-4 px-4">
-       {(selectedKeyword === '전체' ? data?.pages.flatMap(page => page.posts) : data?.pages.flatMap(page => page.posts.filter(post => post.staticKeywords.includes(selectedKeyword))))?.map((post, index) =>
-            <PostContent key={index} post={post} />
-        )}
+            <div className="mt-12 relative">
+                <div className="fixed top-[85%] right-[18rem] z-[1000]">
+                    <GoToPostEditorButton />
+                    <ScrollTopButton />
+                </div>
+                <div className="text-xl ml-6 font-bold">키워드 추천</div>
+                <div className="mt-6 ml-6 flex flex-wrap justify-flex-start gap-4">
+                {keywords.map((keyword) => {
+                    const isActive = tempPosts.some(post => post.staticKeywords.includes(keyword.title));
+                    return (
+                    <div
+                        key={keyword.title}
+                        onClick={() => setSelectedKeyword(keyword.title)}
+                        className={`py-[4px] px-4 border rounded-full cursor-pointer text-xs ${isActive ? 'bg-black text-white'  : 'bg-white text-black'}`}>
+                        <p>{keyword.title}</p>
+                    </div>
+                    )
+                })}
+                </div>     
+            </div>
+
+            <div className="mt-5 h-auto grid grid-cols-2 gap-4 px-4">
+            {(selectedKeyword === '전체' ? data?.pages.flatMap(page => page.posts) : data?.pages.flatMap(page => page.posts.filter(post => post.staticKeywords.includes(selectedKeyword))))?.map((post, index) =>
+                <PostContent key={index} post={post} />
+            )}
+            </div>
         </div>
-      </div>
     </div>
-  );
+    );
 };
 
 export default Main;

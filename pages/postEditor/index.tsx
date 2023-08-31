@@ -1,6 +1,5 @@
 // HomePage.tsx
 import { useRecoilState } from "recoil";
-import axios from "axios";
 import { uploadedImageFilesState, uploadedImageUrlsState, locationState } from "../../utils/atoms";
 import ImageUpload from "./ImageUpload";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -8,15 +7,18 @@ import KeywordCheckbox from "./KeywordCheckbox";
 import KeywordRadioButton from "./KeywordRadioButton";
 import GoogleMapsComponent from "./GoogleMap";
 import Divider from "../components/Divider";
+import { AiOutlineClose } from "react-icons/ai";
+import useInitialData from "@/hooks/customHooks";
+import { apiInstance } from "../api/api";
 
-const keywordList = {
-  style: ["아메카지", "원마일웨어", "미니멀", "댄디", "비즈니스", "캐주얼", "빈티지", "스트릿", "스포티"],
-  tpo: ["데이트", "하객", "여행", "출근"],
-  season: ["봄", "여름", "가을", "겨울"],
-  weather: ["맑음", "흐림", "비", "눈"],
-};
+interface StyleTag {
+  id: number;
+  category: string;
+  keywordImg: string;
+  keyword: string;
+}
 
-interface postingData {
+export interface postingData {
   content: string;
   styleKeywords: string[];
   dynamicKeywords: string[];
@@ -28,15 +30,22 @@ interface postingData {
   privacyWeight: boolean;
   staticKeywords: string[];
   location: string;
+  styleTags: number[];
 }
 
-const HomePage = () => {
+interface HomePageProps {
+  initialPostData?: postingData;
+}
+
+const HomePage = ({ initialPostData }: HomePageProps) => {
+  const [styleTagsData, setStyleTagsData] = useState<StyleTag[]>([]);
+  const [styleTags, setStyleTags] = useState<number[]>([]);
   // blob
   const [uploadedImageUrls] = useRecoilState(uploadedImageUrlsState);
   // file
   const [uploadedImageFiles] = useRecoilState(uploadedImageFilesState);
   //locaiton
-  const [location] = useRecoilState(locationState);
+  const [location, setLocation] = useRecoilState(locationState);
   const [staticKeywords, setStaticKeywords] = useState<string[]>([]);
   const [styleKeywords, setStyleKeywords] = useState<string[]>([]);
   const [dynamicKeywords, setDynamicKeywords] = useState<string[]>([]);
@@ -49,6 +58,7 @@ const HomePage = () => {
   const [formData, setFormData] = useState<postingData>({
     content: "",
     dynamicKeywords: dynamicKeywords,
+    styleTags: styleTags,
     styleKeywords: styleKeywords,
     uploadedImageFiles: uploadedImageFiles,
     seasonKeywords: seasonKeywords,
@@ -59,6 +69,16 @@ const HomePage = () => {
     staticKeywords: staticKeywords,
     location: location,
   });
+
+  useInitialData(initialPostData?.location, setLocation);
+  useInitialData(initialPostData?.styleTags, setStyleTags);
+  useInitialData(initialPostData?.content, setContent);
+  useInitialData(initialPostData?.privacyHeight, setPrivacyHeight);
+  useInitialData(initialPostData?.privacyWeight, setPrivacyWeight);
+  useInitialData(initialPostData?.dynamicKeywords, setDynamicKeywords);
+  useInitialData(initialPostData?.styleKeywords, setStyleKeywords);
+  useInitialData(initialPostData?.seasonKeywords, setSeasonKeywords);
+  useInitialData(initialPostData?.weatherKeywords, setWeatherKeywords);
 
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -88,6 +108,43 @@ const HomePage = () => {
     staticKeywords,
     location,
   ]);
+
+  // 키워드 불러오기
+  useEffect(() => {
+    apiInstance
+      .get("styleTags")
+      .then((response) => {
+        setStyleTagsData(response.data.data.styleTags);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  }, []);
+
+  const keywordList = styleTagsData.reduce(
+    (acc: { [key: string]: string[] }, item) => {
+      const category = item.category.toLowerCase();
+
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+
+      acc[category].push(item.keyword);
+
+      return acc;
+    },
+    { style: [], tpo: [], season: [], weather: [] },
+  );
+
+  useEffect(() => {
+    const newStyleTags = styleTagsData.filter((data) => staticKeywords.includes(data.keyword)).map((data) => data.id);
+
+    setStyleTags(newStyleTags);
+  }, [styleTagsData, staticKeywords]);
+
+  useEffect(() => {
+    console.log(styleTags);
+  }, [styleTags]);
 
   // 정적 키워드들을 한곳에 담기
   useEffect(() => {
@@ -209,6 +266,12 @@ const HomePage = () => {
     setContent(e.target.value);
   };
 
+  // 동적 입력 태그 삭제
+
+  const removeDynamicKeyword = (removeItem: string) => {
+    setDynamicKeywords(dynamicKeywords.filter((dynamicKeyword) => dynamicKeyword !== removeItem));
+  };
+
   // submit 함수
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -220,14 +283,15 @@ const HomePage = () => {
     });
 
     submissionFormData.append("content", content);
-    submissionFormData.append("styleKeywords", styleKeywords.join(","));
-    submissionFormData.append("dynamicKeywords", dynamicKeywords.join(","));
-    submissionFormData.append("seasonKeyword", seasonKeywords.join(","));
-    submissionFormData.append("weatherKeyword", weatherKeywords.join(","));
+    submissionFormData.append("location", location);
+    submissionFormData.append("privacyHeight", String(privacyHeight));
+    submissionFormData.append("privacyWeight", String(privacyWeight));
+    submissionFormData.append("styleTags", styleTags.join(","));
+    submissionFormData.append("hashTags", dynamicKeywords.join(","));
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      await axios.post("/api", submissionFormData, {
+      await apiInstance.post(`posts`, submissionFormData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -263,7 +327,7 @@ const HomePage = () => {
               type="checkbox"
               checked={privacyHeight}
               onChange={handlePublicCheck}
-              className="checkbox checkbox-xs mr-5 ml-1 mt-[1px]"
+              className="checkbox checkbox-xs mr-5 ml-1 mt-[1.5px]"
             />
           </label>
           <label className="flex items-center">
@@ -272,7 +336,7 @@ const HomePage = () => {
               type="checkbox"
               checked={!privacyHeight}
               onChange={handlePrivateCheck}
-              className="checkbox checkbox-xs ml-1 mt-[1px]"
+              className="checkbox checkbox-xs ml-1 mt-[1.5px]"
             />
           </label>
         </div>
@@ -280,8 +344,14 @@ const HomePage = () => {
       <Divider width="w-[600px]" />
       <div className="mb-5">
         {dynamicKeywords.map((keyword) => (
-          <div key={keyword} className="inline-block m-1 text-blue-400 ">
-            #{keyword}
+          <div key={keyword} className="inline-block">
+            <div className="flex m-1 text-blue-400">
+              #{keyword}
+              <AiOutlineClose
+                className="flex items-center text-gray-300 cursor-pointer text-xs mt-[3px]"
+                onClick={() => removeDynamicKeyword(keyword)}
+              />
+            </div>
           </div>
         ))}
         {styleKeywords.map((keyword) => (

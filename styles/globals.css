@@ -26,3 +26,7 @@ body {
 input:focus {
   outline: none;
 }
+
+.ReactModal__Content {
+  outline: none;
+}

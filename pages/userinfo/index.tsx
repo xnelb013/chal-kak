@@ -1,7 +1,7 @@
-import { Post, userInfoType } from "@/utils/type";
+import { Post } from "@/utils/type";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { LiaUserCircleSolid } from "react-icons/lia";
+// import { useEffect, useState } from "react";
+// import { LiaUserCircleSolid } from "react-icons/lia";
 
 const tempPosts: Post[] = [
   {
@@ -217,28 +217,28 @@ const tempPosts: Post[] = [
 ];
 
 export default function UserInfo(): JSX.Element {
-  const [userInfo, setUserInfo] = useState({
-    postCount: 0,
-    followers: [],
-    following: [],
-    nickname: "",
-    profileUrl: "",
-  });
+  // const [userInfo, setUserInfo] = useState({
+  //   postCount: 0,
+  //   followers: [],
+  //   following: [],
+  //   nickname: "",
+  //   profileUrl: "",
+  // });
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const userInfo = localStorage.getItem("userinfo");
-      setUserInfo(JSON.parse(userInfo!));
-    };
-    fetchUserInfo();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUserInfo = async () => {
+  //     const userInfo = localStorage.getItem("userinfo");
+  //     setUserInfo(JSON.parse(userInfo!));
+  //   };
+  //   fetchUserInfo();
+  // }, []);
 
   const moveToModifyPage = () => {
     router.push("/userinfo/modify-userinfo");
   };
 
-  const { postCount, followers, following, nickname, profileUrl } = userInfo as userInfoType;
+  // const { postCount, followers, following, nickname, profileUrl } = userInfo as userInfoType;
 
   const gridRowCount = Math.ceil(tempPosts.length / 3);
   return (
@@ -248,16 +248,16 @@ export default function UserInfo(): JSX.Element {
           <div className="flex flex-row items-center justify-around w-[480px] h-[200px] gap-10 mt-2">
             <div className="avatar">
               <div className="w-40 rounded-full">
-                {profileUrl !== "" ? (
+                {/* {profileUrl !== "" ? (
                   <LiaUserCircleSolid className="w-40 h-40" />
                 ) : (
                   <img src={profileUrl} alt="profile-img" />
-                )}
+                )} */}
               </div>
             </div>
             <div className="flex flex-col gap-10 items-center p-5">
               <div className="flex flex-row items-center justify-center">
-                <div className="text-lg font-semibold ml-3 text-black">@{nickname}</div>
+                <div className="text-lg font-semibold ml-3 text-black">@</div>
                 <button
                   className="btn-neutral ml-4 bg-[#efefef] w-[125px] font-medium rounded-lg text-black"
                   onClick={moveToModifyPage}
@@ -268,15 +268,15 @@ export default function UserInfo(): JSX.Element {
               <div className="flex flex-row justify-between items-center gap-10 ">
                 <div className="flex flex-col items-center text-black">
                   <p>게시글</p>
-                  {postCount}
+                  {/* {postCount} */}
                 </div>
                 <div className="flex flex-col items-center text-black">
                   <p>팔로워</p>
-                  {followers.length}
+                  {/* {followers.length} */}
                 </div>
                 <div className="flex flex-col items-center text-black">
                   <p>팔로잉</p>
-                  {following.length}
+                  {/* {following.length} */}
                 </div>
               </div>
             </div>

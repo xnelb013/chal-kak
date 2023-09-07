@@ -1,25 +1,27 @@
 import { keyframes, styled } from "styled-components";
+import { UserinfoType } from "./modify-userinfo";
 
 interface ChangeImageModalProps {
-  // formData: FormData;
+  formData: FormData;
+  setFormData: (formData: FormData) => void;
   isOpen: boolean;
   handleCloseModal: () => void;
   setProfileUrl: (url: string) => void;
+  setUserInfo: (userInfo: UserinfoType) => void;
+  userinfo: UserinfoType;
+  setProfileFile: (file: File) => void;
 }
 
-const ChangeImageModal = ({ isOpen, handleCloseModal, setProfileUrl }: ChangeImageModalProps) => {
+const ChangeImageModal = ({ isOpen, handleCloseModal, setProfileFile }: ChangeImageModalProps) => {
   const handleConfirm = () => {
     handleCloseModal();
   };
-  const imageToBase64 = (file: File) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    return new Promise((resolve) => {
-      reader.onloadend = () => {
-        setProfileUrl(reader.result as string);
-        resolve(reader.result);
-      };
-    });
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      setProfileFile(file);
+    }
   };
 
   return (
@@ -31,9 +33,8 @@ const ChangeImageModal = ({ isOpen, handleCloseModal, setProfileUrl }: ChangeIma
             accept="image/*"
             onChange={(e) => {
               const input = e.target as HTMLInputElement;
-              if (input.files && input.files[0]) {
-                imageToBase64(input.files[0]);
-              }
+              console.log(input.files![0]);
+              handleFileChange(e);
             }}
           />
           <button onClick={handleConfirm}>확인</button>

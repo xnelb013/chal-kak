@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Modal from "react-modal";
 import { useRouter } from "next/router";
 import { AiOutlineClose } from "react-icons/ai";
 import InfoAlert from "../components/InfoAlert";
+import { useSetRecoilState } from "recoil";
+import { alertState } from "@/utils/atoms";
 
 interface ModalComponentProps {
   isOpen: boolean;
@@ -12,19 +14,17 @@ interface ModalComponentProps {
 Modal.setAppElement(".wrap");
 
 const URL = "localhost:3000";
-const alertMessage = "현재 게시글의 주소가 복사되었습니다!";
 
 const ShareModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal }) => {
-  const [alertOepn, setAlertOpen] = useState(false);
-
   const router = useRouter();
 
+  const setAlert = useSetRecoilState(alertState);
   const currentURL = URL + router.asPath;
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(currentURL);
-      setAlertOpen(true);
+      setAlert({ open: true, message: "현재 게시글의 주소가 복사되었습니다!" });
     } catch (err) {
       console.error("Failed to copy URL: ", err);
     }
@@ -62,7 +62,7 @@ const ShareModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal }) => {
             </button>
           </div>
         </div>
-        <InfoAlert open={alertOepn} setOpen={setAlertOpen} message={alertMessage} />
+        <InfoAlert />
       </Modal>
     </div>
   );

@@ -2,6 +2,13 @@ import { ChangeEvent, FormEvent, useState, useEffect, useCallback } from "react"
 import KeywordModal from "./KeywordModal";
 import debounce from "lodash.debounce";
 import { apiInstance } from "../api/api";
+import router from "next/router";
+import { BsQuestionCircle } from "react-icons/bs";
+import { useSetRecoilState } from "recoil";
+import { alertState } from "@/utils/atoms";
+import SkeletonSignup from "./SkeletonSignup";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 type Gender = "MALE" | "FEMALE";
 
 interface StyleTag {
@@ -23,6 +30,7 @@ interface SignUpData {
 }
 
 export default function signup() {
+  const setAlert = useSetRecoilState(alertState);
   const [styleTagsData, setStyleTagsData] = useState<StyleTag[]>([]);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
@@ -34,6 +42,7 @@ export default function signup() {
   const [styleTags, setStyleTags] = useState<number[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [emailTouched, setEmailTouched] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [nicknameTouched, setNicknamewordTouched] = useState(false);
   const [passwordConfirmTouched, setPasswordConfirmTouched] = useState(false);
@@ -56,9 +65,9 @@ export default function signup() {
   const checkNicknameDuplication = useCallback(
     debounce(async (nickname: string) => {
       try {
-        const response = await apiInstance.post(`users/validate/nickname`, { nickname });
+        const response = await apiInstance.get(`users/validate/nickname/${encodeURIComponent(nickname)}`);
         // 중복 여부에 따른 처리
-        if (response.data.message === "이미 존재하는 닉네임입니다.") {
+        if (response.data.data.isDuplicated === true) {
           setNicknameDuplicated(true);
         } else {
           setNicknameDuplicated(false);
@@ -71,17 +80,15 @@ export default function signup() {
   );
 
   useEffect(() => {
-    console.log(styleTags);
-  }, [styleTags]);
-
-  useEffect(() => {
     apiInstance
       .get("styleTags")
       .then((response) => {
         setStyleTagsData(response.data.data.styleTags);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("There was an error!", error);
+        setIsLoading(false);
       });
   }, []);
 
@@ -95,11 +102,9 @@ export default function signup() {
   const checkEmailDuplication = useCallback(
     debounce(async (email: string) => {
       try {
-        const response = await apiInstance.post(`users/validate/email`, { email });
-        console.log("test2");
-
+        const response = await apiInstance.get(`users/validate/email/${email}`);
         // 중복 여부에 따른 처리
-        if (response.data.message === "이미 존재하는 이메일입니다.") {
+        if (response.data.data.isDuplicated === true) {
           setEmailDuplicated(true);
         } else {
           setEmailDuplicated(false);
@@ -230,6 +235,8 @@ export default function signup() {
         nickname,
       });
       console.log(response);
+      setAlert({ open: true, message: "회원가입이 성공했습니다! 이메일 인증 후 로그인 해주세요!" });
+      router.push("/login");
       //이메일 인증 구현 예정
     } catch (error) {
       console.error(error);
@@ -238,7 +245,11 @@ export default function signup() {
     console.log(formData);
   };
 
-  return (
+  return isLoading ? (
+    <div>
+      <SkeletonSignup />
+    </div>
+  ) : (
     <div className="flex justify-center items-center">
       <div className="w-[500px]">
         <div className="flex items-center justify-center mt-10">
@@ -246,7 +257,15 @@ export default function signup() {
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 mt-[100px]">
           <div>
-            <p className="text-md font-medium mb-[-10px]">이메일 주소</p> <br />
+            <div className="flex items-center mb-3">
+              <p className="font-bold">이메일 주소</p>
+              <div className="ml-1">
+                <Tooltip id="my-tooltip" className="text-xs" />
+                <a data-tooltip-id="my-tooltip" data-tooltip-content="인증 가능한 이메일을 입력해주세요!">
+                  <BsQuestionCircle className="cursor-pointer" />
+                </a>
+              </div>
+            </div>
             <input
               type="text"
               className="border-b border-gray-200 w-[500px] pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
@@ -318,8 +337,8 @@ export default function signup() {
             <div className="w-1/3 ">
               <p className="text-md font-bold">성별</p>
               <select name="gender" className="text-md h-10 mt-4" value={formData.gender} onChange={handleChange}>
-                <option value="male">남성</option>
-                <option value="female">여성</option>
+                <option value="MALE">남성</option>
+                <option value="FEMALE">여성</option>
               </select>
             </div>
             <br />

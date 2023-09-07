@@ -1,5 +1,11 @@
 import { Post } from "@/utils/type";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { apiInstance } from "../api/api";
+import Cookies from "js-cookie";
+import { useRecoilState } from "recoil";
+import { userDetailState } from "@/utils/atoms";
+
 // import { useEffect, useState } from "react";
 // import { LiaUserCircleSolid } from "react-icons/lia";
 
@@ -216,6 +222,16 @@ const tempPosts: Post[] = [
   },
 ];
 
+// interface userDetailPropsType {
+//   posts: number | null;
+//   followerCount: number;
+//   followingCount: number;
+// }
+
+// export const getServerSideProps: userDetailPropsType = async (context) => {
+
+// }
+
 export default function UserInfo(): JSX.Element {
   // const [userInfo, setUserInfo] = useState({
   //   postCount: 0,
@@ -224,7 +240,18 @@ export default function UserInfo(): JSX.Element {
   //   nickname: "",
   //   profileUrl: "",
   // });
+  const [userDetail, setUserDetail] = useRecoilState(userDetailState);
   const router = useRouter();
+  const userId = Cookies.get("userId");
+  // const [isFollowerModalOpen, setIsFollowerModalOpen] = useState<boolean>(false);
+  // const [isFollowingModalOpen, setIsFollowingModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const userDetailRes = apiInstance.get(`/users/details/${userId}`);
+    userDetailRes.then((res) => {
+      setUserDetail(res.data.data);
+    });
+  }, []);
 
   // useEffect(() => {
   //   const fetchUserInfo = async () => {
@@ -269,14 +296,17 @@ export default function UserInfo(): JSX.Element {
                 <div className="flex flex-col items-center text-black">
                   <p>게시글</p>
                   {/* {postCount} */}
+                  {userDetail.posts}
                 </div>
                 <div className="flex flex-col items-center text-black">
                   <p>팔로워</p>
                   {/* {followers.length} */}
+                  {userDetail.followerCount}
                 </div>
                 <div className="flex flex-col items-center text-black">
                   <p>팔로잉</p>
                   {/* {following.length} */}
+                  {userDetail.followingCount}
                 </div>
               </div>
             </div>

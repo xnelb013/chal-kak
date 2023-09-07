@@ -1,19 +1,17 @@
 import { FunctionComponent, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { alertState } from "@/utils/atoms";
 
-interface AlertProps {
-  open: boolean;
-  setOpen: (state: boolean) => void;
-  message: string;
-}
+const InfoAlert: FunctionComponent = () => {
+  const [alert, setAlert] = useRecoilState(alertState);
 
-const InfoAlert: FunctionComponent<AlertProps> = ({ open, setOpen, message }) => {
   useEffect(() => {
     let timerId: number | null = null;
 
-    if (open) {
+    if (alert.open) {
       timerId = setTimeout(() => {
-        setOpen(false);
-      }, 1500) as unknown as number;
+        setAlert({ open: false, message: "" });
+      }, 4000) as unknown as number;
     }
 
     return () => {
@@ -21,12 +19,11 @@ const InfoAlert: FunctionComponent<AlertProps> = ({ open, setOpen, message }) =>
         clearTimeout(timerId);
       }
     };
-  }, [open]);
-
+  }, [alert, setAlert]);
   return (
     <div
-      className={`fixed left-5 bottom-5 transition-all duration-500 ease-out transform ${
-        open ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+      className={`fixed left-5 bottom-5 flex items-center transition-all duration-500 ease-out transform ${
+        alert.open ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
       }`}
     >
       <div
@@ -34,16 +31,20 @@ const InfoAlert: FunctionComponent<AlertProps> = ({ open, setOpen, message }) =>
         role="alert"
       >
         <svg
-          className="flex-shrink-0 inline w-4 h-4 mr-3"
-          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 20 20"
+          fill="none"
+          viewBox="0 0 24 24"
+          className="stroke-info shrink-0 w-7 h-6 mt-1"
         >
-          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
         </svg>
         <span className="sr-only">Info</span>
-        <div>{message}</div>
+        <div>{alert.message}</div>
       </div>
     </div>
   );

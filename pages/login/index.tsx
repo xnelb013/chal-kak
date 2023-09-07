@@ -5,9 +5,10 @@ import Link from "next/link";
 import Alert from "../components/Alert";
 // import { useRecoilState } from "recoil";
 // import { accessTokenState, refreshTokenState } from "@/utils/atoms";
-// import { on } from "events";
 import Cookies from "js-cookie";
 import { apiInstance } from "../api/api";
+import { useSetRecoilState } from "recoil";
+import { accessTokenState, userState } from "@/utils/atoms";
 
 // 이메일과 비밀번호를 포함한 객체
 interface LoginData {
@@ -20,7 +21,14 @@ interface SigninResponse {
     success?: boolean;
     message?: string;
     data: {
-      userId: number;
+      userInfo: {
+        gender: string;
+        height: number;
+        weight: number;
+        nickname: string;
+        styleTags: number[];
+        userId: number;
+      };
       token: {
         readonly grantType: string;
         readonly accessToken: string;
@@ -40,7 +48,7 @@ export default function Login() {
     email: "",
     password: "",
   });
-  // const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
+  const setAcToken = useSetRecoilState(accessTokenState);
   // const [refreshToken, setRefreshToken] = useRecoilState(refreshTokenState);
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
@@ -52,16 +60,22 @@ export default function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
+  const setLoggedInUser = useSetRecoilState(userState);
+
   // 로그인 성공 시, accessToken을 recoil에 저장
   const onLoginSuccess = (response: SigninResponse) => {
     const { accessToken, refreshToken, accessTokenExpireDate } = response.data.data.token;
+    const styleTags = response.data.data.userInfo.styleTags;
+    console.log("styleTags", styleTags);
     // 쿠키에 로그인 정보 저장
-    Cookies.set("userId", String(response.data.data.userId));
+    Cookies.set("userId", String(response.data.data.userInfo.userId));
     Cookies.set("accessToken", accessToken);
-
+    Cookies.set("myKeywords", JSON.stringify(styleTags));
     // accessToken, refreshToken recoil에 저장
+    setAcToken(accessToken);
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
+
     // 현재 시간 (unix time)
     const now = new Date().getTime();
     // accessToken 만료 시간
@@ -69,7 +83,9 @@ export default function Login() {
     // 만료 시간 - 현재 시간 - 10분
     const delay = Math.max(expiration - now - 600000, 0);
     setTimeout(silentRefresh, delay);
-    router.reload();
+    router.push("/main");
+    // 로그인 성공 시 userState 업데이트
+    setLoggedInUser((prevUser) => ({ ...prevUser, isLoggedIn: true, styleTags: styleTags }));
   };
 
   // silentRefresh: accessToken 재발급 및 로그인 성공 실행 함수 실행
@@ -107,28 +123,17 @@ export default function Login() {
       onLoginSuccess(tokenResponse);
       setFormData({ email: "", password: "" });
     } catch (error) {
-      console.log('err', error)
+      console.log("err", error);
       setAlertMessage("이메일 또는 비밀번호를 확인해주세요.");
       setAlertOpen(true);
     }
   };
 
-  // // 구글 로그인 API 호출
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     const response = await axios.get("/googlelogin");
-  //     console.log(response);
-  //     if (response.status === 200) {
-  //       router.push("/");
-  //     } else {
-  //       setAlertMessage("이메일 또는 비밀번호를 확인해주세요.");
-  //       setAlertOpen(true);
-  //     }
-  //   } catch (error) {
-  //     setAlertMessage("이메일 또는 비밀번호를 확인해주세요.");
-  //     setAlertOpen(true);
-  //   }
-  // };
+  // 구글 로그인 API 호출
+  const handleGoogleLogin = () => {
+    window.location.href =
+      "http://ec2-13-127-154-248.ap-south-1.compute.amazonaws.com:8080/oauth2/authorization/google";
+  };
 
   // 이메일 양식 확인
   const checkEmailFormat = (email: string) => {
@@ -247,7 +252,7 @@ export default function Login() {
 
           <div
             className="mt-[50px] ml-[210px] background-white border rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer"
-            // onClick={handleGoogleLogin}
+            onClick={handleGoogleLogin}
           >
             <FcGoogle className="w-[34px] h-[34px]" />
           </div>

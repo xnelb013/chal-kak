@@ -106,7 +106,7 @@ const KeywordModal = ({
                           )}
                         </label>
                         <div
-                          className={`text-sm text-center font-semibold w-[60px] mt-2 ${
+                          className={`text-sm text-center font-semibold w-[7rem] mt-2 ${
                             keywords.includes(keyword) ? "text-blue-600" : "text-gray-500"
                           }`}
                         >

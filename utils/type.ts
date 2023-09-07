@@ -26,3 +26,9 @@ export type userInfoType = {
   nickname: string;
   profileUrl: string;
 };
+
+export type userDetailPropsType = {
+  postCount: number | null;
+  followers: string[];
+  following: string[];
+};

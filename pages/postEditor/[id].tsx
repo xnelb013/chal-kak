@@ -1,13 +1,12 @@
-import HomePage, { postingData } from "./index";
+import HomePage, { editData } from "./index";
 import { GetServerSideProps } from "next";
 import { apiInstance } from "../api/api";
 
 interface PostEditorProps {
-  initialPostData: postingData;
+  initialPostData: editData;
 }
 
 const PostEditor = ({ initialPostData }: PostEditorProps) => {
-  console.log("hh");
   return <HomePage initialPostData={initialPostData} />;
 };
 
@@ -24,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const response = await apiInstance.get(`/posts/${postId}`);
-    postData = response.data;
+    postData = response.data.data;
   } catch (error) {
     console.error(error);
     return { notFound: true };

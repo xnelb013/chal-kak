@@ -71,7 +71,7 @@ const ChangeUserinfoModal = ({
   };
 
   const maxCheckedCount = 5;
-  const [checkedKeyword, setCheckedKeyword] = useState<number[]>(userinfo.styleTags);
+  const [checkedKeyword, setCheckedKeyword] = useState<number[]>(userinfo.styleTags!);
   console.log("checkedKeyword", checkedKeyword);
   const handleKeywordCheckedChange = (keywordId: number) => {
     if (checkedKeyword.includes(keywordId)) {

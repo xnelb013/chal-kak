@@ -64,9 +64,6 @@ export default function modifyuserinfo() {
     });
   }, []);
 
-  const hasFile = formData.has("multipartFiles");
-  console.log(hasFile);
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };

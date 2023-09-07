@@ -52,9 +52,6 @@ const ChangeUserinfoModal = ({
     });
     handleCloseModal();
   };
-  //
-  const hasFile = formData.has("multipartFiles");
-  console.log("has", hasFile);
 
   useEffect(() => {
     // formData.append("multipartFiles", profileFile as File);

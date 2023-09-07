@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import Cookies from "js-cookie";
+import { UserinfoType } from "@/pages/userinfo/modify-userinfo";
 
 // file
 export const uploadedImageFilesState = atom<File[]>({
@@ -101,4 +102,17 @@ export const styleTagsState = atom({
       keyword: "",
     },
   ],
+});
+
+// userinfoState
+export const userinfoState = atom({
+  key: "userinfoState",
+  default: {
+    nickname: "",
+    gender: "",
+    userId: 0,
+    height: "",
+    weight: "",
+    styleTags: [],
+  } as UserinfoType,
 });

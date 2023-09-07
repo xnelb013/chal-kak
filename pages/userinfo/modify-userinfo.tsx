@@ -3,8 +3,8 @@ import { LiaUserCircleSolid } from "react-icons/lia";
 import ChangeImageModal from "./ChangeImageModal";
 import Cookies from "js-cookie";
 import { apiInstance } from "../api/api";
-import { useRecoilValue } from "recoil";
-import { styleTagsState } from "@/utils/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { styleTagsState, userinfoState } from "@/utils/atoms";
 import ChangeUserinfoModal from "./ChangeUserinfoModal";
 import ChangePWModal from "./ChangePWModal";
 import WithdrawalModal from "./WithdrawalModal";
@@ -35,6 +35,7 @@ export default function modifyuserinfo() {
   const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState<boolean>(false);
   const [, setProfileUrl] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
+  const [, setUserinfoProfile] = useRecoilState(userinfoState);
   const [userinfo, setUserinfo] = useState<UserinfoType>({
     nickname: "",
     gender: "",
@@ -43,6 +44,7 @@ export default function modifyuserinfo() {
     weight: "",
     styleTags: [],
   });
+  console.log("userinfo", userinfo);
   const [profileFile, setProfileFile] = useState<File>();
   console.log("profileFile", profileFile);
   const [userNickname, setUserNickname] = useState<string>("");
@@ -60,6 +62,7 @@ export default function modifyuserinfo() {
     });
     userinfoRes.then((res) => {
       setUserinfo(res.data.data);
+      setUserinfoProfile(res.data.data);
       setUserNickname(res.data.data.nickname);
     });
   }, []);

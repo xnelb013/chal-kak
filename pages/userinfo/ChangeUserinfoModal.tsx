@@ -3,8 +3,8 @@ import { UserinfoType } from "./modify-userinfo";
 import { ChangeEvent, FormEventHandler, useCallback, useEffect, useState } from "react";
 import { apiInstance } from "../api/api";
 import debounce from "lodash.debounce";
-import { styleTagsState } from "@/utils/atoms";
-import { useRecoilValue } from "recoil";
+import { styleTagsState, userinfoState } from "@/utils/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { AiOutlineClose } from "react-icons/ai";
 import Cookies from "js-cookie";
 
@@ -29,6 +29,10 @@ const ChangeUserinfoModal = ({
   formData,
   userNickname,
 }: ChangeUserinfoModalProps) => {
+  console.log("userinfo-modal", userinfo);
+  // const stList = userinfo.styleTags;
+  // const userinfoProfile = useRecoilValue(userinfoState);
+  const [userinfoProfile, setUserinfoPropfile] = useRecoilState(userinfoState);
   const [invalidNickname, setInvalidNickname] = useState(false);
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
   const keywordTagList = useRecoilValue(styleTagsState);
@@ -63,15 +67,18 @@ const ChangeUserinfoModal = ({
     const { name, value } = e.target;
     if (name === "gender") {
       setUserInfo({ ...userinfo, gender: value });
+      setUserinfoPropfile({ ...userinfoProfile, gender: value });
     } else if (name === "height" || name === "weight") {
       setUserInfo({ ...userinfo, [name]: Number(value) });
+      setUserinfoPropfile({ ...userinfoProfile, [name]: Number(value) });
     } else {
       setUserInfo({ ...userinfo, [name]: value });
+      setUserinfoPropfile({ ...userinfoProfile, [name]: value });
     }
   };
 
   const maxCheckedCount = 5;
-  const [checkedKeyword, setCheckedKeyword] = useState<number[]>(userinfo.styleTags!);
+  const [checkedKeyword, setCheckedKeyword] = useState<number[]>(userinfoProfile.styleTags);
   console.log("checkedKeyword", checkedKeyword);
   const handleKeywordCheckedChange = (keywordId: number) => {
     if (checkedKeyword.includes(keywordId)) {
@@ -110,7 +117,7 @@ const ChangeUserinfoModal = ({
     if (nicknameTouched && validateNickname(userinfo.nickname)) {
       validateNickname(userinfo.nickname);
     }
-  }, [userinfo.nickname, nicknameTouched]);
+  }, [nicknameTouched, userinfoProfile.nickname]);
 
   return (
     <>

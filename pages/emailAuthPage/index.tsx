@@ -1,18 +1,19 @@
 import router from "next/router";
+import "animate.css";
 
-const Custom404 = () => {
+const HomePage = () => {
   return (
     <section className="bg-white dark:bg-gray-900 mt-40">
-      <div className="container flex items-start min-h-screen px-6 mx-auto">
+      <div className="container flex items-start min-h-screen px-6 mx-auto ">
         <div className="flex flex-col items-center max-w-sm mx-auto text-center">
-          <p className="p-3 text-sm font-medium text-gray-500 rounded-full bg-blue-50 dark:bg-gray-800">
+          <p className="p-3 text-sm font-medium text-blue-500 rounded-full bg-blue-50 dark:bg-gray-800 animate__animated animate__bounce">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="2"
               stroke="currentColor"
-              className="w-6 h-6"
+              className="w-6 h-6 "
             >
               <path
                 strokeLinecap="round"
@@ -21,11 +22,11 @@ const Custom404 = () => {
               />
             </svg>
           </p>
-          <h1 className="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl">
-            페이지를 찾을 수 없습니다!
+          <h1 className="mt-3 text-2xl w-[700px] font-semibold text-blue-800 dark:text-white md:text-3xl animate__animated animate__bounce">
+            이메일 인증에 성공했습니다! 🎉
           </h1>
-          <p className="mt-4 text-gray-500 dark:text-gray-400">
-            주소가 올바르지 않거나 알 수 없는 오류로 인해 페이지를 찾을 수 없습니다.
+          <p className="mt-4 text-gray-500 dark:text-gray-400 animate__animated animate__bounce">
+            로그인 후 #찰칵을 즐겨보세요!
           </p>
 
           <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
@@ -48,10 +49,10 @@ const Custom404 = () => {
             </button>
 
             <button
-              onClick={() => router.push("/main")}
-              className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-gray-500 rounded-lg shrink-0 sm:w-auto hover:bg-gray-600 dark:hover:bg-blue-500 dark:bg-blue-600"
+              onClick={() => router.push("/login")}
+              className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600"
             >
-              홈으로 돌아가기
+              로그인하러 가기
             </button>
           </div>
         </div>
@@ -59,4 +60,4 @@ const Custom404 = () => {
     </section>
   );
 };
-export default Custom404;
+export default HomePage;

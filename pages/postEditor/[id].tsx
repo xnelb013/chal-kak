@@ -24,8 +24,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const response = await apiInstance.get(`/posts/${postId}`);
     postData = response.data.data;
+    console.log(response);
   } catch (error) {
-    console.error(error);
+    alert("There was an error!" + error);
     return { notFound: true };
   }
 

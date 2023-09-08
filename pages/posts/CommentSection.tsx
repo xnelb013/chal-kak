@@ -51,7 +51,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
         setTotalComments(response.data.data.totalElements);
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        alert("There was an error!" + error);
       });
   };
 

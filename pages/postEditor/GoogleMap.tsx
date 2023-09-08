@@ -50,7 +50,9 @@ const GoogleMapsComponent = () => {
       .then((latLng) => {
         setSelectedLatLng(latLng);
       })
-      .catch((error) => console.error("Error", error));
+      .catch((error) => {
+        alert("There was an error!" + error);
+      });
   };
 
   return (

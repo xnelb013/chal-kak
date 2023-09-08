@@ -19,7 +19,7 @@ interface StyleTag {
 }
 
 interface SignUpData {
-  confirmPassword: string | number | readonly string[] | undefined;
+  confirmPassword: string;
   email: string;
   password: string;
   gender: Gender;
@@ -73,7 +73,7 @@ export default function signup() {
           setNicknameDuplicated(false);
         }
       } catch (error) {
-        console.error(error);
+        alert("There was an error!" + error);
       }
     }, 600),
     [],
@@ -87,7 +87,7 @@ export default function signup() {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        alert("There was an error!" + error);
         setIsLoading(false);
       });
   }, []);
@@ -110,7 +110,7 @@ export default function signup() {
           setEmailDuplicated(false);
         }
       } catch (error) {
-        console.error(error);
+        alert("There was an error!" + error);
       }
     }, 600),
     [],
@@ -239,7 +239,7 @@ export default function signup() {
       router.push("/login");
       //이메일 인증 구현 예정
     } catch (error) {
-      console.error(error);
+      alert("There was an error!" + error);
     }
 
     console.log(formData);

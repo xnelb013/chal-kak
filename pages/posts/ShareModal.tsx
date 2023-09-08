@@ -25,8 +25,8 @@ const ShareModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal }) => {
     try {
       await navigator.clipboard.writeText(currentURL);
       setAlert({ open: true, message: "현재 게시글의 주소가 복사되었습니다!" });
-    } catch (err) {
-      console.error("Failed to copy URL: ", err);
+    } catch (error) {
+      alert("There was an error!" + error);
     }
   };
 

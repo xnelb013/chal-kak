@@ -1,6 +1,14 @@
 // HomePage.tsx
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { uploadedImageFilesState, uploadedImageUrlsState, locationState, alertState } from "../../utils/atoms";
+import {
+  uploadedImageFilesState,
+  uploadedImageUrlsState,
+  locationState,
+  alertState,
+  imageInfoState,
+  imageIdsState,
+  deleteImageIdsState,
+} from "../../utils/atoms";
 import ImageUpload from "./ImageUpload";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import KeywordCheckbox from "./KeywordCheckbox";
@@ -12,7 +20,8 @@ import useInitialData from "@/hooks/customHooks";
 import { apiInstance } from "../api/api";
 import InfoAlert from "../components/InfoAlert";
 import Cookies from "js-cookie";
-import router from "next/router";
+import router, { useRouter } from "next/router";
+import { GetServerSidePropsContext } from "next";
 
 interface StyleTag {
   id: number;
@@ -36,6 +45,13 @@ interface postingData {
   styleTags: number[];
 }
 
+interface PostPhoto {
+  id: number;
+  order: number;
+  name: string;
+  url: string;
+}
+
 export interface editData {
   content: string;
   styleTags: string[];
@@ -48,8 +64,7 @@ export interface editData {
   privacyWeight: boolean;
   staticKeywords: string[];
   location: string;
-  testData: string[];
-  testData2: number[];
+  postPhotos: PostPhoto[];
 }
 
 interface HomePageProps {
@@ -77,6 +92,9 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
   const [privacyWeight, setPrivacyWeight] = useState(false);
   const [dynamicKeywordInput, setDynamicKeywordInput] = useState<string>("");
   const [allStaticKeywords, setAllStaticKeywords] = useState<string[]>([]);
+  const [imageInfo, setImageInfo] = useRecoilState(imageInfoState);
+  const [imageIds, setImageIds] = useRecoilState(imageIdsState);
+  const [deleteImageIds] = useRecoilState(deleteImageIdsState);
   const setAlert = useSetRecoilState(alertState);
   const [formData, setFormData] = useState<postingData>({
     content: "",
@@ -93,7 +111,17 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
     location: location,
   });
 
+  const userouter = useRouter();
+
+  useEffect(() => {
+    if (!accessToken) {
+      alert("로그인이 필요합니다");
+      router.push("/main");
+    }
+  }, []);
+
   useInitialData(initialPostData?.location, setLocation);
+  // useInitialData(initialPostData?.styleTags, setStyleTags);
   // useInitialData(initialPostData?.styleTags, setStyleTags);
   useInitialData(initialPostData?.content, setContent);
   useInitialData(initialPostData?.privacyHeight, setPrivacyHeight);
@@ -102,6 +130,15 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
   useInitialData(initialPostData?.styleTags, setStyleKeywords);
   useInitialData(initialPostData?.seasonTags, setSeasonKeywords);
   useInitialData(initialPostData?.weatherTags, setWeatherKeywords);
+
+  useEffect(() => {
+    setImageInfo(initialPostData?.postPhotos.map((photo) => ({ id: photo.id, url: photo.url })) || []);
+  }, [initialPostData]);
+
+  useEffect(() => {
+    const ids = imageInfo.map((info) => info.id);
+    setImageIds(ids);
+  }, [imageInfo]);
 
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -143,7 +180,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
         setAllStaticKeywords(keywordArray);
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        alert("There was an error!" + error);
       });
   }, []);
 
@@ -194,7 +231,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
       if (dynamicKeywordInput.trim() === "") return;
       // 중복 키워드 확인
       if (dynamicKeywords.includes(dynamicKeywordInput.trim()) || staticKeywords.includes(dynamicKeywordInput.trim())) {
-        alert("이미 있는 키워드입니다!"); // 이미 있는 키워드일 경우 alert 표시함
+        alert("이미 있는 키워드입니다!"); // 이미 있는 키워드일 경우 alert 표시
       } else if (allStaticKeywords.includes(dynamicKeywordInput.trim())) {
         alert("해당 키워드는 버튼을 눌러주세요!"); // keywords에 존재하는 경우 alert 표시
       } else {
@@ -284,6 +321,22 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
     />
   ));
 
+  const renderButton = (isActive: boolean) => {
+    return isActive ? (
+      <button type="button" onClick={handleSubmit} className="btn-neutral w-[600px] p-3 rounded-full text-sm my-10">
+        작성
+      </button>
+    ) : (
+      <button
+        type="button"
+        disabled
+        className="btn w-[600px] p-3 rounded-full text-sm my-10 bg-gray-200 cursor-not-allowed"
+      >
+        작성
+      </button>
+    );
+  };
+
   // 내용 입력 창 체인지
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -304,30 +357,57 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
       submissionFormData.append("multipartFileList", file);
     });
 
-    const request = {
-      content: content,
-      location: location,
-      privacyHeight: privacyHeight,
-      privacyWeight: privacyWeight,
-      styleTags: styleTags,
-      hashTags: dynamicKeywords,
-    };
+    let request;
+
+    if (userouter.query.id) {
+      request = {
+        content: content,
+        location: location,
+        privacyHeight: privacyHeight,
+        privacyWeight: privacyWeight,
+        styleTags: styleTags,
+        hashTags: dynamicKeywords,
+        deletedImageIds: deleteImageIds,
+      };
+    } else {
+      request = {
+        content: content,
+        location: location,
+        privacyHeight: privacyHeight,
+        privacyWeight: privacyWeight,
+        styleTags: styleTags,
+        hashTags: dynamicKeywords,
+      };
+    }
 
     const blob = new Blob([JSON.stringify(request)], { type: "application/json" });
     submissionFormData.append("request", blob);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      await apiInstance.post(`posts`, submissionFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setAlert({ open: true, message: "게시물 작성이 완료되었습니다!" });
-      router.push("/main");
+      if (router.query.id) {
+        // postId가 있으면 PATCH 요청으로 게시글 수정
+        const response = await apiInstance.patch(`posts/${router.query.id}`, submissionFormData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setAlert({ open: true, message: "게시물 수정이 완료되었습니다!" });
+
+        router.push(`/posts/${response.data.data.postId}`);
+      } else {
+        // postId가 없으면 POST 요청으로 게시글 생성
+        const response = await apiInstance.post(`posts`, submissionFormData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setAlert({ open: true, message: "게시물 업로드가 완료되었습니다!" });
+        router.push(`/posts/${response.data.data.postId}`);
+      }
     } catch (error) {
-      console.error(error);
+      alert("There was an error!" + error);
     }
 
     console.log(formData);
@@ -427,22 +507,23 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
         <h2 className="mb-2 font-medium">Weather*</h2>
         <div className="flex ">{weatherKeywordCheckboxes}</div>
       </div>
-      {uploadedImageUrls.length > 0 && seasonKeywords.length > 0 && weatherKeywords.length > 0 ? (
-        <button type="button" onClick={handleSubmit} className="btn-neutral w-[600px] p-3 rounded-full text-sm my-10">
-          작성
-        </button>
-      ) : (
-        <button
-          type="button"
-          disabled
-          className="btn w-[600px] p-3 rounded-full text-sm my-10 bg-gray-200 cursor-not-allowed"
-        >
-          작성
-        </button>
-      )}
+      {userouter.query.id
+        ? renderButton(
+            (imageIds.length > 0 || uploadedImageUrls.length > 0) &&
+              seasonKeywords.length > 0 &&
+              weatherKeywords.length > 0,
+          )
+        : renderButton(uploadedImageUrls.length > 0 && seasonKeywords.length > 0 && weatherKeywords.length > 0)}
       <InfoAlert />
     </div>
   );
 };
 
 export default HomePage;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const postId = context.params?.postId ?? null;
+  return {
+    props: { postId },
+  };
+}

@@ -20,7 +20,6 @@ interface ModalComponentProps {
   onCommentDeleted?: () => void;
 }
 
-
 interface Comment {
   commentId: number;
   comment: string;
@@ -81,7 +80,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
           setIsLoading(false); // loading 종료
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
           setIsLoading(false); // loading 종료
         });
     }
@@ -143,7 +142,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         }
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        alert("There was an error!" + error);
       });
   };
 
@@ -179,7 +178,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
           if (!userId) {
             router.push("/login");
           }
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
         });
     }
   };

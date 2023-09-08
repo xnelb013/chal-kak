@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AiOutlineClose, AiOutlinePlusCircle } from "react-icons/ai";
 import { apiInstance } from "../api/api";
 import router from "next/router";
+import Cookies from "js-cookie";
 
 interface ModalComponentProps {
   isOpen: boolean;
@@ -27,6 +28,8 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
   const [isLoading, setIsLoading] = useState(false);
   const [likeListData, setLikeListData] = useState<LikeList[]>([]);
   const [followStatuses, setFollowStatuses] = useState<Record<string, boolean>>({});
+
+  const userId = Cookies.get("userId");
 
   useEffect(() => {
     if (isOpen) {
@@ -52,10 +55,14 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
         setIsLoading(false); // loading 종료
       })
       .catch((error) => {
-        console.error(error);
+        alert("There was an error!" + error);
         setIsLoading(false); // loading 종료
       });
   };
+
+  useEffect(() => {
+    console.log(likeListData);
+  }, [likeListData]);
 
   //로그인 페이지로 이동
   const redirectToLogin = () => {
@@ -78,7 +85,7 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
           setFollowStatuses({ ...followStatuses, [memberId]: true });
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
           redirectToLogin();
         });
     }
@@ -94,7 +101,7 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
           setFollowStatuses({ ...followStatuses, [memberId]: false });
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
           redirectToLogin();
         });
     }
@@ -136,26 +143,26 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
                 </div>
                 <div className="ml-5 text-lg">{likeList.nickName}</div>
               </div>
-
-              {followStatuses[likeList.memberId.toString()] || likeList.followed ? (
-                <div>
-                  <button
-                    className="w-20 h-8 border rounded-md bg-gray-600 text-white hover:bg-gray-800 hover:text-gray-200"
-                    onClick={() => handleClickUnfollowBtn(likeList.memberId)}
-                  >
-                    언팔로우
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  <button
-                    className="w-20 h-8 border rounded-md hover:bg-gray-200"
-                    onClick={() => handleClickFollowBtn(likeList.memberId)}
-                  >
-                    팔로우
-                  </button>
-                </div>
-              )}
+              {likeList.memberId !== Number(userId) &&
+                (followStatuses[likeList.memberId.toString()] || likeList.followed ? (
+                  <div>
+                    <button
+                      className="w-20 h-8 border rounded-md bg-gray-600 text-white hover:bg-gray-800 hover:text-gray-200"
+                      onClick={() => handleClickUnfollowBtn(likeList.memberId)}
+                    >
+                      언팔로우
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      className="w-20 h-8 border rounded-md hover:bg-gray-200"
+                      onClick={() => handleClickFollowBtn(likeList.memberId)}
+                    >
+                      팔로우
+                    </button>
+                  </div>
+                ))}
             </div>
           ))}
           {likeListData.length >= 8 && totalPages > page + 1 && (

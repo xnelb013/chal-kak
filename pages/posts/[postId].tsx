@@ -64,7 +64,7 @@ const HomePage = () => {
   const [isWriter, setIsWriter] = useState(false);
   const [isLike, setIsLike] = useState(postData?.liked || false);
   const [isFollow, setIsFollow] = useState(postData?.liked || false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(postData?.likeCount || 0);
   const [loading, setLoading] = useState(true);
   const [isLogined, setIsLogined] = useState(true);
   const [alertOepn, setAlertOpen] = useState(false);
@@ -129,7 +129,8 @@ const HomePage = () => {
           setLoading(false);
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
+          if (error.response.data.message === "존재하지 않는 게시글 번호입니다.") router.push("/404");
           setLoading(false);
         });
     }
@@ -215,7 +216,7 @@ const HomePage = () => {
           setIsFollow(true);
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
 
           redirectToLogin();
         });
@@ -235,7 +236,7 @@ const HomePage = () => {
           setIsFollow(false);
         })
         .catch((error) => {
-          console.error("There was an error!", error);
+          alert("There was an error!" + error);
           redirectToLogin();
         });
     }
@@ -247,11 +248,11 @@ const HomePage = () => {
       url: `posts/${postId}/delete`,
     })
       .then(() => {
-        setAlert({ open: true, message: "게시물 작성이 완료되었습니다!" });
+        setAlert({ open: true, message: "게시물 삭제가 완료되었습니다!" });
         router.push("/main");
       })
       .catch((error) => {
-        console.log(error);
+        alert("There was an error!" + error);
       });
   };
 
@@ -382,7 +383,8 @@ const HomePage = () => {
                   alt={`Post Image ${index}`}
                   width={720}
                   height={960}
-                  quality={100}
+                  priority={index === 0}
+                  quality={80}
                   layout="responsive"
                   className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 />

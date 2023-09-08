@@ -44,7 +44,6 @@ export default function modifyuserinfo() {
     weight: "",
     styleTags: [],
   });
-  console.log("userinfo", userinfo);
   const [profileFile, setProfileFile] = useState<File>();
   console.log("profileFile", profileFile);
   const [userNickname, setUserNickname] = useState<string>("");

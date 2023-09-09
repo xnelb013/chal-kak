@@ -216,7 +216,7 @@ const HomePage = () => {
           setIsFollow(true);
         })
         .catch((error) => {
-          alert("There was an error!" + error);
+          console.error("There was an error!" + error);
 
           redirectToLogin();
         });
@@ -298,6 +298,10 @@ const HomePage = () => {
     }
   };
 
+  const moveToProfilePage = () => {
+    router.push(`/userinfo/${postData?.writer.id}`);
+  };
+
   function formatDateToRelativeTime(dateString: string | number | Date) {
     const date = new Date(dateString);
 
@@ -317,12 +321,14 @@ const HomePage = () => {
       <div className=" flex flex-col mt-6">
         <div className=" flex items-center w-[680px] mx-auto">
           <div className="flex items-center">
-            <div className="relative w-12 h-12">
+            <div className="relative w-12 h-12 cursor-pointer" onClick={moveToProfilePage}>
               <Image src={writerSrc} alt="프로필 사진" layout="fill" className="rounded-full object-cover" />
             </div>
             <div className="ml-3">
               <div className="flex">
-                <div className=" font-semibold">{postData?.writer.nickname}</div>
+                <div className=" font-semibold cursor-pointer" onClick={moveToProfilePage}>
+                  {postData?.writer.nickname}
+                </div>
                 <div className="ml-3">
                   {postData?.privacyHeight && (
                     <div className="flex items-center">

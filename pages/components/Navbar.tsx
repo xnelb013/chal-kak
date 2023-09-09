@@ -8,7 +8,7 @@ export default function Navbar() {
   const router = useRouter();
   const [actoken, setActoken] = useRecoilState(accessTokenState);
   console.log("actoken", actoken);
-
+  const userId = Cookies.get("userId");
   const handleLogout = async () => {
     try {
       Cookies.remove("accessToken");
@@ -52,7 +52,7 @@ export default function Navbar() {
                   <li>
                     <a
                       onClick={() => {
-                        router.push("/userinfo");
+                        router.push(`/userinfo/${userId}`);
                       }}
                     >
                       userinfo

@@ -19,3 +19,25 @@ apiInstance.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+
+// 토큰 갱신부분
+// apiInstance.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   }
+//   async (error) => {
+//     const originalRequest = error.config;
+//     if (error.response.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+//       const refreshToken = Cookies.get("refreshToken");
+//       const { data } = await apiInstance({
+//         url: "/users/reissue",
+//         method: "POST",
+//         data: {
+//           refreshToken: refreshToken,
+//       })
+//       Cookies.set("accessToken", data.accessToken);
+//       return apiInstance(originalRequest);
+//     }
+//   }
+// )

@@ -32,3 +32,51 @@ export type userDetailPropsType = {
   followers: string[];
   following: string[];
 };
+
+export type userPostsType = {
+  id: number;
+  thumbnail: string | undefined;
+};
+
+export type followerResType = {
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  followerResponses: [
+    {
+      memberId: number;
+      nickName: string;
+      profileUrl: string;
+    },
+  ];
+};
+
+export type followingResType = {
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  followerResponses: [
+    {
+      memberId: number;
+      nickName: string;
+      profileUrl: string;
+    },
+  ];
+};
+
+export type followingPostsResType = {
+  content: string;
+  hashTags: string[];
+  id: number;
+  likeCount: number;
+  liked: boolean;
+  location: string;
+  styleTags: string[];
+  thumbnail: string;
+  viewCount: number;
+  writer: {
+    id: number;
+    nickname: string;
+    profileImg: string;
+  };
+};

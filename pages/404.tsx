@@ -27,7 +27,6 @@ const Custom404 = () => {
           <p className="mt-4 text-gray-500 dark:text-gray-400">
             주소가 올바르지 않거나 알 수 없는 오류로 인해 페이지를 찾을 수 없습니다.
           </p>
-
           <div className="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
             <button
               onClick={() => router.back()}
@@ -43,10 +42,8 @@ const Custom404 = () => {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
               </svg>
-
               <span>뒤로가기</span>
             </button>
-
             <button
               onClick={() => router.push("/main")}
               className="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-gray-500 rounded-lg shrink-0 sm:w-auto hover:bg-gray-600 dark:hover:bg-blue-500 dark:bg-blue-600"

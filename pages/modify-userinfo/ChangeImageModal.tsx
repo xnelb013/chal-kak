@@ -1,5 +1,5 @@
 import { keyframes, styled } from "styled-components";
-import { UserinfoType } from "./modify-userinfo";
+import { UserinfoType } from "./[userId]";
 
 interface ChangeImageModalProps {
   formData: FormData;

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { LiaUserCircleSolid } from "react-icons/lia";
 import ChangeImageModal from "./ChangeImageModal";
 import Cookies from "js-cookie";
-import { apiInstance } from "../api/api";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { styleTagsState, userinfoState } from "@/utils/atoms";
+
+import { useRecoilValue } from "recoil";
+import { styleTagsState } from "@/utils/atoms";
 import ChangeUserinfoModal from "./ChangeUserinfoModal";
 import ChangePWModal from "./ChangePWModal";
 import WithdrawalModal from "./WithdrawalModal";
+import { apiInstance } from "../api/api";
 
 export type UserinfoType = {
   nickname: string;
@@ -35,7 +36,6 @@ export default function modifyuserinfo() {
   const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState<boolean>(false);
   const [, setProfileUrl] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
-  const [, setUserinfoProfile] = useRecoilState(userinfoState);
   const [userinfo, setUserinfo] = useState<UserinfoType>({
     nickname: "",
     gender: "",
@@ -45,14 +45,12 @@ export default function modifyuserinfo() {
     styleTags: [],
   });
   const [profileFile, setProfileFile] = useState<File>();
-  console.log("profileFile", profileFile);
   const [userNickname, setUserNickname] = useState<string>("");
   const userId = Cookies.get("userId");
   const accessToken = Cookies.get("accessToken");
   const styleTagList = useRecoilValue(styleTagsState);
   const myKeywords = styleTagList.filter((obj) => userinfo.styleTags.includes(obj.id));
-  // const formData = new FormData();
-  console.log(formData);
+
   useEffect(() => {
     const userinfoRes = apiInstance.get(`/users/${userId}`, {
       headers: {
@@ -61,10 +59,12 @@ export default function modifyuserinfo() {
     });
     userinfoRes.then((res) => {
       setUserinfo(res.data.data);
-      setUserinfoProfile(res.data.data);
       setUserNickname(res.data.data.nickname);
     });
   }, []);
+
+  const hasFile = formData.has("multipartFiles");
+  console.log(hasFile);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

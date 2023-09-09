@@ -1,12 +1,13 @@
 import { styled } from "styled-components";
-import { UserinfoType } from "./modify-userinfo";
 import { ChangeEvent, FormEventHandler, useCallback, useEffect, useState } from "react";
 import { apiInstance } from "../api/api";
 import debounce from "lodash.debounce";
 import { styleTagsState, userinfoState } from "@/utils/atoms";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { AiOutlineClose } from "react-icons/ai";
 import Cookies from "js-cookie";
+import { UserinfoType } from "../modify-userinfo/[userId]";
+import { useRecoilState } from "recoil";
 
 interface ChangeUserinfoModalProps {
   formData: FormData;
@@ -29,12 +30,9 @@ const ChangeUserinfoModal = ({
   formData,
   userNickname,
 }: ChangeUserinfoModalProps) => {
-  console.log("userinfo-modal", userinfo);
-  // const stList = userinfo.styleTags;
-  // const userinfoProfile = useRecoilValue(userinfoState);
-  const [userinfoProfile, setUserinfoPropfile] = useRecoilState(userinfoState);
   const [invalidNickname, setInvalidNickname] = useState(false);
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
+  const [userinfoProfile, setUserinfoPropfile] = useRecoilState(userinfoState);
   const keywordTagList = useRecoilValue(styleTagsState);
   const styleTagList = keywordTagList.filter((obj) => obj.category === "STYLE");
   const tpoTagList = keywordTagList.filter((obj) => obj.category === "TPO");

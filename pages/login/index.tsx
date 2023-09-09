@@ -66,9 +66,9 @@ export default function Login() {
   // 로그인 성공 시, accessToken을 recoil에 저장
   const onLoginSuccess = (response: SigninResponse) => {
     const { accessToken, refreshToken, accessTokenExpireDate } = response.data.data.token;
-    // const styleTags = response.data.data.userInfo.styleTags;
-    const { styleTags, profileImg } = response.data.data.userInfo;
+    const { styleTags, profileImg, height, weight } = response.data.data.userInfo;
     console.log("styleTags", styleTags);
+
     // 쿠키에 로그인 정보 저장
     Cookies.set("userId", String(response.data.data.userInfo.userId));
     Cookies.set("accessToken", accessToken);
@@ -90,7 +90,14 @@ export default function Login() {
     setTimeout(silentRefresh, delay);
     router.push("/main");
     // 로그인 성공 시 userState 업데이트
-    setLoggedInUser((prevUser) => ({ ...prevUser, isLoggedIn: true, styleTags: styleTags }));
+    setLoggedInUser((prevUser) => ({
+      ...prevUser,
+      isLoggedIn: true,
+      styleTags: styleTags,
+      height: height,
+      weight: weight,
+    }));
+    console.log(response);
   };
 
   // silentRefresh: accessToken 재발급 및 로그인 성공 실행 함수 실행

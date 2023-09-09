@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 // import Carousel from "../components/Carousel";
 import Weather from "../components/Weather";
 // import { seasonState, weatherState } from "@/utils/atoms";
 // import Image from 'next/image'
-// import { useInfiniteQuery } from "react-query";
 import ScrollTopButton from "../components/ScrollTopButton";
 import GoToPostEditorButton from "./GoToPostEditorButton";
 import BodyShapeModal from "./BodyShapeModal";
 import { apiInstance } from "../api/api";
 import { useRecoilValue } from "recoil";
 import { styleTagsState } from "@/utils/atoms";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { userState } from "@/utils/atoms";
+import { useRouter } from "next/router";
 
 interface User {
   height: number;
@@ -22,16 +22,19 @@ interface User {
 type Writer = {
   id: number;
   nickname: string;
-  profileImg: string;
+  profileImg?: string;
 };
 
 type Post = {
-  pageParam?: number;
+  currentPage: number;
+  totalPage: number;
+  totalElements: number;
   id: number;
   content: string;
   location: string;
   viewCount: number;
   likeCount: number;
+  liked: boolean;
   styleTags: string[];
   hashTags: string[];
   writer: Writer;
@@ -48,24 +51,29 @@ type Post = {
 const Main = () => {
   // const season = useRecoilValue(seasonState);
   // const weather = useRecoilValue(weatherState);
+  const router = useRouter();
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [pageParam, setPageParam] = useState(0);
   const styleTags = useRecoilValue(styleTagsState); // recoil 에서 가져온 전체 스타일 태그 목록
   const [isModalOpen, setIsModalOpen] = useState(false);
   const loggedInUser = useRecoilValue(userState);
+
   const [user, setUser] = useState<User>({
     height: loggedInUser.height,
     weight: loggedInUser.weight,
     styleTagIds: loggedInUser.styleTags,
   });
   const [selectedStyleTags, setSelectedStyleTags] = useState<number[]>(user.styleTagIds || []);
-
-  // 페이지에 들어오자마자 데이터가 다 보여짐
-  useEffect(() => {
-    fetchPosts({ pageParam: 0 });
-  }, []);
+  const [inputHeight, setInputHeight] = useState<number | null>(null);
+  const [inputWeight, setInputWeight] = useState<number | null>(null);
+  const [isMySizeApplied, setIsMySizeApplied] = useState(false);
 
   // 키워드 나열 계절과 날씨 제외
   const styleTagsList = styleTags.filter((tag) => tag.category !== "SEASON" && tag.category !== "WEATHER");
+
+  const handleNavigation = () => {
+    router.push("/following");
+  };
 
   // 게시글 api
   const fetchPosts = async ({ pageParam = 0 }) => {
@@ -75,13 +83,37 @@ const Main = () => {
         weight: user.weight,
         styleTagIds: selectedStyleTags,
       });
-      setFilteredPosts(response.data.data.posts);
-      return response.data.data;
-      // return response.data.data.posts;
+      setFilteredPosts((prevPosts) => [...prevPosts, ...response.data.data.posts]);
     } catch (error) {
       console.error(error);
     }
   };
+
+  // 특정 DOM 요소의 (loading) 페이지의 마지막 부분을 참조
+  const loadingRef = useRef<HTMLDivElement | null>(null);
+
+  // 특정 요소가 화면에 보이는지 감시, 페이지 마지막 부분이 보이면 새로운 데이터 렌더링
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPageParam((prevPageParam) => prevPageParam + 1);
+        }
+      },
+      { threshold: 1 }, //페이지 하단에 있는 로딩 컴포넌트(loadingRef.current) 전체가 화면에 보일 때 새로운 페이지 데이터를 불러오도록 설정
+    );
+
+    if (loadingRef.current) {
+      observer.observe(loadingRef.current);
+    }
+
+    return () => {
+      // cleanup 현재 관찰 중인 요소에 대한 관찰을 중지
+      if (loadingRef.current) {
+        observer.unobserve(loadingRef.current);
+      }
+    };
+  }, [loadingRef]);
 
   // user 상태 업데이트
   useEffect(() => {
@@ -92,22 +124,82 @@ const Main = () => {
     });
   }, [loggedInUser]);
 
+  // 페이지에 들어오자마자 데이터가 다 보여짐
+  useEffect(() => {
+    fetchPosts({ pageParam });
+  }, [pageParam]);
+
+  // 필터링 조건이 변경될 때는 게시물 목록을 초기화
+  useEffect(() => {
+    setPageParam(0);
+    setFilteredPosts([]);
+    fetchPosts({ pageParam: 0 });
+  }, [selectedStyleTags, inputHeight, inputWeight]);
+
   useEffect(() => {
     setSelectedStyleTags(user.styleTagIds);
     console.log(selectedStyleTags);
   }, [user]);
 
+  // // 로그인 유저의 마이사이즈 불러오기, 사용자가 커스텀으로 설정할때
+  // useEffect(() => {
+  //   if (loggedInUser.isLoggedIn) {
+  //     if (isMySizeApplied) {
+  //       // '마이사이즈 적용' 버튼을 클릭한 경우
+  //       setUser({
+  //         height: loggedInUser.height,
+  //         weight: loggedInUser.weight,
+  //         styleTagIds: loggedInUser.styleTags,
+  //       });
+  //     } else if (inputHeight !== null && inputWeight !== null) {
+  //       // 사용자가 직접 키와 몸무게 값을 입력한 경우
+  //       setUser({
+  //         ...user,
+  //         height: inputHeight,
+  //         weight: inputWeight,
+  //       });
+  //     }
+  //   } else {
+  //     if (inputHeight !== null && inputWeight !== null) {
+  //       // 비로그인 상태에서 사용자가 직접 키와 몸무게 값을 입력한 경우
+  //       setUser({
+  //         ...user,
+  //         height: inputHeight,
+  //         weight: inputWeight,
+  //       });
+  //     }
+  //   }
+  // }, [loggedInUser, isMySizeApplied, inputHeight, inputWeight]);
+
+  useEffect(() => {
+    if (loggedInUser.isLoggedIn && isMySizeApplied) {
+      // '마이사이즈 적용' 버튼을 클릭한 경우
+      setUser({
+        height: loggedInUser.height,
+        weight: loggedInUser.weight,
+        styleTagIds: loggedInUser.styleTags,
+      });
+    }
+
+    if (inputHeight !== null && inputWeight !== null) {
+      // 사용자(로그인 유저 또는 비로그인 유저)가 직접 키와 몸무게 값을 입력한 경우
+      setUser({
+        ...user,
+        height: inputHeight,
+        weight: inputWeight,
+      });
+    }
+  }, [loggedInUser, isMySizeApplied, inputHeight, inputWeight]);
+
   // 키워드 버튼 선택 해제
   const handleDeleteTag = (tagId: number) => {
     setSelectedStyleTags(selectedStyleTags.filter((id) => id !== tagId));
-    fetchPosts({ pageParam: 0 });
   };
 
   // 키워드 버튼 추가 선택
   const handleAddTag = (tagId: number) => {
     if (!selectedStyleTags.includes(tagId)) {
       setSelectedStyleTags([...selectedStyleTags, tagId]);
-      fetchPosts({ pageParam: 0 });
     }
   };
 
@@ -119,43 +211,89 @@ const Main = () => {
 
   const handleBodyClick = () => {
     setIsModalOpen(true);
+    setIsMySizeApplied(true);
   };
 
-  // // useInfiniteQuery 훅을 사용하여 무한 스크롤 구현
-  // const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-  //   ["posts", selectedStyleTags],
-  //   ({ pageParam = 0 }) => fetchPosts({ pageParam }),
-  //   {
-  //     getNextPageParam: (lastPage) => {
-  //       console.log("Last page data: ", lastPage);
-  //       return lastPage.currentPage < lastPage.totalPages - 1 ? lastPage.currentPage + 1 : undefined;
-  //     },
-  //   },
-  // );
+  // 체형 모달 적용하기
+  const handleApply = (height: number, weight: number) => {
+    setInputHeight(height);
+    setInputWeight(weight);
 
-  // useEffect(() => {
-  //   const onScroll = () => {
-  //     if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 50) {
-  //       console.log("Reached bottom of the page");
-  //       if (hasNextPage) {
-  //         console.log("Fetching next page");
-  //         fetchNextPage();
-  //       }
-  //     }
-  //   };
+    // 로그인 여부와 관계없이 isMySizeApplied를 true로 설정
+    setIsMySizeApplied(true);
+  };
 
-  //   window.addEventListener("scroll", onScroll);
+  const handleClickLike = (postId: number, likeCount: number, liked: boolean) => {
+    if (postId) {
+      apiInstance({
+        method: "get",
+        url: `like/posts/${postId}`,
+      })
+        .then(() => {
+          const updatePosts = filteredPosts.map((post) => {
+            if (post.id === postId) {
+              return {
+                ...post,
+                likeCount: likeCount + 1,
+                liked: !liked,
+              };
+            }
+            return post;
+          });
+          setFilteredPosts(updatePosts);
+        })
+        .catch((err) => {
+          console.log(err);
+          // router.push("/login");
+        });
+    }
+  };
 
-  //   return () => window.removeEventListener("scroll", onScroll);
-  // }, [hasNextPage, fetchNextPage]);
+  const handleClickUnlike = (postId: number, likeCount: number, liked: boolean) => {
+    if (postId) {
+      apiInstance({
+        method: "delete",
+        url: `like/posts/${postId}`,
+      })
+        .then(() => {
+          const updatePosts = filteredPosts.map((post) => {
+            if (post.id === postId) {
+              return {
+                ...post,
+                likeCount: likeCount - 1,
+                liked: !liked,
+              };
+            }
+            return post;
+          });
+          setFilteredPosts(updatePosts);
+        })
+        .catch((err) => {
+          console.log(err);
+          // router.push("/login");
+        });
+    }
+  };
 
-  //   window.addEventListener("scroll", onScroll);
-  //   document.addEventListener("visibilitychange", onVisibilityChange);
-
-  //   // cleanup function
-  //   return () => window.removeEventListener("scroll", onScroll);
-  //   document.removeEventListener("visibilitychange", onVisibilityChange);
-  // }, [hasNextPage]);
+  // 좋아요 아이콘을 보여주는 함수
+  const renderLikeIcon = (post: Post) => {
+    console.log(post);
+    if (post.liked) {
+      // isLike가 true일 때
+      return (
+        <button className="mb-2" onClick={() => handleClickUnlike(post.id, post.likeCount, post.liked)}>
+          <AiFillHeart className="text-lg mr-1 cursor-pointer text-red-600" />
+        </button>
+      );
+    } else {
+      // isLike가 false일 때
+      return (
+        <button className="mb-2" onClick={() => handleClickLike(post.id, post.likeCount, post.liked)}>
+          <AiOutlineHeart className="text-lg mr-1 cursor-pointer" />
+        </button>
+      );
+    }
+  };
 
   // 날씨 추천 API
   // useEffect(() => {
@@ -196,9 +334,11 @@ const Main = () => {
   return (
     <div className="w-full h-full bg-white">
       <div className="max-auto">
-        <div className="flex items-center justify-start border-b pb-2">
-          <button className="mr-4 text-lg ml-6">팔로잉</button>
-          <button className="text-lg">추천</button>
+        <div className="cursor-pointer flex items-center justify-start border-b pb-2">
+          <button className="mr-4 text-lg ml-6 font-semibold">추천</button>
+          <button onClick={handleNavigation} className="text-lg text-gray-400">
+            팔로잉
+          </button>
         </div>
         <div className="mt-6 ml-6 text-m text-gray-400">
           <Weather />
@@ -213,26 +353,35 @@ const Main = () => {
         </div>
 
         <div className="mt-12 relative">
-          <div className="fixed top-[85%] right-[18rem] z-[1000]">
-            <GoToPostEditorButton />
-            <ScrollTopButton />
+          <div className="fixed top-[85%] right-[30px] z-[1000]">
+            <div className="flex flex-col justify-end">
+              <ScrollTopButton />
+              <GoToPostEditorButton />
+            </div>
           </div>
           <div className="text-xl ml-6 font-bold">키워드 추천</div>
           <div className="mt-6 ml-6 flex flex-wrap justify-flex-start gap-3">
             <div
               className={`py-[4px] px-4 border rounded-full cursor-pointer text-xs ${
-                !loggedInUser.isLoggedIn ? "bg-black text-white" : "bg-white text-black"
+                selectedStyleTags.length > 0
+                  ? "bg-white text-black" // 태그가 선택된 경우(로그인 상태에 관계 없이) 비활성화
+                  : !loggedInUser.isLoggedIn || selectedStyleTags.length === 0
+                  ? "bg-black text-white" // 로그인하지 않은 경우 활성화
+                  : "bg-white text-black" // 로그인을 하면 비활성화
               }`}
               onClick={handleAllTag}
             >
               <p>전체</p>
             </div>
             <div
-              className="py-[4px] px-4 border rounded-full cursor-pointer text-xs bg-white text-black"
+              className={`py-[4px] px-4 border rounded-full cursor-pointer text-xs ${
+                isMySizeApplied ? "bg-black text-white" : "bg-white text-black"
+              }`}
               onClick={handleBodyClick}
             >
               <p>체형</p>
             </div>
+
             {styleTagsList.map((tag) =>
               selectedStyleTags.includes(tag.id) ? (
                 <div
@@ -254,38 +403,45 @@ const Main = () => {
             )}
           </div>
         </div>
-        {/* {filteredPosts.map((post: Post) => ( */}
-        {/* {data?.pages.map((pageData) =>
-            pageData.posts.map((post: Post) => ( */}
 
         <div className="mt-5 h-auto grid grid-cols-2 gap-4 px-4">
-          {filteredPosts.map((post: Post) => (
-            <div key={post.id} className="flex flex-col bg-white rounded-lg overflow-hidden">
-              <div className="mt-2 flex flex-wrap items-center justify-left">
+          {filteredPosts.map((post: Post, index) => (
+            <div key={index} className="flex flex-col bg-white overflow-hidden">
+              <div
+                className="mt-2 flex flex-wrap items-center justify-left cursor-pointer"
+                onClick={() => router.push(`/userinfo/${post.writer.id}`)}
+              >
                 <img src={post.writer.profileImg} alt="profile" className="ml-1 w5 h5 rounded-full w-[32px] h-[32px]" />
                 <p className="text-xs pl-2">{post.writer.nickname}</p>
               </div>
-              <div className="mt-2">
-                <img src={post.thumbnail} alt="content" className="object-cover" />
+              <div className="mt-2" onClick={() => router.push(`/posts/${post.id}`)}>
+                <img src={post.thumbnail} alt="content" className="cursor-pointer object-cover w-[340px] h-[450px]" />
               </div>
-              <div className="">
-                <div className="mt-2 text-sm">{post.content}</div>
-                <div className="mt-2 flex items-center justify-start">
-                  <p className="text-xs">
-                    {post.styleTags.join(" ")}
-                    {post.hashTags.join(" ")}
-                  </p>
+
+              <div className="ml-2 flex justify-between items-center">
+                <div>
+                  <p className="inline mt-2 text-sm">{post.content}</p>
+                  <div className="mt-1 flex items-center justify-start">
+                    <p className="text-xs">
+                      {post.styleTags.join(" ")}
+                      {post.hashTags.join(" ")}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center justify-end mt-4">
-                  <AiOutlineHeart className="text-sm mr-2 cursor-pointer" />
-                  <p className="text-sm">{post.likeCount}</p>
+
+                <div className="flex items-center justify-end">
+                  {renderLikeIcon(post)}
+                  <p className="mr-2 mb-2 text-sm text-gray-500">{post.likeCount}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
+        <div ref={loadingRef} className="invisible" />
       </div>
-      {isModalOpen && <BodyShapeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <BodyShapeModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onApply={handleApply} />
+      )}
     </div>
   );
 };

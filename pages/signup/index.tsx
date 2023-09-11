@@ -163,7 +163,7 @@ export default function signup() {
 
   // 닉네임 양식 확인
   const checkNicknameFormat = (nickname: string) => {
-    const nicknamePattern = /(^[a-zA-Z]{4,16}$)|(^[가-힣]{2,8}$)/;
+    const nicknamePattern = /(^[a-zA-Z0-9_]{4,16}$)|(^[가-힣0-9_]{2,8}$)/;
     return nicknamePattern.test(nickname);
   };
 
@@ -251,12 +251,12 @@ export default function signup() {
     </div>
   ) : (
     <div className="flex justify-center items-center">
-      <div className="w-[500px]">
-        <div className="flex items-center justify-center mt-10">
+      <div className="w-full max-w-[500px]">
+        <div className="flex items-center justify-center mt-10 w-full">
           <div className="text-2xl">회원가입</div>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 mt-[100px]">
-          <div>
+        <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 mt-24">
+          <div className="w-full">
             <div className="flex items-center mb-3">
               <p className="font-bold">이메일 주소</p>
               <div className="ml-1">
@@ -268,7 +268,7 @@ export default function signup() {
             </div>
             <input
               type="text"
-              className="border-b border-gray-200 w-[500px] pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+              className="border-b border-gray-200 w-full pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
               name="email"
               placeholder="예) example@example.com"
               value={formData.email}
@@ -284,11 +284,11 @@ export default function signup() {
               <p className="text-red-500 text-xs mt-1">이미 사용 중인 이메일입니다. 다른 이메일을 사용해주세요.</p>
             )}
           </div>
-          <div>
+          <div className="w-full">
             <p className="text-md font-bold mb-[-10px] mt-2">비밀번호</p> <br />
             <input
               type="password"
-              className="border-b border-gray-200 focus:border-gray-700 transition-colors ease-in duration-100 w-[500px] pb-2 text-sm"
+              className="border-b border-gray-200 focus:border-gray-700 transition-colors ease-in duration-100 w-full pb-2 text-sm"
               name="password"
               placeholder="영문, 숫자, 특수문자 조합 8~16자"
               value={formData.password}
@@ -300,11 +300,11 @@ export default function signup() {
             />
             {invalidPassword && <p className="text-red-500 text-xs mt-1">비밀번호 양식이 올바르지 않습니다.</p>}
           </div>
-          <div>
+          <div className="w-full">
             <p className="text-md font-bold mb-[-10px] mt-2">비밀번호 확인</p> <br />
             <input
               type="password"
-              className="border-b border-gray-200 w-[500px] pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+              className="border-b border-gray-200 w-full pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
               name="confirmPassword"
               placeholder="비밀번호 확인"
               value={formData.confirmPassword}
@@ -316,11 +316,11 @@ export default function signup() {
             />
             {passwordMismatch && <p className="text-red-500 text-xs mt-1">비밀번호가 일치하지 않습니다.</p>}
           </div>
-          <div>
+          <div className="w-full">
             <p className="text-md font-bold mb-[-10px] mt-2">닉네임</p> <br />
             <input
               type="text"
-              className="border-b border-gray-200 w-[500px] pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+              className="border-b border-gray-200 w-full pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
               name="nickname"
               placeholder="영문 4-16자 이내, 한글 2-8자 이내, 초성, 특수문자 및 공백 사용 불가"
               value={formData.nickname}
@@ -343,14 +343,14 @@ export default function signup() {
             </div>
             <br />
             <div className="flex flex-col items-start w-2/3 mb-10 ml-24">
-              <p className="text-md font-bold mb-[21px]">체형</p>
+              <p className="text-md font-bold mb-6">체형</p>
               <div className="flex w-full">
                 <div className="flex flex-col items-start w-1/2 mr-5">
-                  <div className="flex items-center">
+                  <div className="flex items-center w-full">
                     <input
                       type="text"
                       name="height"
-                      className="pb-1 border-b border-gray-200 w-[115px] mr-4 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+                      className="pb-1 border-b border-gray-200 w-full mr-4 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
                       maxLength={3}
                       value={formData.height}
                       onChange={(e) => {
@@ -368,7 +368,7 @@ export default function signup() {
                     <input
                       type="text"
                       name="weight"
-                      className="pb-1 border-b border-gray-200 w-[115px] mr-4 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
+                      className="pb-1 border-b border-gray-200 w-full mr-4 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
                       maxLength={3}
                       value={formData.weight}
                       onChange={(e) => {
@@ -416,7 +416,7 @@ export default function signup() {
             )}
           </div>
 
-          <div>
+          <div className="w-full flex">
             {invalidEmail ||
             invalidPassword ||
             passwordMismatch ||
@@ -430,11 +430,15 @@ export default function signup() {
             !passwordConfirmTouched ||
             !heightTouched ||
             !weightTouched ? (
-              <button type="submit" className="btn w-[500px] p-4 bg-gray-200 rounded-full text-white mb-10" disabled>
+              <button
+                type="submit"
+                className="btn w-full p-4 bg-gray-200 rounded-full text-white mb-10 justify-center"
+                disabled
+              >
                 회원가입
               </button>
             ) : (
-              <button type="submit" className="btn-neutral w-[500px] p-3 rounded-full text-sm mb-10">
+              <button type="submit" className="btn-neutral w-full p-3 rounded-full text-sm mb-10 justify-center">
                 회원가입
               </button>
             )}

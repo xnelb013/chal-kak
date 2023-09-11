@@ -44,7 +44,7 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
 
   // api호출
   const loadLikeList = (page: number) => {
-    setIsLoading(true); // loading 시작
+    setIsLoading(true); // loading 시작임
     apiInstance({
       method: "get",
       url: `like/posts/${postId}/liker?page=${page}&size=9&sort=id,desc`,
@@ -107,6 +107,10 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
     }
   };
 
+  const goToProfile = (id: number) => {
+    router.push(`/userinfo/${id}`);
+  };
+
   const handlePlusClick = () => {
     const newPage = page + 1;
     setPage(newPage);
@@ -127,12 +131,12 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
         onRequestClose={handleCloseModal}
         contentLabel="Comments Modal"
         overlayClassName="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-filter"
-        className="bg-white rounded-lg p-10 w-[650px] h-[750px] relative overflow-y-auto "
+        className="bg-white rounded-lg py-10 md:px-8 px-2 w-full md:w-[650px] h-[750px] relative overflow-y-auto "
       >
-        <div className="w-[570px]">
+        <div className="w-full">
           {likeListData.map((likeList, index) => (
             <div key={index} className="flex w-full justify-between items-center mb-5">
-              <div className="flex items-center">
+              <div className="flex items-center cursor-pointer" onClick={() => goToProfile(likeList.memberId)}>
                 <div className="relative w-12 h-12">
                   <Image
                     src={likeList.profileUrl || pofileImage}
@@ -141,7 +145,7 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
                     className="rounded-full object-cover mt-[2px] items-start"
                   />
                 </div>
-                <div className="ml-5 text-lg">{likeList.nickName}</div>
+                <div className="ml-5 text-lg flex flex-wrap">{likeList.nickName}</div>
               </div>
               {likeList.memberId !== Number(userId) &&
                 (followStatuses[likeList.memberId.toString()] || likeList.followed ? (

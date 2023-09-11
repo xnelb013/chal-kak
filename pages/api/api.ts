@@ -1,5 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import router from "next/router";
+
+const cookieNames = ["isLoggedIn", "accessToken", "userId", "myKeywords", "refreshToken", "profileImg"];
 
 export const apiInstance = axios.create({
   baseURL: "https://www.chla-kak-back.store",
@@ -16,6 +19,13 @@ apiInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    if (error.response && error.response.status === 401) {
+      cookieNames.forEach((cookieName) => {
+        Cookies.remove(cookieName);
+      });
+      alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+      router.push("/login");
+    }
     return Promise.reject(error);
   },
 );

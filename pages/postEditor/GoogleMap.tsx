@@ -70,8 +70,8 @@ const GoogleMapsComponent = () => {
           onRequestClose={handleToggleMap}
           style={{
             content: {
-              width: "600px",
-              height: "700px",
+              width: "80%",
+              height: "80%",
               margin: "auto",
             },
           }}
@@ -89,13 +89,13 @@ const GoogleMapsComponent = () => {
           >
             <Marker position={selectedLatLng} />
           </GoogleMap>
-          <div className="mx-auto w-[450px] mt-5">
+          <div className="mx-auto w-full mt-5">
             <PlacesAutocomplete value={location} onChange={handleChange} onSelect={handleSelect}>
               {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                 <div>
                   <input
                     {...getInputProps({ placeholder: "장소를 입력하세요" })}
-                    className="py-2 border-b border-gray-300 w-[450px]"
+                    className="py-2 border-b border-gray-300 w-full"
                   />
                   <div className="h-[300px]">
                     {loading ? <div>Loading...</div> : null}
@@ -123,7 +123,7 @@ const GoogleMapsComponent = () => {
             </PlacesAutocomplete>
           </div>
           <div className="flex">
-            <button className="btn m-auto w-[450px]" onClick={handleMapClose}>
+            <button className="btn m-auto w-full" onClick={handleMapClose}>
               확인
             </button>
           </div>

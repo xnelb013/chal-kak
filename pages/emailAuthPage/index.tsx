@@ -22,7 +22,7 @@ const HomePage = () => {
               />
             </svg>
           </p>
-          <h1 className="mt-3 text-2xl w-[700px] font-semibold text-blue-800 dark:text-white md:text-3xl animate__animated animate__bounce">
+          <h1 className="mt-3 text-2xl w-full font-semibold text-blue-800 dark:text-white md:text-3xl animate__animated animate__bounce">
             이메일 인증에 성공했습니다! 🎉
           </h1>
           <p className="mt-4 text-gray-500 dark:text-gray-400 animate__animated animate__bounce">

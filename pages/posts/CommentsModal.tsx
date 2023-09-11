@@ -190,7 +190,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         onRequestClose={handleCloseModal}
         contentLabel="Comments Modal"
         overlayClassName="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-filter"
-        className="bg-white rounded-lg p-10 w-[650px] h-[750px] relative overflow-y-auto "
+        className="bg-white rounded-lg py-10 md:px-10 px-2 w-full md:w-[650px] h-[750px] relative overflow-y-auto "
       >
         <div className="flex w-full justify-between">
           <input
@@ -206,8 +206,8 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         </div>
         {comments.map((comment, index) => (
           <div key={index} className="flex mb-5 items-center justify-between">
-            <div className="flex items-start w-[600px] ">
-              <div className="relative w-9 h-9">
+            <div className="flex items-start w-full">
+              <div className="relative w-12 h-12">
                 <Image
                   src={comment.profileUrl || img}
                   alt="프로필 사진"
@@ -215,23 +215,23 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
                   className="rounded-full object-cover mt-[2px] items-start"
                 />
               </div>
-              <div>
+              <div className="flex-grow-6">
                 <div className="flex flex-col ml-2">
                   <div className="block">
                     <div className="text-sm font-semibold ml-1">{comment.nickname}</div>
                     <div
-                      className={`text-sm ml-1 col w-[400px] whitespace-pre-wrap break-words ${
+                      className={`text-sm ml-1 col whitespace-pre-wrap break-words max-w-[13rem] md:max-w-sm ${
                         !showFullTexts[index] ? "line-clamp-2" : ""
                       }`}
                       onClick={() => toggleFullText(index)}
                     >
-                      {comment.comment}{" "}
+                      {comment.comment}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="mr-5 flex flex-col h-full">
-                <div className="text-xs text-gray-400 ml-1 text-end w-24">
+              <div className="mr-5 flex flex-col h-full flex-grow-1">
+                <div className="text-xs text-gray-400 ml-1 text-end w-full">
                   {formatDateToRelativeTime(comment.createAt)}
                 </div>
                 {comment.memberId === Number(userId) && (

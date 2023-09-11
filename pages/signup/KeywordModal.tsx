@@ -57,7 +57,7 @@ const KeywordModal = ({
   const renderKeywordsList = () => {
     return keywords.map((keyword, index) => (
       <div key={`keyword_${index}`} className="inline-block mr-2">
-        <div className="badge badge-outline h-7 mb-5">{keyword}</div>
+        <div className="badge badge-outline h-7 mb-1 text-xs md:text-sm">{keyword}</div>
       </div>
     ));
   };
@@ -68,7 +68,7 @@ const KeywordModal = ({
         <ModalWrapper>
           <div className="text-xl font-bold mt-8">관심 키워드 선택</div>
           <div className="text-md mb-5">(최대 5개까지 선택 가능합니다)</div>
-          <div>{renderKeywordsList()}</div>
+          <div className="flex flex-wrap justify-center">{renderKeywordsList()}</div>
 
           <div className="mt-4 mb-5">
             {["STYLE", "TPO"].map((category, index) => {
@@ -78,10 +78,10 @@ const KeywordModal = ({
 
               return (
                 <React.Fragment key={index}>
-                  <div className="text-2xl font-bold mb-5 mt-10 text-center">{category}</div>
+                  <div className="text-2xl font-bold mb-5 text-center">{category}</div>
                   <ul className="grid gap-6 grid-cols-4">
                     {filteredStyleTags.map(({ id, keywordImg, keyword }) => (
-                      <li key={id} className="w-[100px] flex flex-col items-center">
+                      <li key={id} className=" flex flex-col items-center">
                         <input
                           type="checkbox"
                           id={keyword}
@@ -93,20 +93,22 @@ const KeywordModal = ({
                         />
                         <label
                           htmlFor={keyword}
-                          className="relative inline-flex w-full h-[100px] text-gray-500 bg-white border-[3px] border-gray-200 rounded-full cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                          className="relative inline-flex w-full aspect-content text-gray-500 bg-white border-[3px] border-gray-200 rounded-full cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600"
                         >
-                          {keywordImg && (
-                            <Image
-                              src={keywordImg}
-                              alt={`${keyword} 이미지`}
-                              width={700}
-                              height={900}
-                              className="absolute inset-0 object-cover w-full h-full rounded-full"
-                            />
-                          )}
+                          <AspectContent>
+                            {keywordImg && (
+                              <Image
+                                src={keywordImg}
+                                alt={`${keyword} 이미지`}
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-full"
+                              />
+                            )}
+                          </AspectContent>
                         </label>
                         <div
-                          className={`text-sm text-center font-semibold w-[7rem] mt-2 ${
+                          className={`text-sm text-center font-semibold w-full mt-2 ${
                             keywords.includes(keyword) ? "text-blue-600" : "text-gray-500"
                           }`}
                         >
@@ -134,8 +136,9 @@ const ModalWrapper = styled.div`
   justify-content: start;
   align-items: center;
   position: fixed;
-  width: 600px;
-  min-width: 600px;
+  width: calc(100% - 2rem);
+  max-width: 600px;
+  min-height: min-content;
   max-height: 90vh;
   top: 50%;
   left: 50%;
@@ -146,6 +149,12 @@ const ModalWrapper = styled.div`
   border-radius: 5px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
   overflow-y: auto;
+`;
+
+const AspectContent = styled.div`
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
 `;
 
 export default KeywordModal;

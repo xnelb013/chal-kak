@@ -12,7 +12,16 @@
   max-width: 720px;
   min-height: 100vh;
   margin: 0px auto;
+  width: 100%;
   background-color: rgb(255, 255, 255);
+  padding: 15px;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 .title {
@@ -29,4 +38,8 @@ input:focus {
 
 .ReactModal__Content {
   outline: none;
+}
+
+.slick-list {
+  padding: 0 !important;
 }

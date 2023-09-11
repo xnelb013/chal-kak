@@ -326,14 +326,14 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
 
   const renderButton = (isActive: boolean) => {
     return isActive ? (
-      <button type="button" onClick={handleSubmit} className="btn-neutral w-[600px] p-3 rounded-full text-sm my-10">
+      <button type="button" onClick={handleSubmit} className="btn-neutral w-full p-3 rounded-full text-sm my-10">
         작성
       </button>
     ) : (
       <button
         type="button"
         disabled
-        className="btn w-[600px] p-3 rounded-full text-sm my-10 bg-gray-200 cursor-not-allowed"
+        className="btn w-full p-3 rounded-full text-sm my-10 bg-gray-200 cursor-not-allowed"
       >
         작성
       </button>
@@ -423,11 +423,11 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
   };
 
   return (
-    <div className="w-[600px] m-auto">
+    <div className="w-full m-auto">
       <div>
         <GoogleMapsComponent />
       </div>
-      <Divider width="w-[600px]" />
+      <Divider width="w-full" />
       <div className="mb-5">
         <ImageUpload />
       </div>
@@ -460,7 +460,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
           </label>
         </div>
       </div>
-      <Divider width="w-[600px]" />
+      <Divider width="w-full" />
       <div className="mb-5">
         {dynamicKeywords.map((keyword) => (
           <div key={keyword} className="inline-block">
@@ -493,7 +493,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
         <h2 className="mb-2 font-medium">Tag</h2>
         <input
           type="text"
-          className="border-b border-gray-200 focus:border-gray-700 transition-colors ease-in duration-100 w-[600px] mb-7 py-2"
+          className="border-b border-gray-200 focus:border-gray-700 transition-colors ease-in duration-100 w-full mb-7 py-2"
           placeholder="키워드를 입력하세요"
           value={dynamicKeywordInput}
           onChange={handleDynamicKeywordChange}
@@ -501,10 +501,10 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
         />
         <input type="text" className="hidden" />
       </div>
-      <div className="w-[600px] mb-5">
+      <div className="w-full mb-5">
         <h2 className="mb-2 font-medium">Style</h2>
-        <div className="w-[600px] mb-5">
-          <div className="flex">{styleKeywordCheckboxes}</div>
+        <div className="w-full mb-5">
+          <div className="flex flex-wrap">{styleKeywordCheckboxes}</div>
           <div className="flex">{tpoKeywordCheckboxes}</div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import profileImg from "./img/프로필사진.jpg";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { apiInstance } from "../api/api";
+import router from "next/router";
 
 interface CommentsSectionProps {
   postId: string | string[] | undefined;
@@ -16,6 +17,7 @@ interface Comment {
   nickname: string;
   profileUrl: string | null;
   createAt: string;
+  memberId: number;
 }
 
 const img = profileImg;
@@ -31,6 +33,10 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
 
   const closeCommentsModal = () => {
     setcommentsModalIsOpen(false);
+  };
+
+  const goToProfile = (id: number) => {
+    router.push(`/userinfo/${id}`);
   };
 
   function formatDateToRelativeTime(dateString: string | number | Date) {
@@ -62,8 +68,8 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
   }, [postId]);
 
   return (
-    <div className="mb-4">
-      <div className="mt-3 ml-5 mb-4 flex cursor-pointer w-24" onClick={openCommentsModal}>
+    <div className="mb-4 md:text-base text-sm">
+      <div className="mt-3 mb-4 flex cursor-pointer w-24" onClick={openCommentsModal}>
         댓글
         <div className="font-bold ml-1">{totalComments}</div>개
       </div>
@@ -75,12 +81,12 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
         onCommentDeleted={onCommentAdded}
       />
 
-      <div className="flex w-[680px] mx-auto ml-5">
+      <div className="flex w-full mx-auto ">
         <div className="flex flex-col">
           {commentsData.map((comment, index) => (
-            <div key={index} className="flex w-[680px] mb-4 justify-between">
+            <div key={index} className="flex w-full mb-4 justify-between">
               <div className="flex items-center">
-                <div className="relative w-9 h-9">
+                <div className="relative w-9 h-9 cursor-pointer" onClick={() => goToProfile(comment.memberId)}>
                   <Image
                     src={comment.profileUrl || img}
                     alt="프로필 사진"
@@ -90,24 +96,31 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
                 </div>
                 <div>
                   <div className="flex flex-col ml-2">
-                    <div className="flex">
-                      <div className="text-sm font-semibold ml-1">{comment.nickname}</div>
-                      <div className="text-sm ml-2 col w-96 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    <div className="flex w-full">
+                      <div
+                        className="md:text-sm text-xs font-semibold ml-1 cursor-pointer"
+                        onClick={() => goToProfile(comment.memberId)}
+                      >
+                        {comment.nickname}
+                      </div>
+                      <div className="md:text-sm text-xs ml-2 col md:w-96 sm:w-48 w-24 overflow-hidden overflow-ellipsis whitespace-nowrap ">
                         {comment.comment}
                       </div>
                     </div>
-                    <div className="text-xs text-gray-400 ml-1 mt-1">{formatDateToRelativeTime(comment.createAt)}</div>
+                    <div className="md:text-xs text-[0.5rem] text-gray-400 ml-1 mt-1">
+                      {formatDateToRelativeTime(comment.createAt)}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           ))}
           {totalComments > 3 ? (
-            <div className="text-gray-400 ml-2 cursor-pointer" onClick={openCommentsModal}>
+            <div className="text-gray-400 cursor-pointer" onClick={openCommentsModal}>
               댓글 더 보기...
             </div>
           ) : (
-            <div className="text-gray-400 ml-2 cursor-pointer" onClick={openCommentsModal}>
+            <div className="text-gray-400 cursor-pointer" onClick={openCommentsModal}>
               댓글 창 열기
             </div>
           )}

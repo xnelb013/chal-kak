@@ -32,6 +32,10 @@ export default function Navbar() {
     }
   };
 
+  const isValidSrc = (src: string) => {
+    return src && src !== "null" && src !== "undefined";
+  };
+
   useEffect(() => {
     if (myUserState.isLoggedIn) {
       setProfileImg(myUserState.profileImg);
@@ -79,7 +83,12 @@ export default function Navbar() {
           <div className="dropdown dropdown-end mb-2 text-end">
             <label tabIndex={0} className="avatar cursor-pointer flex justify-end mb-1 ml-1">
               <div className="mt-[2px] rounded-full">
-                <Image src={profileImg || "/images/defaultImg.jpg"} width={32} height={32} alt="profile-img" />
+                <Image
+                  src={isValidSrc(profileImg) ? profileImg : "/images/defaultImg.jpg"}
+                  width={32}
+                  height={32}
+                  alt="profile-img"
+                />
               </div>
             </label>
             <ul

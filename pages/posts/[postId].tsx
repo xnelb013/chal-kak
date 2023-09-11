@@ -1,5 +1,4 @@
 import Image from "next/image";
-import profileImg from "./img/프로필사진.jpg";
 import Carousel from "../components/Carousel";
 import { AiOutlineHeart, AiOutlineComment, AiFillHeart } from "react-icons/ai";
 import { GrMore } from "react-icons/gr";
@@ -55,7 +54,6 @@ interface PostPhoto {
   url: string;
 }
 
-const img = profileImg;
 const HomePage = () => {
   const [postData, setPostData] = useState<Post | null>(null);
   const [commentsModalIsOpen, setcommentsModalIsOpen] = useState(false);
@@ -74,7 +72,7 @@ const HomePage = () => {
   const [postImages, setPostImages] = useState<string[] | undefined>(undefined);
   const accessToken = Cookies.get("accessToken");
   const userId = Cookies.get("userId");
-  const writerSrc = postData?.writer.profileImg || img;
+  const writerSrc = postData?.writer.profileImg || "/images/defaultImg.jpg";
   const router = useRouter();
   const { postId } = router.query;
   const setAlert = useSetRecoilState(alertState);

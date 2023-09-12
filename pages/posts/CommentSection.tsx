@@ -1,7 +1,6 @@
 import Image from "next/image";
 import CommentsModal from "./CommentsModal";
 import { useEffect, useState } from "react";
-import profileImg from "./img/프로필사진.jpg";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { apiInstance } from "../api/api";
@@ -19,8 +18,6 @@ interface Comment {
   createAt: string;
   memberId: number;
 }
-
-const img = profileImg;
 
 const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
   const [commentsModalIsOpen, setcommentsModalIsOpen] = useState(false);
@@ -88,7 +85,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
               <div className="flex items-center">
                 <div className="relative w-9 h-9 cursor-pointer" onClick={() => goToProfile(comment.memberId)}>
                   <Image
-                    src={comment.profileUrl || img}
+                    src={comment.profileUrl || "/images/defaultImg.jpg"}
                     alt="프로필 사진"
                     layout="fill"
                     className="rounded-full object-cover mt-[2px]"

@@ -13,7 +13,7 @@ interface ModalComponentProps {
 
 Modal.setAppElement(".wrap");
 
-const URL = "localhost:3000";
+const URL = "https://chal-kak.vercel.app";
 
 const ShareModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal }) => {
   const router = useRouter();

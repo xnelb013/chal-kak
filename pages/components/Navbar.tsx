@@ -56,7 +56,7 @@ export default function Navbar() {
   }, [cookies]);
   return (
     <>
-      <div className="h-[50px] navbar bg-base-100 md:px-5">
+      <div className="h-[50px] navbar bg-base-100">
         <div className="flex-1">
           <Link href={"/"} className="normal-case text-3xl title">
             #찰칵

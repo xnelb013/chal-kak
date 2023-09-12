@@ -83,14 +83,14 @@ const Following = () => {
     <div className="w-full h-full bg-white">
       <div className="mx-auto">
         <div className="flex items-center justify-start border-b pb-2">
-          <button className="mr-4 ml-6 text-lg font-semibold">팔로잉</button>
+          <button className="mr-4 text-lg font-semibold">팔로잉</button>
           <button className="text-lg text-gray-400" onClick={() => router.push("/main")}>
             추천
           </button>
         </div>
         {followingPosts.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-10">
-            <p className="text-gray-400 mt-2">팔로우한 사람이 없습니다.</p>
+            <p className="text-gray-400 mt-2">팔로우한 유저의 게시물이 존재하지 않습니다.</p>
           </div>
         )}
         <div style={{ columnCount: 2, columnGap: "1rem", padding: "0 1rem" }} className="mt-4">

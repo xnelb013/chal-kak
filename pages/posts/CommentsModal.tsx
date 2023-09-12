@@ -1,5 +1,4 @@
 import Modal from "react-modal";
-import pofileImage from "./img/프로필사진.jpg";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { AiOutlinePlusCircle, AiOutlineClose } from "react-icons/ai";
@@ -9,8 +8,6 @@ import { apiInstance } from "../api/api";
 import Cookies from "js-cookie";
 import router from "next/router";
 import WarningAlert from "@/pages/components/WarningAlert";
-
-const img = pofileImage;
 
 interface ModalComponentProps {
   isOpen: boolean;
@@ -210,9 +207,9 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         {comments.map((comment, index) => (
           <div key={index} className="flex mb-5 items-center justify-between">
             <div className="flex items-start w-full">
-              <div className="relative w-12 h-12 cursor-pointer" onClick={() => goToProfile(comment.memberId)}>
+              <div className="relative w-11 h-11 cursor-pointer" onClick={() => goToProfile(comment.memberId)}>
                 <Image
-                  src={comment.profileUrl || img}
+                  src={comment.profileUrl || "/images/defaultImg.jpg"}
                   alt="프로필 사진"
                   layout="fill"
                   className="rounded-full object-cover mt-[2px] items-start"

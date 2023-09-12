@@ -1,4 +1,3 @@
-import pofileImage from "./img/프로필사진.jpg";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
@@ -135,7 +134,7 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
               <div className="flex items-center cursor-pointer" onClick={() => goToProfile(likeList.memberId)}>
                 <div className="relative w-12 h-12">
                   <Image
-                    src={likeList.profileUrl || pofileImage}
+                    src={likeList.profileUrl || "/images/defaultImg.jpg"}
                     alt="프로필 사진"
                     layout="fill"
                     className="rounded-full object-cover mt-[2px] items-start"

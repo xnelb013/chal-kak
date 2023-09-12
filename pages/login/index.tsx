@@ -146,7 +146,7 @@ export default function Login() {
         <div className="p-6">
           <h2 className="text-2xl font-medium mt-3 pl-3 text-center leading-9 text-gray-800">로그인</h2>
         </div>
-        <div className="mt-[60px] mx-4 w-[500px] h-[600px]">
+        <div className="mt-[60px] mx-4 w-full h-[600px] md:px-24">
           <form>
             <div>
               <label htmlFor="email" className="block pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
@@ -221,11 +221,13 @@ export default function Login() {
             <p className="text-gray-700 text-xs pr-[24px]">Or sign in with</p>
             <hr className="flex-grow border-t border-gray-100" />
           </div>
-          <div
-            className="mt-[50px] ml-[210px] background-white border rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer"
-            onClick={handleGoogleLogin}
-          >
-            <FcGoogle className="w-[34px] h-[34px]" />
+          <div className="w-full flex justify-center">
+            <div
+              className="mt-6 md:mt-12 background-white border rounded-full w-[70px] h-[70px] flex items-center justify-center cursor-pointer"
+              onClick={handleGoogleLogin}
+            >
+              <FcGoogle className="w-[34px] h-[34px]" />
+            </div>
           </div>
         </div>
       </div>

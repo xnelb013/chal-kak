@@ -88,7 +88,7 @@ const Search = () => {
   return (
     <div className="absoulte top-0 mx-auto bg-white">
       <div className="flex flex-col p-6">
-        <form className="flex items-center w-[650px]" onSubmit={(e) => e.preventDefault()}>
+        <form className="flex items-center w-full" onSubmit={(e) => e.preventDefault()}>
           <div>
             <TfiArrowLeft className="w-[24px] h-[24px] mr-1 cursor-pointer" onClick={() => router.back()} />
           </div>

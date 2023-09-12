@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { seasonState, weatherState } from "@/utils/atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { weatherLocationState, seasonState, weatherState } from "@/utils/atoms";
+import { useRecoilValue } from "recoil";
 
 // const local = "http://ec2-13-127-154-248.ap-south-1.compute.amazonaws.com:8080";
 const vercel = "https://www.chla-kak-back.store";
@@ -26,11 +27,16 @@ const Weather = () => {
   const [, setSeason] = useRecoilState(seasonState);
   const [weather, setWeather] = useRecoilState(weatherState);
 
+  const setLocation = useSetRecoilState(weatherLocationState); //현재 위치 정보로 locationState atom을 업데이트
+  const location = useRecoilValue(weatherLocationState); //현재 위치 정보(locationState)를 가져옴
+
   // 실시간 위치 허용하여 날씨 출력
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
+
+        setLocation({ latitude, longitude }); //현재 위치 정보로 locationState atom을 업데이트
 
         try {
           const response = await axios.get<WeatherData>(`${vercel}/weather?lat=${latitude}&lon=${longitude}`);
@@ -42,12 +48,12 @@ const Weather = () => {
       async (error) => {
         console.error("위치 정보 실패", error);
 
-        // 위치 거부 시 기본값 서울 날씨 정보 출력
         try {
           const response = await axios.get<WeatherData>(`${vercel}/weather?lat=37.5665&lon=126.9784`);
           setWeatherData(response.data);
+          console.log(location.latitude, location.longitude);
         } catch (error) {
-          console.error("날씨 정보 실패함", error);
+          console.error("날씨 정보 실패", error);
         }
       },
     );
@@ -113,7 +119,6 @@ const Weather = () => {
           weatherIcon = "";
       }
       setWeather(weatherIcon || "알 수 없음");
-      console.log(weather);
     }
   }, [weatherData]);
 

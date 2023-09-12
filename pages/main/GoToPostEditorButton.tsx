@@ -30,7 +30,7 @@ const PostEditorButton = () => {
     isVisble && (
       <button
         onClick={handleNavigation}
-        className="fixed top-[85%] right-[30rem] border rounded-full border-gray-800 mb-2 text-white bg-gray-800 w-[42px] h-[42px] flex items-center justify-center"
+        className="fixed top-[85%] right-[32px] border rounded-full border-gray-800 mb-2 text-white bg-gray-800 w-[42px] h-[42px] flex items-center justify-center"
       >
         <AiOutlinePlus className="w-[24px] h-[24px]" />
       </button>

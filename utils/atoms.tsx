@@ -21,6 +21,11 @@ export const locationState = atom<string>({
   default: "",
 });
 
+export const weatherLocationState = atom({
+  key: "weatherLocationState",
+  default: { latitude: 37.5665, longitude: 126.9784 }, // 기본값은 서울
+});
+
 // season, weather keywords
 export const seasonState = atom({
   key: "seasonState",

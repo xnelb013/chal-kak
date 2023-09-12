@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GrClose } from "react-icons/gr";
-import { IoRefreshOutline } from "react-icons/io5";
+// import { IoRefreshOutline } from "react-icons/io5";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import { userState } from "@/utils/atoms";
 import { useRecoilValue } from "recoil";
@@ -36,11 +36,11 @@ const BodyShapeModal = ({ isOpen, onClose, onApply }: BodyShapeModalProps) => {
   const router = useRouter();
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 backdrop-filter">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 backdrop-filter z-[1000]">
       <div className="bg-white p-4 rounded-md w-[450px] h-[350px]">
         <div className="flex items-center justify-between">
           <GrClose className="w-[20px] h-[20px] cursor-pointer" onClick={onClose} />
-          <IoRefreshOutline className="w-[24px] h-[24px] cursor-pointer" />
+          {/* <IoRefreshOutline className="w-[24px] h-[24px] cursor-pointer" /> */}
         </div>
         <p className="text-lg font-bold text-center mb-4">키・몸무게</p>
         <form onSubmit={(e) => e.preventDefault()} className="m-3">
@@ -126,7 +126,6 @@ const BodyShapeModal = ({ isOpen, onClose, onApply }: BodyShapeModalProps) => {
             <button
               onClick={() => {
                 onApply(inputHeight as number, inputWeight as number); // 적용하기 버튼 클릭 시 height와 weight 값 전달
-                onClose();
               }}
               className="text-white text-sm"
             >

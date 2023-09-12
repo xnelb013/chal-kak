@@ -47,7 +47,6 @@ export default function Navbar() {
   useEffect(() => {
     setCookies(parseCookies()); // 쿠키 값 업데이트
   }, []);
-
   useEffect(() => {
     const cookies = parseCookies();
     const profileImg = cookies.profileImg;
@@ -55,7 +54,6 @@ export default function Navbar() {
     const isLoggedIn = !!cookies.isLoggedIn;
     setLogin(isLoggedIn);
   }, [cookies]);
-
   return (
     <>
       <div className="h-[50px] navbar bg-base-100 md:px-5">

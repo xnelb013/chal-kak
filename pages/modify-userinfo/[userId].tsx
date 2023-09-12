@@ -53,20 +53,41 @@ export default function modifyuserinfo() {
   const myKeywords = styleTagList.filter((obj) => userinfoProfile.styleTags.includes(obj.id));
 
   useEffect(() => {
-    setTimeout(() => {
-      const userinfoRes = apiInstance.get(`/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      userinfoRes.then((res) => {
-        setUserinfo(res.data.data);
-        setUserinfoPropfile(res.data.data);
-        setUserNickname(res.data.data.nickname);
-        setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
-        Cookies.set("profileImg", res.data.data.profileImg);
-      });
-    }, 1500);
+    const fetchUserInfo = async () => {
+      try {
+        const response = await apiInstance.get(`/users/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const data = response.data.data;
+
+        setUserinfo(data);
+        setUserinfoPropfile(data);
+        setUserNickname(data.nickname);
+        setCurUser((prev) => ({ ...prev, profileImg: data.profileImg, isLoggedIn: true }));
+        Cookies.set("profileImg", data.profileImg);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (isModifyModalOpen) {
+      setTimeout(fetchUserInfo, 1500); // API 호출을 비동기 함수 내부로 옮김
+    }
+    // const userinfoRes = apiInstance.get(`/users/${userId}`, {
+    //   headers: {
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    // });
+    // userinfoRes.then((res) => {
+    //   setUserinfo(res.data.data);
+    //   setUserinfoPropfile(res.data.data);
+    //   setUserNickname(res.data.data.nickname);
+    //   setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
+    //   Cookies.set("profileImg", res.data.data.profileImg);
+    // });
   }, [isModifyModalOpen]);
 
   // 구글 로그인 후 modify-userinfo로 넘어왔을 때, url 로부터 필요한 정보를 가져와서 설정해주는 함수.

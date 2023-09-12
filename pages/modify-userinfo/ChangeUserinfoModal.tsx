@@ -63,8 +63,8 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
     }
 
     setIsNicknameValid(checkNicknameFormat(userinfoProfile?.nickname));
-    setIsHeightValid(checkHeightFormat(userinfoProfile?.height.toString()));
-    setIsWeightValid(checkWeightFormat(userinfoProfile?.weight.toString()));
+    setIsHeightValid(checkHeightFormat(userinfoProfile?.height?.toString()));
+    setIsWeightValid(checkWeightFormat(userinfoProfile?.weight?.toString()));
   }, [userinfoProfile?.nickname, userinfoProfile?.height, userinfoProfile?.weight]);
 
   useEffect(() => {

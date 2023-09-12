@@ -59,7 +59,7 @@ const ImageUpload = () => {
       if (files) {
         let fileArray = Array.from(files);
 
-        //이미지 파일 형식확인
+        //이미지 파일의 형식확인
         for (let i = 0; i < fileArray.length; i++) {
           const fileType = fileArray[i].type;
           if (fileType !== "image/jpeg" && fileType !== "image/png") {

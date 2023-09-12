@@ -1,7 +1,26 @@
 import router from "next/router";
+import { useRouter } from "next/router";
 import "animate.css";
+import { useEffect } from "react";
+import { apiInstance } from "@/pages/api/api";
 
 const HomePage = () => {
+  const userouter = useRouter();
+  const { userId, authToken } = userouter.query;
+
+  useEffect(() => {
+    if (userId && authToken) {
+      apiInstance
+        .post("users/auth", { id: Number(userId), authToken })
+        .then(() => {
+          console.log("Request sent successfully");
+        })
+        .catch((error) => {
+          console.error("Error sending request:", error);
+        });
+    }
+  }, [userId, authToken]);
+
   return (
     <section className="bg-white dark:bg-gray-900 mt-40">
       <div className="container flex items-start min-h-screen px-6 mx-auto ">

@@ -52,6 +52,14 @@ interface PostPhoto {
   url: string;
 }
 
+export interface Writer {
+  height: number;
+  id: number;
+  nickname: string;
+  profileImg: string;
+  weight: number;
+}
+
 export interface editData {
   content: string;
   styleTags: string[];
@@ -65,6 +73,7 @@ export interface editData {
   staticKeywords: string[];
   location: string;
   postPhotos: PostPhoto[];
+  writer: Writer;
 }
 
 interface HomePageProps {
@@ -72,6 +81,7 @@ interface HomePageProps {
 }
 
 const accessToken = Cookies.get("accessToken");
+const userId = Cookies.get("userId");
 
 const HomePage = ({ initialPostData }: HomePageProps) => {
   const resetUploadedImageFiles = useResetRecoilState(uploadedImageFilesState);
@@ -120,6 +130,11 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
     if (!accessToken) {
       alert("로그인이 필요합니다");
       router.push("/main");
+    } else if (userouter.query.id) {
+      if (userId !== initialPostData?.writer.id) {
+        alert("작성자 아이디와 일치하지 않습니다");
+        router.push("/main");
+      }
     }
   }, []);
 

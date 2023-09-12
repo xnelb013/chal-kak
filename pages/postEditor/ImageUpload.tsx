@@ -14,8 +14,8 @@ const ImageUpload = () => {
   const [, setUploadedImageUrls] = useRecoilState(uploadedImageUrlsState);
   const [previews, setPreviews] = useState<string[]>([]);
   const [imageInfo] = useRecoilState(imageInfoState);
-  const [imageIds, setImageIds] = useRecoilState(imageIdsState);
-  const [deleteImageIds, setDeleteImageIds] = useRecoilState(deleteImageIdsState);
+  const [, setImageIds] = useRecoilState(imageIdsState);
+  const [, setDeleteImageIds] = useRecoilState(deleteImageIdsState);
 
   const userouter = useRouter();
 
@@ -49,12 +49,6 @@ const ImageUpload = () => {
     const urls = imageInfo.map((info) => info.url);
     setPreviews(urls);
   }, [imageInfo]);
-
-  useEffect(() => {
-    console.log(previews);
-    console.log(imageIds);
-    console.log(deleteImageIds);
-  }, [previews]);
 
   const handleImageChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {

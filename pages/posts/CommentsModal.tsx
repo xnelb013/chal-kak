@@ -76,7 +76,6 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         .then((response) => {
           setComments((prevComments) => [...prevComments, ...response.data.data.commentLoadResponses]);
           setTotalPages(response.data.data.totalPages);
-
           setIsLoading(false); // loading 종료
         })
         .catch((error) => {
@@ -152,6 +151,10 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
     setAlertOpen(true); // 알림창 열기
   };
 
+  const goToProfile = (id: number) => {
+    router.push(`/userinfo/${id}`);
+  };
+
   const handleSubmitComment = () => {
     if (postId) {
       apiInstance({
@@ -178,7 +181,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
           if (!userId) {
             router.push("/login");
           }
-          alert("There was an error!" + error);
+          console.log(error);
         });
     }
   };
@@ -207,7 +210,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         {comments.map((comment, index) => (
           <div key={index} className="flex mb-5 items-center justify-between">
             <div className="flex items-start w-full">
-              <div className="relative w-12 h-12">
+              <div className="relative w-12 h-12 cursor-pointer" onClick={() => goToProfile(comment.memberId)}>
                 <Image
                   src={comment.profileUrl || img}
                   alt="프로필 사진"
@@ -218,7 +221,12 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
               <div className="flex-grow-6">
                 <div className="flex flex-col ml-2">
                   <div className="block">
-                    <div className="text-sm font-semibold ml-1">{comment.nickname}</div>
+                    <div
+                      className="text-sm font-semibold ml-1 cursor-pointer"
+                      onClick={() => goToProfile(comment.memberId)}
+                    >
+                      {comment.nickname}
+                    </div>
                     <div
                       className={`text-sm ml-1 col whitespace-pre-wrap break-words max-w-[13rem] md:max-w-sm ${
                         !showFullTexts[index] ? "line-clamp-2" : ""

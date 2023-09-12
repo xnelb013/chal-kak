@@ -115,13 +115,9 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
               </div>
             </div>
           ))}
-          {totalComments > 3 ? (
-            <div className="text-gray-400 cursor-pointer" onClick={openCommentsModal}>
+          {totalComments > 3 && (
+            <div className="text-gray-400 cursor-pointer text-xs md:text-sm" onClick={openCommentsModal}>
               댓글 더 보기...
-            </div>
-          ) : (
-            <div className="text-gray-400 cursor-pointer" onClick={openCommentsModal}>
-              댓글 창 열기
             </div>
           )}
         </div>

@@ -9,13 +9,12 @@ import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 export default function Navbar() {
   const router = useRouter();
-  const [actoken, setActoken] = useRecoilState(accessTokenState);
+  const [, setActoken] = useRecoilState(accessTokenState);
   const [myUserState] = useRecoilState(userState);
   const [login, setLogin] = useState(false);
   const [profileImg, setProfileImg] = useState("");
   const [cookies, setCookies] = useState({});
   const cookieNames = ["isLoggedIn", "accessToken", "userId", "myKeywords", "refreshToken", "profileImg"];
-  console.log("actoken", actoken);
   const userId = Cookies.get("userId");
   const handleLogout = async () => {
     try {
@@ -44,8 +43,6 @@ export default function Navbar() {
       setLogin(false);
     }
   }, [myUserState]);
-
-  console.log("");
 
   useEffect(() => {
     setCookies(parseCookies()); // 쿠키 값 업데이트

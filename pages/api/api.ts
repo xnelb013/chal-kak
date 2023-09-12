@@ -1,7 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import router from "next/router";
-
 const cookieNames = ["isLoggedIn", "accessToken", "userId", "myKeywords", "refreshToken", "profileImg"];
 
 export const apiInstance = axios.create({
@@ -31,40 +30,35 @@ apiInstance.interceptors.response.use(
     // 성공적인 응답을 받았을 때의 처리
     return response;
   },
-  (error) => {
-    // 서버로부터의 에러 응답(예: 상태 코드가 400 이상인 경우)을 받았을 때의 처리
+  async (error) => {
     console.error("Response error", error);
 
     if (error.response && error.response.status === 401) {
-      cookieNames.forEach((cookieName) => {
-        Cookies.remove(cookieName);
-      });
-      alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
-      router.push("/login");
+      try {
+        const refreshToken = Cookies.get("refreshToken");
+        const userId = Number(Cookies.get("userId"));
+        if (!refreshToken) throw new Error("No refresh token");
+
+        const res = await axios.post("https://www.chla-kak-back.store/users/reissue", { refreshToken, userId });
+        const newAccessToken = res.data.data.accessToken;
+        const newRefreshToken = res.data.data.refreshToken;
+
+        // Store the new access token.
+        Cookies.set("accessToken", newAccessToken);
+        Cookies.set("refreshToken", newRefreshToken);
+        return apiInstance.request({
+          ...error.config,
+          headers: { Authorization: `Bearer ${newAccessToken}` },
+        });
+      } catch (err) {
+        cookieNames.forEach((cookieName) => {
+          Cookies.remove(cookieName);
+        });
+        alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
+        router.push("/login");
+      }
     }
 
     return Promise.reject(error);
   },
 );
-
-// 토큰 갱신부분
-// apiInstance.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   }
-//   async (error) => {
-//     const originalRequest = error.config;
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       const refreshToken = Cookies.get("refreshToken");
-//       const { data } = await apiInstance({
-//         url: "/users/reissue",
-//         method: "POST",
-//         data: {
-//           refreshToken: refreshToken,
-//       })
-//       Cookies.set("accessToken", data.accessToken);
-//       return apiInstance(originalRequest);
-//     }
-//   }
-// )

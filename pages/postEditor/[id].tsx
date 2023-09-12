@@ -26,7 +26,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     postData = response.data.data;
     console.log(response);
   } catch (error) {
-    alert("There was an error!" + error);
     return { notFound: true };
   }
 

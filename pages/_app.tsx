@@ -11,6 +11,8 @@ import { styleTagsState } from "@/utils/atoms";
 import { apiInstance } from "./api/api";
 import InfoAlert from "./components/InfoAlert";
 
+// import Cookies from 'js-cookie'
+
 // 탭을 전환했다가 다시 돌아왔을 때 API 호출이 발생하지 않음
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +41,6 @@ function StyleTagsFetcher() {
     },
     enabled: isEmpty,
   });
-  console.log(currentStyleTags);
   return null;
 }
 

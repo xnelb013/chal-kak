@@ -5,10 +5,10 @@ const SkeletonSignup = () => {
         <div className="h-12 bg-gray-200 rounded-lg dark:bg-gray-700 w-[160px] justify-center"></div>
       </div>
       <div className="flex justify-center">
-        <div className="flex items-center justify-center w-[550px] h-[580px] mb-7 bg-gray-300 rounded dark:bg-gray-700"></div>
+        <div className="flex items-center justify-center w-full h-[580px] mb-7 bg-gray-300 rounded dark:bg-gray-700"></div>
       </div>
       <div className="flex flex-col items-center">
-        <div className="h-12 w-[500px] flex bg-gray-200 rounded-full dark:bg-gray-700 mb-4"></div>
+        <div className="h-12 w-full flex bg-gray-200 rounded-full dark:bg-gray-700 mb-4"></div>
         <span className="sr-only">Loading...</span>
       </div>
     </>

@@ -60,10 +60,6 @@ const HeartsModal: React.FC<ModalComponentProps> = ({ isOpen, closeModal, postId
       });
   };
 
-  useEffect(() => {
-    console.log(likeListData);
-  }, [likeListData]);
-
   //로그인 페이지로 이동
   const redirectToLogin = () => {
     router.push("/login");

@@ -131,7 +131,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
       alert("로그인이 필요합니다");
       router.push("/main");
     } else if (userouter.query.id) {
-      if (userId !== initialPostData?.writer.id) {
+      if (userId != initialPostData?.writer.id) {
         alert("작성자 아이디와 일치하지 않습니다");
         router.push("/main");
       }

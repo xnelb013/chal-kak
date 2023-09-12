@@ -46,23 +46,27 @@ export default function modifyuserinfo() {
   const [profileFile] = useState<File>();
   const [userNickname, setUserNickname] = useState<string>("");
   const userId = Cookies.get("userId");
+  // const router = useRouter();
+  // const id = router.query;
   const accessToken = Cookies.get("accessToken");
   const styleTagList = useRecoilValue(styleTagsState);
   const myKeywords = styleTagList.filter((obj) => userinfoProfile.styleTags.includes(obj.id));
 
   useEffect(() => {
-    const userinfoRes = apiInstance.get(`/users/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    userinfoRes.then((res) => {
-      setUserinfo(res.data.data);
-      setUserinfoPropfile(res.data.data);
-      setUserNickname(res.data.data.nickname);
-      setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
-      Cookies.set("profileImg", res.data.data.profileImg);
-    });
+    setTimeout(() => {
+      const userinfoRes = apiInstance.get(`/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      userinfoRes.then((res) => {
+        setUserinfo(res.data.data);
+        setUserinfoPropfile(res.data.data);
+        setUserNickname(res.data.data.nickname);
+        setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
+        Cookies.set("profileImg", res.data.data.profileImg);
+      });
+    }, 1500);
   }, [isModifyModalOpen]);
 
   // 구글 로그인 후 modify-userinfo로 넘어왔을 때, url 로부터 필요한 정보를 가져와서 설정해주는 함수.

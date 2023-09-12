@@ -1,5 +1,5 @@
 import debounce from "lodash.debounce";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { styled } from "styled-components";
 import { apiInstance } from "../api/api";
@@ -44,10 +44,6 @@ const ChangePWModal = ({ isOpen, handleCloseModal }: ChangePWModalProps) => {
     [curPassword],
   );
 
-  useEffect(() => {
-    console.log(invalidPassword);
-  }, [invalidPassword]);
-
   // 비밀번호 양식 확인
   const checkPasswordFormat = (password: string) => {
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*[!@#$%^&*])(?=.*\d)[a-zA-Z\d!@#$%^&*]{8,16}$/;
@@ -89,6 +85,7 @@ const ChangePWModal = ({ isOpen, handleCloseModal }: ChangePWModalProps) => {
       },
     });
     handleCloseModal();
+    alert("비밀번호가 수정되었습니다.");
   };
 
   return (
@@ -151,7 +148,7 @@ const ChangePWModal = ({ isOpen, handleCloseModal }: ChangePWModalProps) => {
                 )}
               </div>
               <div className="flex justify-center items-center">
-                <button className="btn btn-sm ml-4 bg-[#efefef] w-[5rem] font-medium rounded-lg text-black">
+                <button className="btn btn-sm mt-4 ml-4 bg-[#efefef] w-[5rem] font-medium rounded-lg text-black">
                   수정
                 </button>
               </div>

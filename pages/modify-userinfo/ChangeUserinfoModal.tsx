@@ -2,8 +2,8 @@ import { styled } from "styled-components";
 import { ChangeEvent, FormEventHandler, useCallback, useEffect, useState } from "react";
 import { apiInstance } from "../api/api";
 import debounce from "lodash.debounce";
-import { styleTagsState, userinfoState } from "@/utils/atoms";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { styleTagsState, userState, userinfoState } from "@/utils/atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { AiOutlineClose } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { UserinfoType } from "./[userId]";
@@ -20,59 +20,97 @@ interface ChangeUserinfoModalProps {
   myKeywords: { id: number; keyword: string; category: string; keywordImg: string }[];
 }
 
-const ChangeUserinfoModal = ({
-  isOpen,
-  handleCloseModal,
-  setUserInfo,
-  userinfo,
-  profileFile,
-  formData,
-  userNickname,
-}: ChangeUserinfoModalProps) => {
-  console.log("userinfo-modal", userinfo);
-  // const stList = userinfo.styleTags;
-  // const userinfoProfile = useRecoilValue(userinfoState);
+const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname }: ChangeUserinfoModalProps) => {
   const [userinfoProfile, setUserinfoPropfile] = useRecoilState(userinfoState);
+  const setCurUser = useSetRecoilState(userState);
+  const [profileImg, setProfileImg] = useState<File>();
   const [invalidNickname, setInvalidNickname] = useState(false);
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
   const keywordTagList = useRecoilValue(styleTagsState);
   const styleTagList = keywordTagList.filter((obj) => obj.category === "STYLE");
   const tpoTagList = keywordTagList.filter((obj) => obj.category === "TPO");
-  console.log("profileFile", profileFile);
-  const handleSubmit: FormEventHandler = async (e) => {
-    e.preventDefault();
-    const blob = new Blob([JSON.stringify(userinfo)], { type: "application/json" });
-    formData.append("infoRequest", blob);
-
-    await apiInstance({
-      method: "patch",
-      url: `/users/${userinfo.userId}/modify`,
-
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-      },
-      data: formData,
-    });
-    handleCloseModal();
+  const [previewImg, setPreviewImg] = useState<string | undefined>(undefined);
+  const [isNicknameValid, setIsNicknameValid] = useState<boolean>(false);
+  const checkNicknameFormat = (nickname: string): boolean => {
+    const nicknamePattern = /(^[a-zA-Z0-9_]{4,16}$)|(^[가-힣0-9_]{2,8}$)/;
+    return nicknamePattern.test(nickname);
   };
 
   useEffect(() => {
-    // formData.append("multipartFiles", profileFile as File);
-    formData.set("multipartFiles", profileFile as File);
-    console.log("formData", formData);
-  }, []);
+    setIsNicknameValid(checkNicknameFormat(userinfoProfile.nickname));
+  }, [userinfoProfile.nickname]);
+
+  const handleSubmit: FormEventHandler = async (e) => {
+    e.preventDefault();
+    if (isNicknameValid === false) {
+      return;
+    }
+    const blob = new Blob([JSON.stringify(userinfoProfile)], { type: "application/json" });
+    formData.append("infoRequest", blob);
+
+    try {
+      const response = await apiInstance({
+        method: "patch",
+        url: `/users/${userinfoProfile.userId}/modify`,
+
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${Cookies.get("accessToken")}`,
+        },
+        data: formData,
+      });
+
+      if (response.status === 200) {
+        setCurUser((prev) => {
+          return {
+            ...prev,
+            profileImg: userinfoProfile.profileImg as string,
+          };
+        });
+      }
+      handleCloseModal();
+      alert("수정되었습니다.");
+    } catch (error) {
+      console.log("fail");
+    }
+  };
+
+  useEffect(() => {
+    if (profileImg) {
+      setProfileImg(profileImg);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImg(reader.result as string);
+      };
+      reader.readAsDataURL(profileImg);
+    } else {
+      if (userinfoProfile.profileImg) {
+        setPreviewImg(userinfoProfile.profileImg);
+      }
+    }
+    return () => {
+      setPreviewImg(undefined);
+    };
+  }, [profileImg, isOpen]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "gender") {
-      setUserInfo({ ...userinfo, gender: value });
       setUserinfoPropfile({ ...userinfoProfile, gender: value });
     } else if (name === "height" || name === "weight") {
-      setUserInfo({ ...userinfo, [name]: Number(value) });
       setUserinfoPropfile({ ...userinfoProfile, [name]: Number(value) });
+    } else if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file.type !== "image/jpeg" && file.type !== "image/png" && file.type !== "image/jpg") {
+        alert("jpg, png파일만 업로드 가능합니다");
+        e.target.value = "";
+        return;
+      } else {
+        console.log("file", file);
+        setProfileImg(file);
+        formData.set("multipartFiles", file as File);
+      }
     } else {
-      setUserInfo({ ...userinfo, [name]: value });
       setUserinfoPropfile({ ...userinfoProfile, [name]: value });
     }
   };
@@ -83,10 +121,10 @@ const ChangeUserinfoModal = ({
   const handleKeywordCheckedChange = (keywordId: number) => {
     if (checkedKeyword.includes(keywordId)) {
       setCheckedKeyword(checkedKeyword.filter((id) => id !== keywordId));
-      setUserInfo({ ...userinfo, styleTags: checkedKeyword.filter((id) => id !== keywordId) });
+      setUserinfoPropfile({ ...userinfoProfile, styleTags: checkedKeyword.filter((id) => id !== keywordId) });
     } else if (checkedKeyword.length < maxCheckedCount) {
       setCheckedKeyword([...checkedKeyword, keywordId]);
-      setUserInfo({ ...userinfo, styleTags: [...checkedKeyword, keywordId] });
+      setUserinfoPropfile({ ...userinfoProfile, styleTags: [...checkedKeyword, keywordId] });
     }
   };
 
@@ -114,8 +152,8 @@ const ChangeUserinfoModal = ({
   );
 
   useEffect(() => {
-    if (nicknameTouched && validateNickname(userinfo.nickname)) {
-      validateNickname(userinfo.nickname);
+    if (nicknameTouched && validateNickname(userinfoProfile.nickname)) {
+      validateNickname(userinfoProfile.nickname);
     }
   }, [nicknameTouched, userinfoProfile.nickname]);
 
@@ -128,6 +166,28 @@ const ChangeUserinfoModal = ({
               <AiOutlineClose size={24} />
             </button>
             <form>
+              <div>
+                <div>
+                  {previewImg && (
+                    <img src={previewImg} alt="프로필 미리보기" style={{ width: "100px", height: "100px" }} />
+                  )}
+                </div>
+                <label htmlFor="profileImg" className="block pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
+                  프로필 이미지 변경
+                </label>
+                <div>
+                  <input
+                    type="file"
+                    id="profileImg"
+                    name="profileImg"
+                    onChange={(e) => {
+                      const input = e.target as HTMLInputElement;
+                      console.log(input.files![0]);
+                      handleChange(e);
+                    }}
+                  />
+                </div>
+              </div>
               <div>
                 <label htmlFor="nickname" className="block pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
                   닉네임
@@ -143,9 +203,15 @@ const ChangeUserinfoModal = ({
                     }}
                     placeholder={userNickname}
                     autoComplete="off"
-                    className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
+                    // className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
+                    className={`mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100 ${
+                      !isNicknameValid ? "border-red" : ""
+                    }`}
                   />
                 </div>
+                {!isNicknameValid && (
+                  <p className="text-red-500 text-xs pr-1 mt-[4px]">닉네임 형식이 올바르지 않습니다.</p>
+                )}
                 {invalidNickname && <p className="text-red-500 text-xs pr-1 mt-1">이미 사용중입니다.</p>}
               </div>
               <div>
@@ -160,7 +226,7 @@ const ChangeUserinfoModal = ({
                     name="gender"
                     value="MALE"
                     onChange={(e) => handleChange(e)}
-                    checked={userinfo.gender === "MALE"}
+                    checked={userinfoProfile.gender === "MALE"}
                     className="mt-1 mx-2 pt-2 pb-2 border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
                   />
                   <label htmlFor="female">여성</label>
@@ -170,7 +236,7 @@ const ChangeUserinfoModal = ({
                     name="gender"
                     value="FEMALE"
                     onChange={(e) => handleChange(e)}
-                    checked={userinfo.gender === "FEMALE"}
+                    checked={userinfoProfile.gender === "FEMALE"}
                     className="mt-1 mx-2 pt-2 pb-2 border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
                   />
                 </div>
@@ -186,7 +252,7 @@ const ChangeUserinfoModal = ({
                       id="height"
                       name="height"
                       onChange={(e) => handleChange(e)}
-                      placeholder={userinfo.height}
+                      placeholder={userinfoProfile.height}
                       autoComplete="off"
                       inputMode="numeric"
                       className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
@@ -203,7 +269,7 @@ const ChangeUserinfoModal = ({
                       id="weight"
                       name="weight"
                       onChange={(e) => handleChange(e)}
-                      placeholder={userinfo.weight}
+                      placeholder={userinfoProfile.weight}
                       autoComplete="off"
                       inputMode="numeric"
                       className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
@@ -258,7 +324,10 @@ const ChangeUserinfoModal = ({
               <div className="flex justify-center items-center">
                 <button
                   onClick={handleSubmit}
-                  className="btn btn-sm ml-4 bg-[#efefef] w-[5rem] font-medium rounded-lg text-black"
+                  disabled={!isNicknameValid}
+                  className={`btn btn-sm ml-4 bg-[#efefef] w-[5rem] font-medium rounded-lg text-black ${
+                    !isNicknameValid ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   수정
                 </button>

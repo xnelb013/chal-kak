@@ -25,9 +25,7 @@ const FollowingModal = ({ initialFollowingData, isOpen, handleCloseModal }: Foll
   const router = useRouter();
   console.log("followingList", initialFollowingData);
   const list = useRecoilValue(followingListState);
-  console.log("list", list);
   const { followerResponses } = list;
-  // console.log("followingResponses", followingResponses);
 
   return (
     <>
@@ -43,7 +41,10 @@ const FollowingModal = ({ initialFollowingData, isOpen, handleCloseModal }: Foll
                   <div
                     className="flex flex-row w-[400px] cursor-pointer"
                     key={following.memberId}
-                    onClick={() => router.push(`/userinfo/${following.memberId}`)}
+                    onClick={() => {
+                      handleCloseModal();
+                      router.push(`/userinfo/${following.memberId}`);
+                    }}
                   >
                     <div className="avatar ml-6">
                       <div className="w-10 rounded-full">

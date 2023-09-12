@@ -35,19 +35,22 @@ const FollowerModal = ({ initialFollowerData, isOpen, handleCloseModal }: Follow
               <AiOutlineClose size={24} />
             </button>
             <div className="flex flex-col h-[600px] w-[500px] gap-4">
-              {followerResponses.map((following) => (
+              {followerResponses.map((follower) => (
                 <>
                   <div
                     className="flex flex-row w-[400px] cursor-pointer"
-                    key={following.memberId}
-                    onClick={() => router.push(`/userinfo/${following.memberId}`)}
+                    key={follower.memberId}
+                    onClick={() => {
+                      handleCloseModal();
+                      router.push(`/userinfo/${follower.memberId}`);
+                    }}
                   >
                     <div className="avatar ml-6">
                       <div className="w-10 rounded-full">
-                        <img src={following.profileUrl} alt="프로필" />
+                        <img src={follower.profileUrl} alt="프로필" />
                       </div>
                     </div>
-                    <div className="text-lg font-semibold ml-6 text-black">{following.nickName}</div>
+                    <div className="text-lg font-semibold ml-6 text-black">{follower.nickName}</div>
                   </div>
                 </>
               ))}

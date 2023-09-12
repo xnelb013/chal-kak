@@ -31,14 +31,33 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
   const tpoTagList = keywordTagList.filter((obj) => obj.category === "TPO");
   const [previewImg, setPreviewImg] = useState<string | undefined>(undefined);
   const [isNicknameValid, setIsNicknameValid] = useState<boolean>(false);
+  const [isHeightValid, setIsHeightValid] = useState<boolean>(false);
+  const [isWeightValid, setIsWeightValid] = useState<boolean>(false);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const checkNicknameFormat = (nickname: string): boolean => {
     const nicknamePattern = /(^[a-zA-Z0-9_]{4,16}$)|(^[가-힣0-9_]{2,8}$)/;
     return nicknamePattern.test(nickname);
   };
 
+  const checkHeightFormat = (height: string): boolean => {
+    const heightRegex = /^(?:[5-9][0-9]|1[0-9]{2}|2[0-4][0-9]|250)$/;
+    return heightRegex.test(height);
+  };
+
+  const checkWeightFormat = (weight: string): boolean => {
+    const weightRegex = /^(?:[2-9][0-9]|1[0-9]{2}|200)$/;
+    return weightRegex.test(weight);
+  };
+
   useEffect(() => {
     setIsNicknameValid(checkNicknameFormat(userinfoProfile.nickname));
-  }, [userinfoProfile.nickname]);
+    setIsHeightValid(checkHeightFormat(userinfoProfile.height.toString()));
+    setIsWeightValid(checkWeightFormat(userinfoProfile.weight.toString()));
+  }, [userinfoProfile.nickname, userinfoProfile.height, userinfoProfile.weight]);
+
+  useEffect(() => {
+    setIsFormValid(isNicknameValid && isHeightValid && isWeightValid);
+  }, [isNicknameValid, isHeightValid, isWeightValid]);
 
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -258,6 +277,7 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
                       className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
                     />
                   </div>
+                  {!isHeightValid && <p className="text-red-500 text-xs pr-1 mt-1">키를 확인하세요.</p>}
                 </div>
                 <div>
                   <label htmlFor="height" className="block pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
@@ -275,6 +295,7 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
                       className="mt-1 pt-2 pb-2 block w-full border-b border-gray-200 focus:border-gray-700 focus:outline-none py-2 text-sm transition-colors ease-in duration-100"
                     />
                   </div>
+                  {!isWeightValid && <p className="text-red-500 text-xs pr-1 mt-1">몸무게를 확인하세요.</p>}
                 </div>
               </div>
               <div>
@@ -324,9 +345,9 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
               <div className="flex justify-center items-center">
                 <button
                   onClick={handleSubmit}
-                  disabled={!isNicknameValid}
+                  disabled={!isFormValid}
                   className={`btn btn-sm ml-4 bg-[#efefef] w-[5rem] font-medium rounded-lg text-black ${
-                    !isNicknameValid ? "opacity-50 cursor-not-allowed" : ""
+                    !isFormValid ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
                   수정

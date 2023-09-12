@@ -107,8 +107,7 @@ export default function Login() {
 
   // 구글 로그인 API 호출
   const handleGoogleLogin = () => {
-    window.location.href =
-      "http://ec2-13-127-154-248.ap-south-1.compute.amazonaws.com:8080/oauth2/authorization/google";
+    window.location.href = "https://www.chla-kak-back.store/oauth2/authorization/google";
   };
 
   // 이메일 양식 확인

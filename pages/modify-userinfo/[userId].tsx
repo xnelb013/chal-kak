@@ -78,7 +78,7 @@ export default function modifyuserinfo() {
     const refreshToken = urlParams[1].split("=")[1]; // url을 = 기준으로 잘라서, refreshToken을 가져옴.
     const profileImg = urlParams[2].split("=")[1]; // url을 = 기준으로 잘라서, profileImg를 가져옴.
     Cookies.set("userId", userId);
-    Cookies.set("isLoggedIn", true);
+    Cookies.set("isLoggedIn", "true");
     Cookies.set("accessToken", accessToken);
     Cookies.set("refreshToken", refreshToken);
     Cookies.set("profileImg", profileImg);

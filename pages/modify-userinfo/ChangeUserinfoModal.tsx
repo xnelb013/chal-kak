@@ -50,6 +50,18 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
   };
 
   useEffect(() => {
+    // userinfoProfile 이 null 이거나 undefined 이면, 초기화
+    if (userinfoProfile.height === null || userinfoProfile.weight === null) {
+      setUserinfoPropfile({
+        nickname: "",
+        gender: "",
+        userId: 0,
+        height: "",
+        weight: "",
+        styleTags: [],
+      });
+    }
+
     setIsNicknameValid(checkNicknameFormat(userinfoProfile?.nickname));
     setIsHeightValid(checkHeightFormat(userinfoProfile?.height.toString()));
     setIsWeightValid(checkWeightFormat(userinfoProfile?.weight.toString()));

@@ -92,7 +92,7 @@ const Main = () => {
   }, [location]);
 
   // 키워드 추천 게시글 api
-  const fetchPosts = async ({ pageParam = 0 }) => {
+  const fetchPosts = async (pageParam = 0) => {
     try {
       const response = await apiInstance.post(`filter?page=${pageParam}&size=4`, {
         height: user.height,
@@ -151,12 +151,13 @@ const Main = () => {
   useEffect(() => {
     setPageParam(0);
     // setFilteredPosts([]);
+    fetchPosts(pageParam);
   }, [selectedStyleTags, inputHeight, inputWeight]);
 
   // 초기값 -1, pageParam이 0 이상의 값을 가질 때까지 실제 게시물 데이터를 요청하지 않음
   useEffect(() => {
     if (pageParam === -1) return;
-    fetchPosts({ pageParam });
+    fetchPosts(pageParam);
   }, [pageParam]);
 
   useEffect(() => {
@@ -214,8 +215,8 @@ const Main = () => {
   // 전체 키워드 버튼 클릭
   const handleAllTag = () => {
     setSelectedStyleTags([]); // 모든 선택된 태그 해제
-    setPageParam(0);
     setFilteredPosts([]);
+    setPageParam(0);
   };
 
   const handleBodyClick = () => {

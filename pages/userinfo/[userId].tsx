@@ -188,8 +188,8 @@ export default function UserInfo(): JSX.Element {
           <div className="flex flex-row items-center justify-around w-auto h-[200px] gap-10 mt-2">
             <div className="avatar">
               <div className="w-32 rounded-full">
-                {userDetail.profileImg === "" && <LiaUserCircleSolid className="w-40 h-40" />}
-                {userDetail.profileImg !== "" && <img src={userDetail.profileImg} alt="profile-img" />}
+                {!userDetail.profileImg && <LiaUserCircleSolid className="w-32 h-32" />}
+                {userDetail.profileImg && <img src={userDetail.profileImg} alt="profile-img" />}
               </div>
             </div>
             <div className="flex flex-col gap-10 items-center p-5">

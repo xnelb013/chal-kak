@@ -203,7 +203,10 @@ export default function UserInfo(): JSX.Element {
                   <p>게시글</p>
                   {userDetail.postsCount}
                 </div>
-                <div className="flex flex-col items-center text-sm text-black" onClick={openFollowerModal}>
+                <div
+                  className="flex flex-col items-center cursor-pointer text-sm text-black"
+                  onClick={openFollowerModal}
+                >
                   <p>팔로워</p>
                   {userDetail.followerCount}
                 </div>
@@ -214,7 +217,10 @@ export default function UserInfo(): JSX.Element {
                     handleCloseModal={closeFollowerModal}
                   />
                 )}
-                <div className="flex flex-col items-center text-sm text-black" onClick={openFollowingModal}>
+                <div
+                  className="flex flex-col items-center cursor-pointer text-sm text-black"
+                  onClick={openFollowingModal}
+                >
                   <p>팔로잉</p>
                   {userDetail.followingCount}
                 </div>

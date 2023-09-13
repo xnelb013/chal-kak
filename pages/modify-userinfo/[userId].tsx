@@ -174,7 +174,7 @@ export default function modifyuserinfo() {
             <div className="flex flex-row flex-wrap justify-center w-[70%] gap-y-2">
               {myKeywords.map((keyword) => {
                 return (
-                  <div className="badge text-xs items-center  badge-outline mr-2 h-6 w-auto " key={keyword.id}>
+                  <div className="badge text-xs items-center  badge-outline mr-2 h-6 w-auto" key={keyword.id}>
                     {keyword.keyword}
                   </div>
                 );
@@ -217,7 +217,7 @@ export default function modifyuserinfo() {
           </div>
           <div>
             <button
-              className="btn btn-sm ml-4 bg-[#ec4444] w-[125px] font-medium rounded-lg text-white"
+              className="btn btn-sm ml-4 bg-[#ec4444] w-[125px] font-medium rounded-lg text-white hover:text-black hover:bg-[#ff5656]"
               onClick={handleOpenWithdrawalModal}
             >
               회원탈퇴

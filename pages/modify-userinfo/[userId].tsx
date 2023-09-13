@@ -90,6 +90,21 @@ export default function modifyuserinfo() {
     });
   }, [isModifyModalOpen]);
 
+  useEffect(() => {
+    const userinfoRes = apiInstance.get(`/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    userinfoRes.then((res) => {
+      setUserinfo(res.data.data);
+      setUserinfoPropfile(res.data.data);
+      setUserNickname(res.data.data.nickname);
+      setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
+      Cookies.set("profileImg", res.data.data.profileImg);
+    });
+  }, []);
+
   // 구글 로그인 후 modify-userinfo로 넘어왔을 때, url 로부터 필요한 정보를 가져와서 설정해주는 함수.
   // https://chal-kak.vercel.app/modify-userinfo/{userId}?accessToken={}&refreshToken={}&profileImg={}
   useEffect(() => {

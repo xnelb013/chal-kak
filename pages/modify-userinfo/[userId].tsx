@@ -171,10 +171,10 @@ export default function modifyuserinfo() {
           </div>
           <div className="flex flex-row justify-between w-[70%] mt-4">
             <div className=" mr-10 text-xl">styletag</div>
-            <div className="flex flex-row flex-wrap justify-center w-[70%] gap-y-2">
+            <div className="flex flex-row flex-wrap justify-end items-end w-[70%] gap-y-2">
               {myKeywords.map((keyword) => {
                 return (
-                  <div className="badge text-xs items-center  badge-outline mr-2 h-6 w-auto" key={keyword.id}>
+                  <div className="badge text-xs items-center  badge-outline ml-2 h-6 w-auto" key={keyword.id}>
                     {keyword.keyword}
                   </div>
                 );

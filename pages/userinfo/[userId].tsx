@@ -239,7 +239,11 @@ export default function UserInfo(): JSX.Element {
           <div className="w-3/4 h-[600px] overflow-y-auto mx-auto">
             <div className="flex flex-row flex-wrap justify-start gap-x-2 gap-y-2">
               {posts.map((post) => (
-                <div key={post.id} className="w-40 h-40" onClick={() => router.push(`/posts/${post.id}`)}>
+                <div
+                  key={post.id}
+                  className="w-40 h-40 cursor-pointer"
+                  onClick={() => router.push(`/posts/${post.id}`)}
+                >
                   <div style={{ position: "relative", width: "100%", height: "100%" }}>
                     <img
                       src={post.thumbnail}

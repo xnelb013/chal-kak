@@ -215,7 +215,7 @@ const Main = () => {
   const handleAllTag = () => {
     setSelectedStyleTags([]); // 모든 선택된 태그 해제
     setPageParam(0);
-    setFilteredPosts([]);
+    // setFilteredPosts([]);
   };
 
   const handleBodyClick = () => {

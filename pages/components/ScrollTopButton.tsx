@@ -20,6 +20,7 @@ const ScrollTopButton = () => {
     } else {
       setIsVisible(false);
     }
+    // setIsVisible(true);
   };
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const ScrollTopButton = () => {
     isVisble && (
       <button
         onClick={handleScrollTop}
-        className="mb-2 fixed top-[92%] right-[30px] flex items-center justify-center border border-gray-800 rounded-full text-white bg-gray-800 w-[42px] h-[42px]"
+        className="fixed top-[85%] right-[32px] flex items-center justify-center border border-gray-800 rounded-full text-white bg-gray-800 w-[42px] h-[42px]"
       >
         <HiOutlineArrowUp className="w-[24px] h-[24px]" />
       </button>

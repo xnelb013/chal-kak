@@ -101,6 +101,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
   const [seasonKeywords, setSeasonKeywords] = useState<string[]>([]);
   const [weatherKeywords, setWeatherKeywords] = useState<string[]>([]);
   const [content, setContent] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [privacyHeight, setPrivacyHeight] = useState(false);
   const [privacyWeight, setPrivacyWeight] = useState(false);
   const [dynamicKeywordInput, setDynamicKeywordInput] = useState<string>("");
@@ -340,7 +341,7 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
   ));
 
   const renderButton = (isActive: boolean) => {
-    return isActive ? (
+    return isActive && !isSubmitting ? (
       <button type="button" onClick={handleSubmit} className="btn-neutral w-full p-3 rounded-full text-sm my-10">
         작성
       </button>
@@ -401,6 +402,8 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
     const blob = new Blob([JSON.stringify(request)], { type: "application/json" });
     submissionFormData.append("request", blob);
 
+    setIsSubmitting(true);
+
     try {
       if (router.query.id) {
         // postId가 있으면 PATCH 요청으로 게시글 수정
@@ -430,8 +433,10 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
       setLocation("");
       resetDeleteImageIds();
       setImageInfo([]);
+      setIsSubmitting(false);
     } catch (error) {
       alert("There was an error!" + error);
+      setIsSubmitting(false);
     }
 
     console.log(formData);

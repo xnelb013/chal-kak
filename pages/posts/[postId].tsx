@@ -400,7 +400,7 @@ const HomePage = () => {
             postImages.map((image, index) => (
               <div
                 key={index}
-                className="w-full md:h-[960px]  sm:h-[700px] h-[500px] max-w-[720px] bg-gray-200 mt-4 flex items-center justify-center relative overflow-hidden"
+                className="w-full md:h-[960px]  sm:h-[700px] h-[500px] max-w-[720px] bg-gray-100 mt-4 flex items-center justify-center relative overflow-hidden"
               >
                 <Image
                   src={image}

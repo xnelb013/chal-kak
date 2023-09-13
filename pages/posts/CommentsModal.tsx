@@ -45,6 +45,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
   const [page, setPage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const accessToken = Cookies.get("accessToken");
   const userId = Cookies.get("userId");
@@ -153,6 +154,11 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
   };
 
   const handleSubmitComment = () => {
+    if (commentInput === "") {
+      return;
+    }
+
+    setIsSubmitting(true);
     if (postId) {
       apiInstance({
         method: "post",
@@ -168,6 +174,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         .then(() => {
           setCommentsInput("");
           setComments([]);
+          setIsSubmitting(false);
           loadComments(0);
           setPage(0);
           if (onCommentAdded) {
@@ -175,6 +182,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
           }
         })
         .catch((error) => {
+          setIsSubmitting(false);
           if (!userId) {
             router.push("/login");
           }
@@ -200,7 +208,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
             onChange={(e) => handleChange(e)}
             className="input input-bordered input-md w-full mb-7 mr-2 focus:border-none rounded-full"
           />
-          <button className="btn" onClick={handleSubmitComment}>
+          <button className="btn" onClick={handleSubmitComment} disabled={isSubmitting}>
             게시
           </button>
         </div>

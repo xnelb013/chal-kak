@@ -328,7 +328,7 @@ const Main = () => {
       // isLike가 true일 때
       return (
         <button className="mb-2" onClick={() => handleClickUnlike(post.id, post.likeCount, post.liked)}>
-          <AiFillHeart className="text-lg mr-1 cursor-pointer text-red-600" />
+          <AiFillHeart className="md:text-lg md:mr-1 text-base cursor-pointer text-red-600" />
         </button>
       );
     } else {

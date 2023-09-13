@@ -144,7 +144,7 @@ const Search = () => {
                     className="mb-4 flex items-center justify-start"
                     onClick={() => router.push(`/userinfo/${users.memberId}`)}
                   >
-                    <div className=" w-10 h-10 relative">
+                    <div className=" w-10 h-10 relative cursor-pointer">
                       <Image
                         src={users.profileImgUrl || "/images/defaultImg.jpg"}
                         layout="fill"
@@ -152,7 +152,7 @@ const Search = () => {
                         className="border rounded-full object-cover"
                       />
                     </div>
-                    <p className="p-2 text-sm">
+                    <p className="p-2 text-sm cursor-pointer">
                       <Highlight text={users.nickname} highlight={keyword} />
                     </p>
                   </div>
@@ -165,7 +165,7 @@ const Search = () => {
                 <div className="mt-6 flex items-center justify-between h-[60px]">
                   <p className="text-sm text-gray-600">피드</p>
                   <div className="mt-2 flex items-center justify-end">
-                    <button onClick={() => setTab("피드")} className="text-sm mr-2 text-gray-400 cursor-pointer">
+                    <button onClick={() => setTab("피드")} className="text-sm mr-2 text-gray-400 ">
                       더보기
                     </button>
                   </div>
@@ -173,10 +173,10 @@ const Search = () => {
                 {searchResult.posts.slice(0, 4).map((posts, index) => (
                   <div
                     key={index}
-                    className="mb-4 flex items-center justify-start"
+                    className="mb-4 flex items-center justify-start cursor-pointer"
                     onClick={() => router.push(`/posts/${posts.postId}`)}
                   >
-                    <p className="p-2 text-sm">
+                    <p className="p-2 text-sm cursor-pointer">
                       <Highlight text={posts.content} highlight={keyword} />
                     </p>
                   </div>
@@ -196,10 +196,10 @@ const Search = () => {
                 </div>
                 {searchResult.tags.slice(0, 4).map((tags, index) => (
                   <div key={index} className="mb-4 flex items-center justify-start">
-                    <div className="border rounded-full w-[40px] h-[40px] flex items-center justify-center">
+                    <div className="border rounded-full w-[40px] h-[40px] flex items-center justify-center cursor-pointer">
                       <FaHashtag className="w-[22px] h-[22px]" />
                     </div>
-                    <p className="pl-4 p-2 text-sm">
+                    <p className="pl-4 p-2 text-sm cursor-pointer">
                       <Highlight text={tags.keyword} highlight={keyword} />
                     </p>
                   </div>
@@ -217,15 +217,15 @@ const Search = () => {
                 className="mt-4 mb-4 flex items-center justify-start"
                 onClick={() => router.push(`/userinfo/${users.memberId}`)}
               >
-                <div className=" w-10 h-10 relative">
+                <div className=" w-10 h-10 relative cursor-pointer">
                   <Image
                     src={users.profileImgUrl || "/images/defaultImg.jpg"}
                     layout="fill"
                     alt="profile-img"
-                    className="border rounded-full object-cover"
+                    className="border rounded-full object-cover "
                   />
                 </div>
-                <p className="pl-4 p-2 text-sm">
+                <p className="pl-4 p-2 text-sm cursor-pointer">
                   <Highlight text={users.nickname} highlight={keyword} />
                 </p>
               </div>
@@ -237,7 +237,7 @@ const Search = () => {
             {searchResult.posts.map((posts, index) => (
               <div
                 key={index}
-                className="mb-4 flex items-center justify-start"
+                className="mb-4 flex items-center justify-start cursor-pointer"
                 onClick={() => router.push(`/posts/${posts.postId}`)}
               >
                 <p className="p-2 text-sm">
@@ -251,10 +251,10 @@ const Search = () => {
           <section className="overflow-auto">
             {searchResult.tags.map((tags, index) => (
               <div key={index} className="mt-4 mb-4 flex items-center justify-start">
-                <div className="border rounded-full w-[40px] h-[40px] flex items-center justify-center">
+                <div className="border rounded-full w-[40px] h-[40px] flex items-center justify-center cursor-pointer">
                   <FaHashtag className="w-[22px] h-[22px]" />
                 </div>
-                <p className="pl-4 p-2 text-sm">
+                <p className="pl-4 p-2 text-sm cursor-pointer">
                   <Highlight text={tags.keyword} highlight={keyword} />
                 </p>
               </div>

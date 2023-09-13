@@ -48,6 +48,7 @@ export default function signup() {
   const [passwordConfirmTouched, setPasswordConfirmTouched] = useState(false);
   const [heightTouched, setHeightTouched] = useState(false);
   const [weightTouched, setWeightTouched] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailDuplicated, setEmailDuplicated] = useState(false);
   const [nicknameDuplicated, setNicknameDuplicated] = useState(false);
   const [formData, setFormData] = useState<SignUpData>({
@@ -221,6 +222,7 @@ export default function signup() {
   // 회원가입 버튼
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     // 회원가입 API에 formdata 전송
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { email, password, gender, height, weight, nickname, styleTags } = formData;
@@ -235,11 +237,13 @@ export default function signup() {
         nickname,
       });
       console.log(response);
+      setIsSubmitting(false);
       setAlert({ open: true, message: "회원가입이 성공했습니다! 이메일 인증 후 로그인 해주세요!" });
       router.push("/login");
       //이메일 인증 구현 예정
     } catch (error) {
       alert("There was an error!" + error);
+      setIsSubmitting(false);
     }
 
     console.log(formData);
@@ -429,7 +433,8 @@ export default function signup() {
             !passwordTouched ||
             !passwordConfirmTouched ||
             !heightTouched ||
-            !weightTouched ? (
+            !weightTouched ||
+            isSubmitting ? (
               <button
                 type="submit"
                 className="btn w-full p-4 bg-gray-200 rounded-full text-white mb-10 justify-center"

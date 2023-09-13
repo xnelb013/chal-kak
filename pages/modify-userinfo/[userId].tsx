@@ -95,7 +95,6 @@ export default function modifyuserinfo() {
   useEffect(() => {
     const url = window.location.href;
     const urlSplit = url.split("?"); // url을 ? 기준으로 잘라서, api 호출부와 필요한 정보를 분리함.
-    console.log(urlSplit);
     const urlParams = urlSplit[1] ? urlSplit[1].split("&") : []; // url을 & 기준으로 잘라서, 필요한 정보를 분리함.
     if (urlParams.length === 0) return;
     const userId = urlSplit[0].split("/")[4]; // url을 / 기준으로 잘라서, userId를 가져옴.

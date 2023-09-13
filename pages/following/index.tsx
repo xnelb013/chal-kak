@@ -5,6 +5,7 @@ import { followingPostsState } from "@/utils/atoms";
 import Cookies from "js-cookie";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useRouter } from "next/router";
+import ScrollTopButton from "../components/ScrollTopButton";
 
 const Following = () => {
   const [followingPosts, setFollowingPosts] = useRecoilState(followingPostsState);
@@ -68,7 +69,7 @@ const Following = () => {
     } else {
       const fetchFollowingPosts = async () => {
         try {
-          const followingPostsRes = await apiInstance.get("/filter/following");
+          const followingPostsRes = await apiInstance.get("/filter/following?page=0&size=99");
           // 팔로우한 사람들이 작성한 게시글을 업데이트
           setFollowingPosts(followingPostsRes.data.data.posts);
         } catch (error) {
@@ -143,6 +144,11 @@ const Following = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="fixed top-[85%] right-[30px] z-[1000]">
+          <div className="flex flex-col justify-center">
+            <ScrollTopButton />
+          </div>
         </div>
       </div>
     </div>

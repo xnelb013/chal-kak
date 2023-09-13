@@ -3,14 +3,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { accessTokenState, userState } from "@/utils/atoms";
-import { useRecoilState } from "recoil";
+import { accessTokenState, userState, userinfoState } from "@/utils/atoms";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 export default function Navbar() {
   const router = useRouter();
   const [, setActoken] = useRecoilState(accessTokenState);
   const [myUserState] = useRecoilState(userState);
+  const resetUserInfo = useResetRecoilState(userinfoState);
   const [login, setLogin] = useState(false);
   const [profileImg, setProfileImg] = useState("");
   const [cookies, setCookies] = useState({});
@@ -24,6 +25,7 @@ export default function Navbar() {
       setActoken("");
       setLogin(false);
       setCookies(parseCookies());
+      resetUserInfo();
       router.push("/");
       alert("로그아웃 되었습니다.");
     } catch (error) {

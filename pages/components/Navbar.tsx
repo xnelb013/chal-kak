@@ -60,9 +60,9 @@ export default function Navbar() {
     <>
       <div className="h-[50px] navbar bg-base-100">
         <div className="flex-1">
-          <Link href={"/"} className="normal-case text-3xl title">
-            #찰칵
-          </Link>
+          <div className="relative w-20 h-8 cursor-pointer" onClick={() => router.push("/main")}>
+            <Image src={"/images/chalkakLogo.png"} layout="fill" alt="logo_Image" />
+          </div>
         </div>
         <div className="flex-none mt-2 justify-end">
           <div className="mb-4 mr-2">

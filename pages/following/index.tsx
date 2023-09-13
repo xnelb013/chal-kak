@@ -118,7 +118,7 @@ const Following = () => {
                   <div className="flex flex-row items-center mr-4">
                     {post.liked === false && (
                       <div className="relative" onClick={() => handleClickLike(post.id, post.likeCount, post.liked)}>
-                        <AiOutlineHeart className="mr-1 cursor-pointer text-red-500" />
+                        <AiOutlineHeart className="mr-1 cursor-pointer" />
                       </div>
                     )}
                     {post.liked === true && (

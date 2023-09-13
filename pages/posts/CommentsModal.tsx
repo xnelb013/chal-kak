@@ -198,7 +198,7 @@ const CommentsModal: React.FC<ModalComponentProps> = ({
         onRequestClose={handleCloseModal}
         contentLabel="Comments Modal"
         overlayClassName="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-filter"
-        className="bg-white rounded-lg py-10 md:px-10 px-2 w-full md:w-[650px] h-[750px] relative overflow-y-auto "
+        className="bg-white rounded-lg py-10 md:px-10 px-2 w-full md:w-[650px] h-[80%] relative overflow-y-auto "
       >
         <div className="flex w-full justify-between">
           <input

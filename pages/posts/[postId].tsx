@@ -405,12 +405,12 @@ const HomePage = () => {
                 <Image
                   src={image}
                   alt={`Post Image ${index}`}
-                  // width={720}
-                  // height={960}
+                  width={720}
+                  height={960}
                   priority={index === 0}
                   quality={80}
-                  layout="fill"
-                  // className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                  layout="responsive"
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 />
               </div>
             ))}

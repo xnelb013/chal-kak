@@ -93,7 +93,7 @@ const KeywordModal = ({
                         />
                         <label
                           htmlFor={keyword}
-                          className="relative inline-flex w-full aspect-content text-gray-500 bg-white border-[3px] border-gray-200 rounded-full cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600"
+                          className="relative inline-flex w-full aspect-content bg-gray-200 text-gray-500 border-[3px] border-gray-200 rounded-full cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600"
                         >
                           <AspectContent>
                             {keywordImg && (

@@ -10,6 +10,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { styleTagsState } from "@/utils/atoms";
 import { apiInstance } from "./api/api";
 import InfoAlert from "./components/InfoAlert";
+import Head from "next/head";
 
 // import Cookies from 'js-cookie'
 
@@ -49,12 +50,20 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout ||
     ((page) => (
-      <div className="wrap">
-        <div className="container">
-          <Navbar />
-          {page}
+      <>
+        <Head>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta charSet="UTF-8" />
+          <meta name="theme-color" content="#317EFB" />
+          <title>#찰칵</title>
+        </Head>
+        <div className="wrap">
+          <div className="container">
+            <Navbar />
+            {page}
+          </div>
         </div>
-      </div>
+      </>
     ));
 
   return (

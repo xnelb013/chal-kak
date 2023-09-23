@@ -104,7 +104,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
                         {comment.comment}
                       </div>
                     </div>
-                    <div className="md:text-xs text-[0.5rem] text-gray-400 ml-1 mt-1">
+                    <div className="md:text-xs text-[0.5rem] text-gray-500 ml-1 mt-1">
                       {formatDateToRelativeTime(comment.createAt)}
                     </div>
                   </div>
@@ -113,7 +113,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
             </div>
           ))}
           {totalComments > 3 && (
-            <div className="text-gray-400 cursor-pointer text-xs md:text-sm" onClick={openCommentsModal}>
+            <div className="text-gray-500 cursor-pointer text-xs md:text-sm" onClick={openCommentsModal}>
               댓글 더 보기...
             </div>
           )}

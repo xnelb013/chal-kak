@@ -1,7 +1,8 @@
-import { followerListState } from "@/utils/atoms";
+// import { followerListState } from "@/utils/atoms";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { AiOutlineClose } from "react-icons/ai";
-import { useRecoilValue } from "recoil";
+// import { useRecoilValue } from "recoil";
 import { styled } from "styled-components";
 
 interface FollowerModalProps {
@@ -13,7 +14,7 @@ interface FollowerModalProps {
       {
         memberId: number;
         nickName: string;
-        profileUrl: string | null;
+        profileUrl: string | undefined;
       },
     ];
   };
@@ -22,10 +23,9 @@ interface FollowerModalProps {
 }
 
 const FollowerModal = ({ initialFollowerData, isOpen, handleCloseModal }: FollowerModalProps) => {
-  console.log("followerList", initialFollowerData);
   const router = useRouter();
-  const list = useRecoilValue(followerListState);
-  const { followerResponses } = list;
+  const followerResponses = initialFollowerData?.followerResponses;
+
   return (
     <>
       {isOpen && (
@@ -47,7 +47,12 @@ const FollowerModal = ({ initialFollowerData, isOpen, handleCloseModal }: Follow
                   >
                     <div className="avatar ml-6">
                       <div className="w-10 rounded-full">
-                        <img src={follower.profileUrl} alt="프로필" />
+                        {follower.profileUrl && (
+                          <Image src={follower.profileUrl} alt="프로필" width={100} height={100} />
+                        )}
+                        {!follower.profileUrl && (
+                          <Image src="/images/defaultImg.jpg" alt="프로필" width={100} height={100} />
+                        )}
                       </div>
                     </div>
                     <div className="text-lg font-semibold ml-6 text-black">{follower.nickName}</div>

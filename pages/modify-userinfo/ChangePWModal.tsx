@@ -4,6 +4,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import { styled } from "styled-components";
 import { apiInstance } from "../api/api";
 import Cookies from "js-cookie";
+import { useSetRecoilState } from "recoil";
+import { alertState } from "@/utils/atoms";
+import InfoAlert from "../components/InfoAlert";
 
 interface ChangePWModalProps {
   isOpen: boolean;
@@ -12,6 +15,7 @@ interface ChangePWModalProps {
 
 const ChangePWModal = ({ isOpen, handleCloseModal }: ChangePWModalProps) => {
   const [invalidPassword, setInvalidPassword] = useState<boolean>(false);
+  const setAlert = useSetRecoilState(alertState);
   const userId = Cookies.get("userId");
   const accessToken = Cookies.get("accessToken");
   const [curPassword, setCurPassword] = useState<string>("");
@@ -85,7 +89,7 @@ const ChangePWModal = ({ isOpen, handleCloseModal }: ChangePWModalProps) => {
       },
     });
     handleCloseModal();
-    alert("비밀번호가 수정되었습니다.");
+    setAlert({ open: true, message: "비밀번호가 수정되었습니다." });
   };
 
   return (
@@ -156,6 +160,7 @@ const ChangePWModal = ({ isOpen, handleCloseModal }: ChangePWModalProps) => {
           </div>
         </ModalWrapper>
       )}
+      <InfoAlert />
     </>
   );
 };

@@ -29,11 +29,16 @@ export interface ModifiedFormdata {
   };
 }
 export default function modifyuserinfo() {
+  // 모달 상태 관리
   const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
   const [isChangePWModalOpen, setIsChangePWModalOpen] = useState<boolean>(false);
   const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState<boolean>(false);
+
+  // 수정 모달에서 사용할 state
   const [formData, setFormData] = useState(new FormData());
   const setCurUser = useSetRecoilState(userState);
+
+  // 아래 두개는 동일해보이므로 추후 통합 필요
   const [userinfoProfile, setUserinfoPropfile] = useRecoilState(userinfoState);
   const [userinfo, setUserinfo] = useState<UserinfoType>({
     nickname: "",

@@ -24,7 +24,7 @@ export type userInfoType = {
   followers: string[];
   following: string[];
   nickname: string;
-  profileUrl: string;
+  profileImg: string;
 };
 
 export type userDetailPropsType = {
@@ -55,7 +55,7 @@ export type followingResType = {
   currentPage: number;
   totalPages: number;
   totalElements: number;
-  followerResponses: [
+  followingResponses: [
     {
       memberId: number;
       nickName: string;
@@ -79,4 +79,12 @@ export type followingPostsResType = {
     nickname: string;
     profileImg: string;
   };
+};
+
+export type userDetailType = {
+  nickname: string;
+  postsCount: number;
+  followerCount: number;
+  followingCount: number;
+  profileImg: string;
 };

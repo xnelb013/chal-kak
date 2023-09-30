@@ -143,7 +143,7 @@ export const followingListState = atom<followingResType>({
     currentPage: 0,
     totalPages: 0,
     totalElements: 0,
-    followerResponses: [{ memberId: 1, nickName: "", profileUrl: "" }],
+    followingResponses: [{ memberId: 1, nickName: "", profileUrl: "" }],
   },
 });
 

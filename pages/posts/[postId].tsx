@@ -337,6 +337,7 @@ const HomePage = () => {
   return (
     <>
       <Head>
+        <title>게시글 - {postId}</title>
         <meta name="description" content="게시글 페이지입니다." />
       </Head>
       <Alert open={alertOepn} setOpen={setAlertOpen} message={alertMessage} />
@@ -388,37 +389,41 @@ const HomePage = () => {
             <div className="text-center ml-auto"> {renderFollowButton()}</div>
           )}
         </div>
-        <Carousel
-          settings={{
-            slidesToShow: 1,
-            speed: 300,
-            arrows: true,
-            dots: true,
-            infinite: false,
-            centerMode: true,
-            centerPadding: "0px", // Add this line
-            lazyLoad: "ondemand",
-          }}
-        >
-          {postImages &&
-            postImages.map((image, index) => (
-              <div
-                key={index}
-                className="w-full md:h-[960px]  sm:h-[700px] h-[500px] max-w-[720px] bg-gray-100 mt-4 flex items-center justify-center relative overflow-hidden"
-              >
-                <Image
-                  src={image}
-                  alt={`Post Image ${index}`}
-                  width={720}
-                  height={960}
-                  priority={index === 0}
-                  quality={80}
-                  layout="responsive"
-                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                />
-              </div>
-            ))}
-        </Carousel>
+        <div className="h-[960px]">
+          <Carousel
+            settings={{
+              slidesToShow: 1,
+              speed: 300,
+              arrows: true,
+              dots: true,
+              infinite: false,
+              centerMode: true,
+              centerPadding: "0px", // Add this line
+              lazyLoad: "ondemand",
+            }}
+          >
+            {postImages &&
+              postImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="w-full md:h-[960px]  sm:h-[700px] h-[500px] max-w-[720px] bg-gray-100 mt-4 flex items-center justify-center relative overflow-hidden"
+                >
+                  <Image
+                    src={image}
+                    alt={`Post Image ${index}`}
+                    width={720}
+                    height={960}
+                    priority={index === 0}
+                    quality={80}
+                    layout="responsive"
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                  />
+                </div>
+              ))}
+          </Carousel>
+        </div>
         <div className="flex items-center justify-between w-full mx-auto mt-1-">
           <div className="flex flex-1">
             {renderLikeIcon()}

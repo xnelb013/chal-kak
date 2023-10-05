@@ -389,7 +389,7 @@ const HomePage = () => {
             <div className="text-center ml-auto"> {renderFollowButton()}</div>
           )}
         </div>
-        <div className="h-[960px]">
+        <div className="h-[980px]">
           <Carousel
             settings={{
               slidesToShow: 1,
@@ -398,7 +398,7 @@ const HomePage = () => {
               dots: true,
               infinite: false,
               centerMode: true,
-              centerPadding: "0px", // Add this line
+              centerPadding: "0px",
               lazyLoad: "ondemand",
             }}
           >

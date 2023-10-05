@@ -31,7 +31,7 @@ export default function Navbar() {
       router.push("/");
       setAlert({ open: true, message: "로그아웃 되었습니다!" });
     } catch (error) {
-      console.log("fail");
+      alert(error);
     }
   };
 

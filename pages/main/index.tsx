@@ -79,7 +79,6 @@ const Main = () => {
         },
       });
       setFilteredWeatherPosts(response.data.data.posts);
-      console.log(response.data.data.posts);
     } catch (error) {
       console.error(error);
     }
@@ -159,26 +158,6 @@ const Main = () => {
     if (pageParam === -1) return;
     fetchPosts(pageParam);
   }, [pageParam]);
-
-  useEffect(() => {
-    if (loggedInUser.isLoggedIn && isMySizeApplied) {
-      // '마이사이즈 적용' 버튼을 클릭한 경우
-      setUser({
-        height: loggedInUser.height,
-        weight: loggedInUser.weight,
-        styleTagIds: loggedInUser.styleTags,
-      });
-    }
-
-    if (inputHeight !== null && inputWeight !== null) {
-      // 사용자(로그인 유저 또는 비로그인 유저)가 직접 키와 몸무게 값을 입력한 경우
-      setUser({
-        ...user,
-        height: inputHeight,
-        weight: inputWeight,
-      });
-    }
-  }, [loggedInUser, isMySizeApplied, inputHeight, inputWeight]);
 
   useEffect(() => {
     if (loggedInUser.isLoggedIn && isMySizeApplied) {
@@ -329,7 +308,7 @@ const Main = () => {
       // isLike가 true일 때
       return (
         <button className="mb-2" onClick={() => handleClickUnlike(post.id, post.likeCount, post.liked)}>
-          <AiFillHeart className="md:text-lg md:mr-1 text-base cursor-pointer text-red-600" />
+          <AiFillHeart className="text-lg mr-1 cursor-pointer text-red-600" />
         </button>
       );
     } else {
@@ -401,8 +380,8 @@ const Main = () => {
                             (() => {
                               const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
                               return (
-                                <span className="text-xs mr-1 block">
-                                  {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
+                                <span className="md:text-xs mr-1">
+                                  {allTags.length > 24 ? allTags.substring(0, 24) + "..." : allTags}
                                 </span>
                               );
                             })()}
@@ -412,7 +391,7 @@ const Main = () => {
                           {(() => {
                             const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
                             return (
-                              <span className="md:text-xs text-[10px] mr-1">
+                              <span className="md:text-xs mr-1">
                                 {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
                               </span>
                             );
@@ -534,7 +513,7 @@ const Main = () => {
                       {(() => {
                         const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
                         return (
-                          <span className="md:text-xs text-[10px] mr-1">
+                          <span className="md:text-xs mr-1">
                             {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
                           </span>
                         );

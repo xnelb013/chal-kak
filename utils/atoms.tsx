@@ -2,6 +2,9 @@ import { atom } from "recoil";
 // import Cookies from "js-cookie";
 import { followerResType, followingPostsResType, followingResType, userPostsType } from "./type";
 import { UserinfoType } from "@/pages/modify-userinfo/[userId]";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist();
 
 // file
 export const uploadedImageFilesState = atom<File[]>({
@@ -52,6 +55,7 @@ export const userState = atom({
     styleTags: [] as number[],
     isLoggedIn: false,
   },
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const emailState = atom({

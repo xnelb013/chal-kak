@@ -38,6 +38,20 @@ interface SigninResponse {
   };
 }
 
+type UserType = {
+  email: string;
+  nickname: string;
+  profileImg: string;
+  postCount: number;
+  followers: number;
+  followings: number;
+  gender: string;
+  height: number[];
+  weight: number[];
+  styleTags: number[];
+  isLoggedIn: boolean;
+};
+
 export default function Login() {
   const router = useRouter();
   const [invalidEmail, setInvalidEmail] = useState(false);
@@ -76,7 +90,7 @@ export default function Login() {
     setAcToken(accessToken);
 
     // 로그인 성공 시 userState 업데이트
-    setLoggedInUser((prevUser) => ({
+    setLoggedInUser((prevUser: UserType) => ({
       ...prevUser,
       isLoggedIn: true,
       styleTags: styleTags,

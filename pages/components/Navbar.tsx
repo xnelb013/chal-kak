@@ -11,7 +11,7 @@ import InfoAlert from "./InfoAlert";
 export default function Navbar() {
   const router = useRouter();
   const [, setActoken] = useRecoilState(accessTokenState);
-  const [myUserState] = useRecoilState(userState);
+  const [myUserState, setUserState] = useRecoilState(userState);
   const resetUserInfo = useResetRecoilState(userinfoState);
   const [login, setLogin] = useState(false);
   const [profileImg, setProfileImg] = useState("");
@@ -27,6 +27,24 @@ export default function Navbar() {
       setActoken("");
       setLogin(false);
       setCookies(parseCookies());
+
+      // userState 초기화
+      setUserState({
+        email: "",
+        nickname: "",
+        profileImg: "",
+        postCount: 0,
+        followers: [],
+        followings: [],
+        gender: "",
+        height: 0,
+        weight: 0,
+        styleTags: [],
+        isLoggedIn: false,
+      });
+
+      // recoil-persist에서 저장한 데이터 삭제
+      localStorage.removeItem("recoil-persist");
       resetUserInfo();
       router.push("/");
       setAlert({ open: true, message: "로그아웃 되었습니다!" });

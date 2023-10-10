@@ -7,6 +7,7 @@ import ChangeUserinfoModal from "./ChangeUserinfoModal";
 import ChangePWModal from "./ChangePWModal";
 import WithdrawalModal from "./WithdrawalModal";
 import { apiInstance } from "../api/api";
+import { UserType } from "../login";
 
 export type UserinfoType = {
   nickname: string;
@@ -90,7 +91,7 @@ export default function modifyuserinfo() {
       setUserinfo(res.data.data);
       setUserinfoPropfile(res.data.data);
       setUserNickname(res.data.data.nickname);
-      setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
+      setCurUser((prev: UserType) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
       Cookies.set("profileImg", res.data.data.profileImg);
     });
   }, [isModifyModalOpen]);
@@ -105,7 +106,7 @@ export default function modifyuserinfo() {
       setUserinfo(res.data.data);
       setUserinfoPropfile(res.data.data);
       setUserNickname(res.data.data.nickname);
-      setCurUser((prev) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
+      setCurUser((prev: UserType) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
       Cookies.set("profileImg", res.data.data.profileImg);
     });
   }, []);

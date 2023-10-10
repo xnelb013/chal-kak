@@ -8,6 +8,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { UserinfoType } from "./[userId]";
 import InfoAlert from "../components/InfoAlert";
+import { UserType } from "../login";
 
 interface ChangeUserinfoModalProps {
   formData: FormData;
@@ -82,7 +83,7 @@ const ChangeUserinfoModal = ({ isOpen, handleCloseModal, formData, userNickname 
       });
 
       if (response.status === 200) {
-        setCurUser((prev) => {
+        setCurUser((prev: UserType) => {
           return {
             ...prev,
             profileImg: userinfoProfile.profileImg as string,

@@ -150,8 +150,8 @@ const Main = () => {
   // 선택된 스타일 태그나 입력된 키/몸무게 등 필터링 조건이 변경될 때마다 실행, 페이지 번호와 게시물 목록 초기화
   useEffect(() => {
     setPageParam(0);
-    // setFilteredPosts([]);
-    fetchPosts(pageParam);
+    setFilteredPosts([]);
+    // fetchPosts(pageParam);
   }, [selectedStyleTags, inputHeight, inputWeight]);
 
   // 초기값 -1, pageParam이 0 이상의 값을 가질 때까지 실제 게시물 데이터를 요청하지 않음

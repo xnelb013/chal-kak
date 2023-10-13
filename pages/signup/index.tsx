@@ -257,18 +257,18 @@ export default function signup() {
   ) : (
     <>
       <Head>
-        <title>#찰칵 - 회원가입</title>
+        <title>#찰칵 - 회원가입 | 회원가입 페이지입니다. </title>
         <meta name="description" content="회원가입 페이지입니다." />
       </Head>
       <div className="flex justify-center items-center">
         <div className="w-full max-w-[500px]">
           <div className="flex items-center justify-center mt-10 w-full">
-            <div className="text-2xl">회원가입</div>
+            <h1 className="text-2xl">회원가입</h1>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 mt-24">
             <div className="w-full">
               <div className="flex items-center mb-3">
-                <p className="font-bold">이메일 주소</p>
+                <h2 className="font-bold">이메일 주소</h2>
                 <div className="ml-1">
                   <Tooltip id="my-tooltip" className="text-xs" />
                   <span data-tooltip-id="my-tooltip" data-tooltip-content="인증 가능한 이메일을 입력해주세요!">
@@ -295,7 +295,7 @@ export default function signup() {
               )}
             </div>
             <div className="w-full">
-              <p className="text-md font-bold mb-[-10px] mt-2">비밀번호</p> <br />
+              <h2 className="text-md font-bold mb-[-10px] mt-2">비밀번호</h2> <br />
               <input
                 type="password"
                 className="border-b border-gray-200 focus:border-gray-700 transition-colors ease-in duration-100 w-full pb-2 text-sm"
@@ -311,7 +311,7 @@ export default function signup() {
               {invalidPassword && <p className="text-red-500 text-xs mt-1">비밀번호 양식이 올바르지 않습니다.</p>}
             </div>
             <div className="w-full">
-              <p className="text-md font-bold mb-[-10px] mt-2">비밀번호 확인</p> <br />
+              <h2 className="text-md font-bold mb-[-10px] mt-2">비밀번호 확인</h2> <br />
               <input
                 type="password"
                 className="border-b border-gray-200 w-full pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
@@ -327,7 +327,7 @@ export default function signup() {
               {passwordMismatch && <p className="text-red-500 text-xs mt-1">비밀번호가 일치하지 않습니다.</p>}
             </div>
             <div className="w-full">
-              <p className="text-md font-bold mb-[-10px] mt-2">닉네임</p> <br />
+              <h2 className="text-md font-bold mb-[-10px] mt-2">닉네임</h2> <br />
               <input
                 type="text"
                 className="border-b border-gray-200 w-full pb-2 text-sm focus:border-gray-700 transition-colors ease-in duration-100"
@@ -359,7 +359,7 @@ export default function signup() {
               </div>
               <br />
               <div className="flex flex-col items-start w-2/3 mb-10 ml-24">
-                <p className="text-md font-bold mb-6">체형</p>
+                <h2 className="text-md font-bold mb-6">체형</h2>
                 <div className="flex w-full">
                   <div className="flex flex-col items-start w-1/2 mr-5">
                     <div className="flex items-center w-full">

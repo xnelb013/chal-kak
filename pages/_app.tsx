@@ -55,7 +55,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta charSet="UTF-8" />
           <meta name="theme-color" content="#317EFB" />
-          <title>#찰칵</title>
+          <title>#찰칵 - 당신의 순간을 공유하세요! | 날씨 기반 추천 sns서비스 #찰칵</title>
+          <meta name="description" content="날씨 기반 추천 sns서비스 #찰칵입니다. 당신의 순간을 공유해보세요!" />
         </Head>
         <div className="wrap">
           <div className="container">

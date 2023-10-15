@@ -446,10 +446,11 @@ const HomePage = ({ initialPostData }: HomePageProps) => {
   return (
     <>
       <Head>
-        <title>#찰칵 - 게시글 작성</title>
+        <title>#찰칵 - 게시글 작성 | 게시글 작성 페이지입니다.</title>
         <meta name="description" content="게시글 작성 페이지입니다." />
       </Head>
       <div className="w-full m-auto">
+        <h1 className="sr-only">게시글 작성 페이지</h1>
         <div>
           <GoogleMapsComponent />
         </div>

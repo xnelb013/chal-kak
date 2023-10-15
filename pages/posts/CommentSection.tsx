@@ -67,7 +67,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
   return (
     <div className="mb-4 md:text-base text-sm">
       <div className="mt-3 mb-4 flex cursor-pointer w-24" onClick={openCommentsModal}>
-        댓글
+        <h1>댓글</h1>
         <div className="font-bold ml-1">{totalComments}</div>개
       </div>
       <CommentsModal

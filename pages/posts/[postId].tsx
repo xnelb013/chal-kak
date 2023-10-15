@@ -337,11 +337,14 @@ const HomePage = () => {
   return (
     <>
       <Head>
-        <title>게시글 - {postId}</title>
+        <title>
+          게시글 - {postId} | {postId}게시글 입니다
+        </title>
         <meta name="description" content="게시글 페이지입니다." />
       </Head>
       <Alert open={alertOepn} setOpen={setAlertOpen} message={alertMessage} />
       <div className=" flex flex-col mt-6">
+        <h1 className="sr-only">{postId} 게시글</h1>
         <div className=" flex items-center w-full mx-auto">
           <div className="flex items-center">
             <div className="relative md:w-12 md:h-12 w-10 h-10 cursor-pointer" onClick={moveToProfilePage}>
@@ -440,7 +443,7 @@ const HomePage = () => {
         <div>
           <div className=" w-full">
             <div className="flex mt-2 cursor-pointer md:text-base text-sm" onClick={openHeartsModal}>
-              좋아요 <div className="font-bold ml-1">{likeCount}</div>개
+              <h2>좋아요</h2> <div className="font-bold ml-1">{likeCount}</div>개
             </div>
             <div className="mt-2 w-full md:text-lg text-base">{postData?.content}</div>
             <div className="flex flex-wrap mt-4 md:text-sm text-xs cursor-pointer w-full text-gray-500">

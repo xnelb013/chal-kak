@@ -11,6 +11,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { userState } from "@/utils/atoms";
 import { useRouter } from "next/router";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Head from "next/head";
 import "swiper/css";
 
 interface User {
@@ -322,217 +323,226 @@ const Main = () => {
   };
 
   return (
-    <div className="w-full h-full bg-white">
-      <div className="max-auto">
-        <div className="cursor-pointer flex items-center justify-start border-b pb-2">
-          <button className="mr-4 text-lg font-semibold">추천</button>
-          <button onClick={handleNavigation} className="text-lg text-gray-400">
-            팔로잉
-          </button>
-        </div>
-        <div className="mt-6 text-m text-gray-400">
-          <Weather />
-        </div>
-        <div className="mt-2 text-xl font-bold">오늘 날씨와 어울리는 스타일</div>
-        <div style={{ width: "100%", height: "auto" }}>
-          <Swiper
-            // spaceBetween={1} // 슬라이드 간의 간격 조정
-            slidesPerView="auto" /* 한번에 보여줄 슬라이드 수 설정 (1.5) */
-          >
-            {filteredWeatherPosts.map((post: Post, index) => (
-              <SwiperSlide key={index} style={{ width: "300px", height: "500px" }}>
-                <div className="mt-4 cursor-pointer overflow-hidden flex flex-col bg-white mr-2">
-                  <div className="flex justify-between items-center pb-2">
-                    <div className="flex items-center" onClick={() => router.push(`/userinfo/${post.writer.id}`)}>
-                      <div className=" w-8 h-8 relative">
-                        <Image
-                          src={post.writer.profileImg || "/images/defaultImg.jpg"}
-                          layout="fill"
-                          alt="profile-img"
-                          className="border rounded-full object-cover"
-                        />
+    <>
+      <Head>
+        <title>#찰칵 - 메인페이지 | 날씨 기반 추천 sns서비스 #찰칵</title>
+        <meta
+          name="description"
+          content="날씨 기반 추천 sns서비스 #찰칵 메인 페이지입니다. 당신의 순간을 공유해보세요!"
+        />
+      </Head>
+      <div className="w-full h-full bg-white">
+        <div className="max-auto">
+          <div className="cursor-pointer flex items-center justify-start border-b pb-2">
+            <button className="mr-4 text-lg font-semibold">추천</button>
+            <button onClick={handleNavigation} className="text-lg text-gray-400">
+              팔로잉
+            </button>
+          </div>
+          <div className="mt-6 text-m text-gray-400">
+            <Weather />
+          </div>
+          <div className="mt-2 text-xl font-bold">오늘 날씨와 어울리는 스타일</div>
+          <div style={{ width: "100%", height: "auto" }}>
+            <Swiper
+              // spaceBetween={1} // 슬라이드 간의 간격 조정
+              slidesPerView="auto" /* 한번에 보여줄 슬라이드 수 설정 (1.5) */
+            >
+              {filteredWeatherPosts.map((post: Post, index) => (
+                <SwiperSlide key={index} style={{ width: "300px", height: "500px" }}>
+                  <div className="mt-4 cursor-pointer overflow-hidden flex flex-col bg-white mr-2">
+                    <div className="flex justify-between items-center pb-2">
+                      <div className="flex items-center" onClick={() => router.push(`/userinfo/${post.writer.id}`)}>
+                        <div className=" w-8 h-8 relative">
+                          <Image
+                            src={post.writer.profileImg || "/images/defaultImg.jpg"}
+                            layout="fill"
+                            alt="profile-img"
+                            className="border rounded-full object-cover"
+                          />
+                        </div>
+                        <p className="text-xs pl-2">{post.writer.nickname}</p>
                       </div>
-                      <p className="text-xs pl-2">{post.writer.nickname}</p>
                     </div>
-                  </div>
 
-                  <div
-                    style={{ width: "300px", height: "400px" }}
-                    className="relative mt-1"
-                    onClick={() => router.push(`/posts/${post.id}`)}
-                  >
-                    <Image
-                      src={post.thumbnail}
-                      width={300}
-                      height={400}
-                      alt="content"
-                      style={{ objectFit: "cover", aspectRatio: "3/4" }}
-                      className="cursor-pointer absolute top-0 left-0 w-full h-full"
-                    />
-                  </div>
+                    <div
+                      style={{ width: "300px", height: "400px" }}
+                      className="relative mt-1"
+                      onClick={() => router.push(`/posts/${post.id}`)}
+                    >
+                      <Image
+                        src={post.thumbnail}
+                        width={300}
+                        height={400}
+                        alt="content"
+                        style={{ objectFit: "cover", aspectRatio: "3/4" }}
+                        className="cursor-pointer absolute top-0 left-0 w-full h-full"
+                      />
+                    </div>
 
-                  <div className="ml-1 flex justify-between items-stretch relative">
-                    <div>
-                      <p className="ml-1 md:text-sm text-xs block">
-                        {post.content && post.content.length > 32
-                          ? post.content.substring(0, 32) + "..."
-                          : post.content ||
-                            (() => {
+                    <div className="ml-1 flex justify-between items-stretch relative">
+                      <div>
+                        <p className="ml-1 md:text-sm text-xs block">
+                          {post.content && post.content.length > 32
+                            ? post.content.substring(0, 32) + "..."
+                            : post.content ||
+                              (() => {
+                                const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
+                                return (
+                                  <span className="md:text-xs mr-1">
+                                    {allTags.length > 24 ? allTags.substring(0, 24) + "..." : allTags}
+                                  </span>
+                                );
+                              })()}
+                        </p>
+                        {post.content && (
+                          <div className="ml-1 flex items-center justify-start">
+                            {(() => {
                               const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
                               return (
                                 <span className="md:text-xs mr-1">
-                                  {allTags.length > 24 ? allTags.substring(0, 24) + "..." : allTags}
+                                  {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
                                 </span>
                               );
                             })()}
-                      </p>
-                      {post.content && (
-                        <div className="ml-1 flex items-center justify-start">
-                          {(() => {
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-end justify-end absolute bottom-3 right-1">
+                      {renderLikeIcon(post)}
+                      <p className="mr-2 mb-[7.5px] text-sm text-gray-500">{post.likeCount}</p>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
+          <div className="mt-6 relative">
+            <div className="fixed top-[85%] right-[30px] z-[1000]">
+              <div className="flex flex-col justify-end">
+                <ScrollTopButton />
+                <GoToPostEditorButton />
+              </div>
+            </div>
+            <div className="text-xl font-bold">키워드 추천</div>
+            <div className="md:mt-6 mt-3 flex flex-wrap justify-flex-start md:gap-3 gap-2">
+              <div
+                className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs ${
+                  selectedStyleTags.length > 0
+                    ? "bg-white text-black" // 태그가 선택된 경우(로그인 상태에 관계 없이) 비활성화
+                    : !loggedInUser.isLoggedIn || selectedStyleTags.length === 0
+                    ? "bg-black text-white" // 로그인하지 않은 경우 활성화
+                    : "bg-white text-black" // 로그인을 하면 비활성화
+                }`}
+                onClick={handleAllTag}
+              >
+                <p>전체</p>
+              </div>
+              <div
+                className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs ${
+                  isMySizeApplied ? "bg-black text-white" : "bg-white text-black"
+                }`}
+                onClick={handleBodyClick}
+              >
+                <p>체형</p>
+              </div>
+              {isModalOpen && <BodyShapeModal isOpen={isModalOpen} onClose={handleClose} onApply={handleApply} />}
+
+              {styleTagsList.map((tag) =>
+                selectedStyleTags.includes(tag.id) ? (
+                  <div
+                    key={tag.id}
+                    className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs bg-black text-white`}
+                    onClick={() => handleDeleteTag(tag.id)} // 태그 리스트에서 제외
+                  >
+                    <p>{tag.keyword}</p>
+                  </div>
+                ) : (
+                  <div
+                    key={tag.id}
+                    className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs`}
+                    onClick={() => handleAddTag(tag.id)}
+                  >
+                    <p>{tag.keyword}</p>
+                  </div>
+                ),
+              )}
+            </div>
+          </div>
+
+          <div className="mt-5 h-auto grid grid-cols-2 gap-2">
+            {filteredPosts.map((post: Post, index) => (
+              <div key={index} className="flex flex-col mb-2 bg-white overflow-hidden">
+                <div
+                  className="mt-2 flex flex-wrap items-center justify-left cursor-pointer"
+                  onClick={() => router.push(`/userinfo/${post.writer.id}`)}
+                >
+                  <div className="md:w-8 md:h-8 w-6 h-6 relative">
+                    <Image
+                      src={post.writer.profileImg || "/images/defaultImg.jpg"}
+                      layout="fill"
+                      alt="profile-img"
+                      className="border rounded-full object-cover"
+                    />
+                  </div>
+                  <p className="md:text-xs text-[10px] md:ml-2 ml-1">{post.writer.nickname}</p>
+                </div>
+                <div
+                  className="relative mt-2 mb-2 md:w-[342px] md:h-[455px] w-full h-52"
+                  onClick={() => router.push(`/posts/${post.id}`)}
+                >
+                  <Image
+                    src={post.thumbnail}
+                    layout="fill"
+                    alt="content"
+                    style={{ objectFit: "cover", aspectRatio: "3/4" }}
+                    className="cursor-pointer absolute top-0 left-0"
+                  />
+                </div>
+
+                <div className="flex justify-between items-stretch relative">
+                  <div>
+                    <p className="ml-1 md:text-sm text-xs block">
+                      {post.content && post.content.length > 32
+                        ? post.content.substring(0, 32) + "..."
+                        : post.content ||
+                          (() => {
                             const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
                             return (
-                              <span className="md:text-xs mr-1">
+                              <span className="text-xs mr-1 block">
                                 {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
                               </span>
                             );
                           })()}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-end justify-end absolute bottom-3 right-1">
-                    {renderLikeIcon(post)}
-                    <p className="mr-2 mb-[7.5px] text-sm text-gray-500">{post.likeCount}</p>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        <div className="mt-6 relative">
-          <div className="fixed top-[85%] right-[30px] z-[1000]">
-            <div className="flex flex-col justify-end">
-              <ScrollTopButton />
-              <GoToPostEditorButton />
-            </div>
-          </div>
-          <div className="text-xl font-bold">키워드 추천</div>
-          <div className="md:mt-6 mt-3 flex flex-wrap justify-flex-start md:gap-3 gap-2">
-            <div
-              className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs ${
-                selectedStyleTags.length > 0
-                  ? "bg-white text-black" // 태그가 선택된 경우(로그인 상태에 관계 없이) 비활성화
-                  : !loggedInUser.isLoggedIn || selectedStyleTags.length === 0
-                  ? "bg-black text-white" // 로그인하지 않은 경우 활성화
-                  : "bg-white text-black" // 로그인을 하면 비활성화
-              }`}
-              onClick={handleAllTag}
-            >
-              <p>전체</p>
-            </div>
-            <div
-              className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs ${
-                isMySizeApplied ? "bg-black text-white" : "bg-white text-black"
-              }`}
-              onClick={handleBodyClick}
-            >
-              <p>체형</p>
-            </div>
-            {isModalOpen && <BodyShapeModal isOpen={isModalOpen} onClose={handleClose} onApply={handleApply} />}
-
-            {styleTagsList.map((tag) =>
-              selectedStyleTags.includes(tag.id) ? (
-                <div
-                  key={tag.id}
-                  className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs bg-black text-white`}
-                  onClick={() => handleDeleteTag(tag.id)} // 태그 리스트에서 제외
-                >
-                  <p>{tag.keyword}</p>
-                </div>
-              ) : (
-                <div
-                  key={tag.id}
-                  className={`py-[6px] px-4 text-center border rounded-full cursor-pointer text-xs`}
-                  onClick={() => handleAddTag(tag.id)}
-                >
-                  <p>{tag.keyword}</p>
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-
-        <div className="mt-5 h-auto grid grid-cols-2 gap-2">
-          {filteredPosts.map((post: Post, index) => (
-            <div key={index} className="flex flex-col mb-2 bg-white overflow-hidden">
-              <div
-                className="mt-2 flex flex-wrap items-center justify-left cursor-pointer"
-                onClick={() => router.push(`/userinfo/${post.writer.id}`)}
-              >
-                <div className="md:w-8 md:h-8 w-6 h-6 relative">
-                  <Image
-                    src={post.writer.profileImg || "/images/defaultImg.jpg"}
-                    layout="fill"
-                    alt="profile-img"
-                    className="border rounded-full object-cover"
-                  />
-                </div>
-                <p className="md:text-xs text-[10px] md:ml-2 ml-1">{post.writer.nickname}</p>
-              </div>
-              <div
-                className="relative mt-2 mb-2 md:w-[342px] md:h-[455px] w-full h-52"
-                onClick={() => router.push(`/posts/${post.id}`)}
-              >
-                <Image
-                  src={post.thumbnail}
-                  layout="fill"
-                  alt="content"
-                  style={{ objectFit: "cover", aspectRatio: "3/4" }}
-                  className="cursor-pointer absolute top-0 left-0"
-                />
-              </div>
-
-              <div className="flex justify-between items-stretch relative">
-                <div>
-                  <p className="ml-1 md:text-sm text-xs block">
-                    {post.content && post.content.length > 32
-                      ? post.content.substring(0, 32) + "..."
-                      : post.content ||
-                        (() => {
+                    </p>
+                    {post.content && (
+                      <div className="ml-1 flex items-center justify-start">
+                        {(() => {
                           const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
                           return (
-                            <span className="text-xs mr-1 block">
+                            <span className="md:text-xs mr-1">
                               {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
                             </span>
                           );
                         })()}
-                  </p>
-                  {post.content && (
-                    <div className="ml-1 flex items-center justify-start">
-                      {(() => {
-                        const allTags = [...post.styleTags, ...post.hashTags].map((tag) => "#" + tag).join(" ");
-                        return (
-                          <span className="md:text-xs mr-1">
-                            {allTags.length > 32 ? allTags.substring(0, 32) + "..." : allTags}
-                          </span>
-                        );
-                      })()}
-                    </div>
-                  )}
-                </div>
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex items-start justify-start">
-                  {renderLikeIcon(post)}
-                  <p className="md:mr-2 md:mb-2 mr-1 mb-1 md:text-sm text-xs text-gray-500">{post.likeCount}</p>
+                  <div className="flex items-start justify-start">
+                    {renderLikeIcon(post)}
+                    <p className="md:mr-2 md:mb-2 mr-1 mb-1 md:text-sm text-xs text-gray-500">{post.likeCount}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div ref={loadingRef} className="invisible" />
         </div>
-        <div ref={loadingRef} className="invisible" />
       </div>
-    </div>
+    </>
   );
 };
 export default Main;

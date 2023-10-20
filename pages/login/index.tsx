@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { apiInstance } from "../api/api";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { accessTokenState, userState } from "@/utils/atoms";
+import Head from "next/head";
 
 // 이메일과 비밀번호를 포함한 객체
 interface LoginData {
@@ -155,16 +156,23 @@ export default function Login() {
 
   return (
     <>
+      <Head>
+        <title>#찰칵 - 로그인페이지 | 날씨 기반 추천 sns서비스 #찰칵</title>
+        <meta
+          name="description"
+          content="로그인페이지 - 날씨 기반 추천 sns서비스 #찰칵입니다. 당신의 순간을 공유해보세요!"
+        />
+      </Head>
       <Alert open={alertOepn} setOpen={setAlertOpen} message={alertMessage} />
       <div className="w-full flex flex-col items-center justify-center bg-white">
         <div className="p-6">
-          <h2 className="text-2xl font-medium mt-3 pl-3 text-center leading-9 text-gray-800">로그인</h2>
+          <h1 className="text-2xl font-medium mt-3 pl-3 text-center leading-9 text-gray-800">로그인</h1>
         </div>
         <div className="mt-[60px] mx-4 w-full h-[600px] md:px-24">
           <form>
             <div>
               <label htmlFor="email" className="block pt-2 pb-2 text-md font-medium leading-6 text-gray-800">
-                이메일 주소
+                <h2>이메일 주소</h2>
               </label>
               <div>
                 <input
@@ -188,7 +196,7 @@ export default function Login() {
                 htmlFor="password"
                 className="block mt-[40px] pt-2 pb-2 text-md font-medium leading-6 text-gray-800"
               >
-                비밀번호
+                <h2>비밀번호</h2>
               </label>
               <div>
                 <input

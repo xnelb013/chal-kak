@@ -10,6 +10,7 @@ import FollowerModal from "./FollowerModal";
 import FollowingModal from "./FollowingModal";
 import { GetServerSidePropsContext } from "next";
 import { followerResType, followingResType, userDetailType } from "@/utils/type";
+import Head from "next/head";
 
 interface UserInfoProps {
   followingListData: followingResType;
@@ -199,100 +200,106 @@ export default function UserInfo(props: UserInfoProps): JSX.Element {
   const { posts } = userPosts;
 
   return (
-    <div className="flex flex-col w-full items-center justify-center">
-      <div className="flex flex-col w-full items-center mt-[10px]">
-        <div className="flex flex-col items-center gap-2 w-full h-[250px]  rounded-lg">
-          <div className="flex flex-row items-center justify-around w-auto h-[200px] gap-10 mt-2">
-            <div className="avatar">
-              <div className="w-32 rounded-full">
-                {!props.userinfoData.profileImg && <LiaUserCircleSolid className="w-32 h-32" />}
-                {props.userinfoData.profileImg && <img src={props.userinfoData.profileImg} alt="profile-img" />}
-              </div>
-            </div>
-            <div className="flex flex-col gap-10 items-center p-5">
-              <div className="flex flex-row items-center justify-center">
-                <div className="text-lg font-semibold ml-3 text-black">@{props.userinfoData.nickname}</div>
-                {curUserId === userId && <DynamicBtn moveToModifyPage={moveToModifyPage} />}
-              </div>
-              <div className="flex flex-row justify-between items-center gap-10 ">
-                <div className="flex flex-col items-center text-sm text-black">
-                  <p>게시글</p>
-                  {props.userinfoData.postsCount}
+    <>
+      <Head>
+        <title>#찰칵 - {props.userinfoData.nickname} 의 프로필 페이지 입니다.</title>
+        <meta name="description" content="프로필 페이지 입니다." />
+      </Head>
+      <div className="flex flex-col w-full items-center justify-center">
+        <div className="flex flex-col w-full items-center mt-[10px]">
+          <div className="flex flex-col items-center gap-2 w-full h-[250px]  rounded-lg">
+            <div className="flex flex-row items-center justify-around w-auto h-[200px] gap-10 mt-2">
+              <div className="avatar">
+                <div className="w-32 rounded-full">
+                  {!props.userinfoData.profileImg && <LiaUserCircleSolid className="w-32 h-32" />}
+                  {props.userinfoData.profileImg && <img src={props.userinfoData.profileImg} alt="profile-img" />}
                 </div>
-                <div
-                  className="flex flex-col items-center cursor-pointer text-sm text-black"
-                  onClick={openFollowerModal}
-                >
-                  <p>팔로워</p>
-                  {props.userinfoData.followerCount}
-                </div>
-                {isOpenFollowerModal && (
-                  <FollowerModal
-                    initialFollowerData={props.followerListData}
-                    isOpen={isOpenFollowerModal}
-                    handleCloseModal={closeFollowerModal}
-                  />
-                )}
-                <div
-                  className="flex flex-col items-center cursor-pointer text-sm text-black"
-                  onClick={openFollowingModal}
-                >
-                  <p>팔로잉</p>
-                  {props.userinfoData.followingCount}
-                </div>
-                {isOpenFollowingModal && (
-                  <FollowingModal
-                    initialFollowingData={props.followingListData}
-                    isOpen={isOpenFollowingModal}
-                    handleCloseModal={closeFollowingModal}
-                  />
-                )}
               </div>
-            </div>
-          </div>
-          {isLogin === "true" && curUserId !== userId && (
-            <div className="flex items-center justify-center mb-6">
-              {isFollowing ? (
-                <button
-                  className="btn btn-sm ml-4 bg-[#efefef] w-[125px] font-medium rounded-lg text-black"
-                  onClick={unfollowUser}
-                >
-                  언팔로우
-                </button>
-              ) : (
-                <button
-                  className="btn btn-sm ml-4 bg-[#efefef] w-[125px] font-medium rounded-lg text-black"
-                  onClick={followUser}
-                >
-                  팔로우
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="mt-[10px] pt-2 border-t-2 w-full">
-          <div className="w-3/4 h-[600px] overflow-y-auto mx-auto">
-            <div className="flex flex-row flex-wrap justify-start gap-x-2 gap-y-2">
-              {posts.map((post) => (
-                <div
-                  key={post.id}
-                  className="w-40 h-40 cursor-pointer"
-                  onClick={() => router.push(`/posts/${post.id}`)}
-                >
-                  <div style={{ position: "relative", width: "100%", height: "100%" }}>
-                    <img
-                      src={post.thumbnail}
-                      alt="post.img"
-                      style={{ objectFit: "cover", width: "100%", height: "100%" }}
-                    />
+              <div className="flex flex-col gap-10 items-center p-5">
+                <div className="flex flex-row items-center justify-center">
+                  <div className="text-lg font-semibold ml-3 text-black">@{props.userinfoData.nickname}</div>
+                  {curUserId === userId && <DynamicBtn moveToModifyPage={moveToModifyPage} />}
+                </div>
+                <div className="flex flex-row justify-between items-center gap-10 ">
+                  <div className="flex flex-col items-center text-sm text-black">
+                    <p>게시글</p>
+                    {props.userinfoData.postsCount}
                   </div>
+                  <div
+                    className="flex flex-col items-center cursor-pointer text-sm text-black"
+                    onClick={openFollowerModal}
+                  >
+                    <p>팔로워</p>
+                    {props.userinfoData.followerCount}
+                  </div>
+                  {isOpenFollowerModal && (
+                    <FollowerModal
+                      initialFollowerData={props.followerListData}
+                      isOpen={isOpenFollowerModal}
+                      handleCloseModal={closeFollowerModal}
+                    />
+                  )}
+                  <div
+                    className="flex flex-col items-center cursor-pointer text-sm text-black"
+                    onClick={openFollowingModal}
+                  >
+                    <p>팔로잉</p>
+                    {props.userinfoData.followingCount}
+                  </div>
+                  {isOpenFollowingModal && (
+                    <FollowingModal
+                      initialFollowingData={props.followingListData}
+                      isOpen={isOpenFollowingModal}
+                      handleCloseModal={closeFollowingModal}
+                    />
+                  )}
                 </div>
-              ))}
-            </div>{" "}
-            <div id="scroll-trigger" style={{ position: "fixed", bottom: 0, height: 1 }} />
+              </div>
+            </div>
+            {isLogin === "true" && curUserId !== userId && (
+              <div className="flex items-center justify-center mb-6">
+                {isFollowing ? (
+                  <button
+                    className="btn btn-sm ml-4 bg-[#efefef] w-[125px] font-medium rounded-lg text-black"
+                    onClick={unfollowUser}
+                  >
+                    언팔로우
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-sm ml-4 bg-[#efefef] w-[125px] font-medium rounded-lg text-black"
+                    onClick={followUser}
+                  >
+                    팔로우
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="mt-[10px] pt-2 border-t-2 w-full">
+            <div className="w-3/4 h-[600px] overflow-y-auto mx-auto">
+              <div className="flex flex-row flex-wrap justify-start gap-x-2 gap-y-2">
+                {posts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="w-40 h-40 cursor-pointer"
+                    onClick={() => router.push(`/posts/${post.id}`)}
+                  >
+                    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                      <img
+                        src={post.thumbnail}
+                        alt="post.img"
+                        style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>{" "}
+              <div id="scroll-trigger" style={{ position: "fixed", bottom: 0, height: 1 }} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

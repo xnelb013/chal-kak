@@ -257,8 +257,11 @@ export default function signup() {
   ) : (
     <>
       <Head>
-        <title>#찰칵 - 회원가입 | 회원가입 페이지입니다. </title>
-        <meta name="description" content="회원가입 페이지입니다." />
+        <title>#찰칵 - 회원가입 | SNS 회원가입 페이지입니다. </title>
+        <meta
+          name="description"
+          content="#찰칵 - 회원가입 | #찰칵은 날씨 기반 추천 SNS 서비스입니다. 당신의 소중한 순간을 공유하고, 다른 사용자들의 멋진 순간들도 만나보세요! 오늘 날씨에 어울리는 스타일링 팁도 받아보세요."
+        />
       </Head>
       <div className="flex justify-center items-center">
         <div className="w-full max-w-[500px]">

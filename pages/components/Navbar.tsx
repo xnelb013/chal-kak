@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import { FaRegPlusSquare } from "react-icons/fa";
 import { accessTokenState, alertState, userState, userinfoState } from "@/utils/atoms";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 import { parseCookies } from "nookies";
@@ -78,13 +79,18 @@ export default function Navbar() {
   }, [cookies]);
   return (
     <>
-      <div className="h-[50px] navbar bg-base-100">
+      <div className="h-[50px] navbar bg-base-100 min-w-[300px]">
         <div className="flex-1">
           <div className="relative w-[90.2px] h-8 cursor-pointer" onClick={() => router.push("/main")}>
             <Image src={"/images/chalkakLogo.png"} layout="fill" alt="logo_Image" />
           </div>
         </div>
         <div className="flex-none mt-2 justify-end">
+          <Link href={"/postEditor"}>
+            <div className="mb-2 mr-3">
+              <FaRegPlusSquare className=" text-3xl" />
+            </div>
+          </Link>
           <div className="mb-4 mr-2">
             <Link href={"/search"}>
               <svg

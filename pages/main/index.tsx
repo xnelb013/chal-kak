@@ -331,7 +331,7 @@ const Main = () => {
           content="날씨 기반 추천 sns서비스 #찰칵 메인 페이지입니다. 당신의 순간을 공유해보세요!"
         />
       </Head>
-      <div className="w-full h-full bg-white">
+      <div className="relative w-full h-[2000px] bg-white">
         <div className="max-auto">
           <div className="cursor-pointer flex items-center justify-start border-b pb-2">
             <button className="mr-4 text-lg font-semibold">추천</button>
@@ -339,6 +339,15 @@ const Main = () => {
               팔로잉
             </button>
           </div>
+          <div className="relative mt-2">
+            <div className="absolute -right-20">
+              <div className="fixed bottom-6 ml-[-50px]">
+                <ScrollTopButton />
+                <GoToPostEditorButton />
+              </div>
+            </div>
+          </div>
+
           <div className="mt-6 text-m text-gray-400">
             <Weather />
           </div>
@@ -418,14 +427,7 @@ const Main = () => {
               ))}
             </Swiper>
           </div>
-
           <div className="mt-6 relative">
-            <div className="fixed top-[85%] right-[30px] z-[1000]">
-              <div className="flex flex-col justify-end">
-                <ScrollTopButton />
-                <GoToPostEditorButton />
-              </div>
-            </div>
             <div className="text-xl font-bold">키워드 추천</div>
             <div className="md:mt-6 mt-3 flex flex-wrap justify-flex-start md:gap-3 gap-2">
               <div

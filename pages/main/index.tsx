@@ -331,7 +331,7 @@ const Main = () => {
           content="날씨 기반 추천 sns서비스 #찰칵 메인 페이지입니다. 당신의 순간을 공유해보세요!"
         />
       </Head>
-      <div className="relative w-full h-[2000px] bg-white">
+      <div className="relative w-full h-full bg-white">
         <div className="max-auto">
           <div className="cursor-pointer flex items-center justify-start border-b pb-2">
             <button className="mr-4 text-lg font-semibold">추천</button>

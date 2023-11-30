@@ -89,6 +89,14 @@ const Following = () => {
             추천
           </button>
         </div>
+        <div className="relative mt-2">
+          <div className="absolute -right-20">
+            <div className="fixed bottom-6 ml-[-50px]">
+              <ScrollTopButton />
+              <PostEditorButton />
+            </div>
+          </div>
+        </div>
         {followingPosts.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-10">
             <p className="text-gray-400 mt-2">팔로우한 유저의 게시물이 존재하지 않습니다.</p>
@@ -144,12 +152,6 @@ const Following = () => {
               </div>
             </div>
           ))}
-        </div>
-        <div className="fixed top-[85%] right-[30px] z-[1000]">
-          <div className="flex flex-col justify-center">
-            <ScrollTopButton />
-            <PostEditorButton />
-          </div>
         </div>
       </div>
     </div>

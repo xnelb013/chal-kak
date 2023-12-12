@@ -8,6 +8,8 @@ import ChangePWModal from "./ChangePWModal";
 import WithdrawalModal from "./WithdrawalModal";
 import { apiInstance } from "../api/api";
 import { UserType } from "../login";
+import { GetServerSidePropsContext } from "next";
+import { LoadingIndicator } from "../components/LoadingIndicator";
 
 export type UserinfoType = {
   nickname: string;
@@ -29,6 +31,7 @@ export interface ModifiedFormdata {
     styleTags: number[];
   };
 }
+
 export default function modifyuserinfo() {
   // 모달 상태 관리
   const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
@@ -52,36 +55,12 @@ export default function modifyuserinfo() {
   const [profileFile] = useState<File>();
   const [userNickname, setUserNickname] = useState<string>("");
   const userId = Cookies.get("userId");
-  // const router = useRouter();
-  // const id = router.query;
+  const [loading, setLoading] = useState<boolean>(true);
   const accessToken = Cookies.get("accessToken");
   const styleTagList = useRecoilValue(styleTagsState);
   const myKeywords = styleTagList.filter((obj) => userinfoProfile.styleTags.includes(obj.id));
 
   useEffect(() => {
-    // const fetchUserInfo = async () => {
-    //   try {
-    //     const response = await apiInstance.get(`/users/${userId}`, {
-    //       headers: {
-    //         Authorization: `Bearer ${accessToken}`,
-    //       },
-    //     });
-
-    //     const data = response.data.data;
-
-    //     setUserinfo(data);
-    //     setUserinfoPropfile(data);
-    //     setUserNickname(data.nickname);
-    //     setCurUser((prev) => ({ ...prev, profileImg: data.profileImg, isLoggedIn: true }));
-    //     Cookies.set("profileImg", data.profileImg);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-
-    // if (isModifyModalOpen) {
-    //   setTimeout(fetchUserInfo, 1500); // API 호출을 비동기 함수 내부로 옮김
-    // }
     const userinfoRes = apiInstance.get(`/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -93,23 +72,24 @@ export default function modifyuserinfo() {
       setUserNickname(res.data.data.nickname);
       setCurUser((prev: UserType) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
       Cookies.set("profileImg", res.data.data.profileImg);
+      setLoading(false);
     });
   }, [isModifyModalOpen]);
 
-  useEffect(() => {
-    const userinfoRes = apiInstance.get(`/users/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    userinfoRes.then((res) => {
-      setUserinfo(res.data.data);
-      setUserinfoPropfile(res.data.data);
-      setUserNickname(res.data.data.nickname);
-      setCurUser((prev: UserType) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
-      Cookies.set("profileImg", res.data.data.profileImg);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const userinfoRes = apiInstance.get(`/users/${userId}`, {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   });
+  //   userinfoRes.then((res) => {
+  //     setUserinfo(res.data.data);
+  //     setUserinfoPropfile(res.data.data);
+  //     setUserNickname(res.data.data.nickname);
+  //     setCurUser((prev: UserType) => ({ ...prev, profileImg: res.data.data.profileImg, isLoggedIn: true }));
+  //     Cookies.set("profileImg", res.data.data.profileImg);
+  //   });
+  // }, []);
 
   // 구글 로그인 후 modify-userinfo로 넘어왔을 때, url 로부터 필요한 정보를 가져와서 설정해주는 함수.
   // https://chal-kak.vercel.app/modify-userinfo/{userId}?accessToken={}&refreshToken={}&profileImg={}
@@ -152,6 +132,14 @@ export default function modifyuserinfo() {
   const handleOpenWithdrawalModal = () => {
     setIsWithdrawalModalOpen(true);
   };
+
+  if (loading) {
+    return (
+      <div>
+        <LoadingIndicator />
+      </div>
+    );
+  }
 
   return (
     <>

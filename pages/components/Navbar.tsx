@@ -88,7 +88,7 @@ export default function Navbar() {
         <div className="flex-none mt-2 justify-end">
           <Link href={"/postEditor"}>
             <div className="mb-2 mr-3">
-              <FaRegPlusSquare className=" text-3xl" />
+              <FaRegPlusSquare className=" text-3xl" aria-label="GoToPostEditor" />
             </div>
           </Link>
           <div className="mb-4 mr-2">
